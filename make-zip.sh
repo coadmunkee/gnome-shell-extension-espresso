@@ -1,5 +1,5 @@
 #!/bin/sh
 
-rm -f caffeine@patapon.info.zip
-glib-compile-schemas --strict --targetdir=caffeine@patapon.info/schemas/ caffeine@patapon.info/schemas
-cd caffeine@patapon.info && zip -r ../caffeine@patapon.info.zip *
+rm -f espresso@coadmunkee.github.com.zip
+glib-compile-schemas --strict --targetdir=espresso@coadmunkee.github.com/schemas/ espresso@coadmunkee.github.com/schemas
+cd espresso@coadmunkee.github.com && zip -r ../espresso@coadmunkee.github.com.zip *

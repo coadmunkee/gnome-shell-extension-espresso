@@ -1,0 +1,12 @@
+{
+  "version": 40,
+  "shell-version": [
+    "40"
+  ],
+  "uuid": "espresso@coadmunkee.github.com",
+  "name": "Espresso",
+  "settings-schema": "org.gnome.shell.extensions.espresso",
+  "gettext-domain": "gnome-shell-extension-espresso",
+  "description": "Disable the screensaver and auto suspend",
+  "url": "https://github.com/coadmunkee/gnome-shell-extension-espresso"
+}
