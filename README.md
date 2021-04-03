@@ -1,5 +1,5 @@
-# This extension is derived directly from the Caffeine extension and provides the same funcitonality.
-# It has been updates to work with Gnome 40 _only_
+# Espresso was derived directly from the Caffeine extension and provides the same functionality.
+# It has been updated to work with Gnome 40 _only_
 
 ## gnome-shell-extension-espresso
 

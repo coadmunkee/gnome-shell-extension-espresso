@@ -27,6 +27,7 @@ const Columns = {
     ICON: 2
 };
 
+let MajorShellVersion = parseInt(Config.PACKAGE_VERSION.split(".")[0]);
 let ShellVersion = parseInt(Config.PACKAGE_VERSION.split(".")[1]);
 
 class EspressoWidget {
@@ -40,92 +41,97 @@ class EspressoWidget {
 
 
         let showEspressoBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-                                margin: 7});
+                                spacing: 7});
 
         let showEspressoLabel = new Gtk.Label({label: _("Show Espresso in top panel"),
-                                           xalign: 0});
+                                            hexpand: true,
+                                            xalign: 0});
 
         let showEspressoSwitch = new Gtk.Switch({active: this._settings.get_boolean(SHOW_INDICATOR_KEY)});
         showEspressoSwitch.connect('notify::active', button => {
             this._settings.set_boolean(SHOW_INDICATOR_KEY, button.active);
         });
 
-        showEspressoBox.pack_start(showEspressoLabel, true, true, 0);
-        showEspressoBox.add(showEspressoSwitch);
+        showEspressoBox.prepend(showEspressoLabel);
+        showEspressoBox.append(showEspressoSwitch);
 
-        this.w.add(showEspressoBox);
+        this.w.attach(showEspressoBox, 0, 0, 1, 1);
 
-        if (ShellVersion > 6) {
-            const gtkhbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-                                    margin: 7});
+        const gtkhbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
+                                    spacing: 7});
 
-            const enableFullscreenLabel = new Gtk.Label({label: _("Enable when a fullscreen application is running"),
-                                       xalign: 0});
+        const enableFullscreenLabel = new Gtk.Label({label: _("Enable when a fullscreen application is running"),
+                                            hexpand: true,
+                                            xalign: 0});
 
-            const enableFullscreenSwitch = new Gtk.Switch({active: this._settings.get_boolean(FULLSCREEN_KEY)});
-            enableFullscreenSwitch.connect('notify::active', button => {
-                this._settings.set_boolean(FULLSCREEN_KEY, button.active);
-            });
+        const enableFullscreenSwitch = new Gtk.Switch({active: this._settings.get_boolean(FULLSCREEN_KEY)});
+        enableFullscreenSwitch.connect('notify::active', button => {
+            this._settings.set_boolean(FULLSCREEN_KEY, button.active);
+        });
 
-            gtkhbox.pack_start(enableFullscreenLabel, true, true, 0);
-            gtkhbox.add(enableFullscreenSwitch);
+        gtkhbox.prepend(enableFullscreenLabel);
+        gtkhbox.append(enableFullscreenSwitch);
 
-            this.w.add(gtkhbox);
-        }
+        this.w.attach(gtkhbox, 0, 1, 1, 1);
 
         const stateBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-                                margin: 7});
+                                spacing: 7});
 
         const stateLabel = new Gtk.Label({label: _("Restore state across reboots"),
-                                   xalign: 0});
+                                            hexpand: true,
+                                            xalign: 0});
 
         const stateSwitch = new Gtk.Switch({active: this._settings.get_boolean(RESTORE_KEY)});
         stateSwitch.connect('notify::active', button => {
             this._settings.set_boolean(RESTORE_KEY, button.active);
         });
 
-        stateBox.pack_start(stateLabel, true, true, 0);
-        stateBox.add(stateSwitch);
+        stateBox.prepend(stateLabel);
+        stateBox.append(stateSwitch);
 
-        this.w.add(stateBox);
+        this.w.attach(stateBox, 0, 2, 1, 1);
 
         const notificationsBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-                                margin: 7});
+                                        spacing: 7});
 
         const notificationsLabel = new Gtk.Label({label: _("Enable notifications"),
-                                   xalign: 0});
+                                                    hexpand: true,
+                                                    xalign: 0});
 
         const notificationsSwitch = new Gtk.Switch({active: this._settings.get_boolean(SHOW_NOTIFICATIONS_KEY)});
         notificationsSwitch.connect('notify::active', button => {
             this._settings.set_boolean(SHOW_NOTIFICATIONS_KEY, button.active);
         });
 
-        notificationsBox.pack_start(notificationsLabel, true, true, 0);
-        notificationsBox.add(notificationsSwitch);
+        notificationsBox.prepend(notificationsLabel);
+        notificationsBox.append(notificationsSwitch);
 
-        this.w.add(notificationsBox);
+        this.w.attach(notificationsBox, 0, 3, 1, 1);
 
-        const nightlightBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-                                margin: 7});
+        const nightlightBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 7});
 
         const nightlightLabel = new Gtk.Label({label: _("Pause/resume Night Light if enabled"),
-                                   xalign: 0});
+                                                hexpand: true,
+                                                xalign: 0,
+                                                max_width_chars: 25});
+
 
         const nightlightSwitch = new Gtk.Switch({active: this._settings.get_boolean(NIGHT_LIGHT_KEY)});
         nightlightSwitch.connect('notify::active', button => {
             this._settings.set_boolean(NIGHT_LIGHT_KEY, button.active);
         });
 
-        nightlightBox.pack_start(nightlightLabel, true, true, 0);
-        nightlightBox.add(nightlightSwitch);
+        nightlightBox.prepend(nightlightLabel);
+        nightlightBox.append(nightlightSwitch);
 
-        this.w.add(nightlightBox);
+        this.w.attach(nightlightBox, 0, 4, 1, 1);
 
         const nightlightAppBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-                                margin: 7});
+                                spacing: 7});
 
         const nightlightAppLabel = new Gtk.Label({label: _("Pause/resume Night Light for defined applications only"),
-                                   xalign: 0});
+                                                    hexpand: true,
+                                                    xalign: 0});
 
         const nightlightAppSwitch = new Gtk.Switch({active: this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)});
         nightlightAppSwitch.connect('notify::active', button => {
@@ -140,10 +146,10 @@ class EspressoWidget {
           }
         });
 
-        nightlightAppBox.pack_start(nightlightAppLabel, true, true, 0);
-        nightlightAppBox.add(nightlightAppSwitch);
+        nightlightAppBox.prepend(nightlightAppLabel);
+        nightlightAppBox.append(nightlightAppSwitch);
 
-        this.w.add(nightlightAppBox);
+        this.w.attach(nightlightAppBox, 0, 5, 1, 1);
 
         this._store = new Gtk.ListStore();
         this._store.set_column_types([Gio.AppInfo, GObject.TYPE_STRING, Gio.Icon]);
@@ -162,66 +168,49 @@ class EspressoWidget {
         appColumn.add_attribute(nameRenderer, "text", Columns.DISPLAY_NAME);
         this._treeView.append_column(appColumn);
 
-        this.w.add(this._treeView);
+        this.w.attach(this._treeView, 0, 6, 1, 1);
 
-        const toolbar = new Gtk.Toolbar();
-        toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
-        this.w.add(toolbar);
+        const toolbar = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 0});
 
-        const newButton = new Gtk.ToolButton({ stock_id: Gtk.STOCK_NEW,
-                                             label: _("Add application"),
-                                             is_important: true });
+        const newButton = new Gtk.Button( { icon_name : 'list-add-symbolic' });
+        log('Add button created.');
         newButton.connect('clicked', this._createNew.bind(this));
-        toolbar.add(newButton);
+        log('Add button connected.');
+        toolbar.prepend(newButton);
 
-        const delButton = new Gtk.ToolButton({ stock_id: Gtk.STOCK_DELETE });
+        const delButton = new Gtk.Button( { icon_name : 'list-remove-symbolic' });
         delButton.connect('clicked', this._deleteSelected.bind(this));
-        toolbar.add(delButton);
+        toolbar.append(delButton);
+
+        this.w.attach(toolbar, 0, 7, 1, 1);
 
         this._changedPermitted = true;
         this._refresh();
     }
 
     _createNew() {
-        const dialog = new Gtk.Dialog({ title: _("Create new matching rule"),
-                                      transient_for: this.w.get_toplevel(),
-                                      modal: true });
-        dialog.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL);
-        dialog.add_button(_("Add"), Gtk.ResponseType.OK);
-        dialog.set_default_response(Gtk.ResponseType.OK);
+        log('createNew called');
 
-        const grid = new Gtk.Grid({ column_spacing: 10,
-                                  row_spacing: 15,
-                                  margin: 10 });
-        dialog._appChooser = new Gtk.AppChooserWidget({ show_all: true });
-        grid.attach(dialog._appChooser, 0, 0, 2, 1);
-        dialog.get_content_area().add(grid);
+        const dialog = new NewInhibitDialog(this.w.get_root());
+        dialog.connect('response', (dlg, id) => {
+            const appInfo = id === Gtk.ResponseType.OK
+                ? dialog.get_widget().get_app_info() : null;
+            if (appInfo) {
+                this._changedPermitted = false;
+                if (!this._appendItem(appInfo.get_id())) {
+                    this._changedPermitted = true;
+                    return;
+                }
+                let iter = this._store.append();
 
-        dialog.connect('response', (dialog, id) => {
-            if (id != Gtk.ResponseType.OK) {
-                dialog.destroy();
-                return;
-            }
-
-            const appInfo = dialog._appChooser.get_app_info();
-            if (!appInfo)
-                return;
-
-            this._changedPermitted = false;
-            if (!this._appendItem(appInfo.get_id())) {
+                this._store.set(iter,
+                                [Columns.APPINFO, Columns.ICON, Columns.DISPLAY_NAME],
+                                [appInfo, appInfo.get_icon(), appInfo.get_display_name()]);
                 this._changedPermitted = true;
-                return;
             }
-            let iter = this._store.append();
-
-            this._store.set(iter,
-                            [Columns.APPINFO, Columns.ICON, Columns.DISPLAY_NAME],
-                            [appInfo, appInfo.get_icon(), appInfo.get_display_name()]);
-            this._changedPermitted = true;
-
             dialog.destroy();
         });
-        dialog.show_all();
+        dialog.show();
     }
 
     _deleteSelected() {
@@ -288,13 +277,39 @@ class EspressoWidget {
     }
 }
 
+const NewInhibitDialog = GObject.registerClass(
+    class NewInhibitDialog extends Gtk.AppChooserDialog {
+        _init(parent) {
+            super._init({
+                transient_for: parent,
+                modal: true,
+            });
+    
+            this._settings = ExtensionUtils.getSettings();
+    
+            this.get_widget().set({
+                show_all: true,
+                show_other: true, // hide more button
+            });
+    
+            this.get_widget().connect('application-selected',
+                this._updateSensitivity.bind(this));
+            this._updateSensitivity();
+        }
+    
+        _updateSensitivity() {
+            const rules = this._settings.get_strv(INHIBIT_APPS_KEY);
+            const appInfo = this.get_widget().get_app_info();
+            this.set_response_sensitive(Gtk.ResponseType.OK,
+                appInfo && !rules.some(i => i.startsWith(appInfo.get_id())));
+        }
+    });
+
 function init() {
     Convenience.initTranslations();
 }
 
 function buildPrefsWidget() {
     const widget = new EspressoWidget();
-    widget.w.show_all();
-
     return widget.w;
 }
