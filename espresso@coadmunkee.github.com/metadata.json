@@ -1,7 +1,8 @@
 {
   "version": 40,
   "shell-version": [
-    "40.0"
+    "40.0",
+    "40"
   ],
   "uuid": "espresso@coadmunkee.github.com",
   "name": "Espresso",

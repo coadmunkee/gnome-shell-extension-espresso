@@ -45,7 +45,7 @@ const Gettext = imports.gettext.domain('gnome-shell-extension-espresso');
 const _ = Gettext.gettext;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
-const Convenience = Me.imports.convenience;
+const Convenience =  imports.misc.extensionUtils;
 
 const ColorInterface = '<node> \
   <interface name="org.gnome.SettingsDaemon.Color"> \
