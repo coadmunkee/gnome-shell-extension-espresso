@@ -5,23 +5,26 @@
 
 Fill the cup to inhibit auto suspend and screensaver.
 
-This extension supports gnome-shell 40:
+This extension supports the following versions of Gnome shell:
+    40.1
+    40.0
+    40 - (for pre-release testing)
 
-    * master: 40
+Filled cup = auto suspend and screensaver off.
+![Screenshot - Espresso On](https://github.com/coadmunkee/gnome-shell-extension-espresso/raw/master/screenshot-on.png)
 
-![Screenshot](https://github.com/coadmunkee/gnome-shell-extension-espresso/raw/master/screenshot.png)
+Empty cup = normal auto suspend and screensaver. 
+![Screenshot - Espresso Off](https://github.com/coadmunkee/gnome-shell-extension-espresso/raw/master/screenshot-off.png)
 
+There are several Espresso options that can be configured ... 
 ![Preferences](https://github.com/coadmunkee/gnome-shell-extension-espresso/raw/master/screenshot-prefs.png)
 
-Empty cup = normal auto suspend and screensaver. Filled cup = auto suspend and
-screensaver off.
 
-## Installation from e.g.o
-
+## Installation from extensions.gnome.org
 https://extensions.gnome.org/extension/4135/espresso/
 
-## Installation from git
 
+## Installation from git
     git clone git://github.com/coadmunkee/gnome-shell-extension-espresso.git
     cd gnome-shell-extension-espresso
     ./update-locale.sh

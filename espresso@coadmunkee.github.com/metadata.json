@@ -1,6 +1,7 @@
 {
-  "version": 40,
+  "version": 3,
   "shell-version": [
+    "40.1",
     "40.0",
     "40"
   ],
