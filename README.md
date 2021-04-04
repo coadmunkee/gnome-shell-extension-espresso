@@ -18,7 +18,7 @@ screensaver off.
 
 ## Installation from e.g.o
 
-https://extensions.gnome.org/extension/517/caffeine/   --> to be updated
+https://extensions.gnome.org/extension/4135/espresso/
 
 ## Installation from git
 
