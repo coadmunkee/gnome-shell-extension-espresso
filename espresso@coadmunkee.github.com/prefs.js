@@ -33,7 +33,16 @@ let ShellVersion = parseInt(Config.PACKAGE_VERSION.split(".")[1]);
 
 class EspressoWidget {
     constructor(params) {
-        this.w = new Gtk.Grid(params);
+		if (params === undefined) {
+		  params={};
+		}
+		params.margin_top=10;
+		params.margin_start=10;
+		params.margin_end=10;
+		params.margin_bottom=10;
+		params.spacing=4;
+
+		this.w = new Gtk.Grid(params);
         this.w.set_orientation(Gtk.Orientation.VERTICAL);
 
         this._settings = Convenience.getSettings();
