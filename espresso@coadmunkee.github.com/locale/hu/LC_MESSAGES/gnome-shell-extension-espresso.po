@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-23 14:56+0100\n"
+"POT-Creation-Date: 2021-04-17 10:19-0400\n"
 "PO-Revision-Date: 2018-06-22 21:22+0200\n"
 "Last-Translator: Kardos László <lacesz@NOSPAM@ox dot io>\n"
 "Language-Team: \n"
@@ -30,46 +30,34 @@ msgstr "Az automatikus felfüggesztés és a képernyővédő engedélyezve"
 msgid "Auto suspend and screensaver enabled"
 msgstr "Az automatikus felfüggesztés és a képernyővédő engedélyezve"
 
-#: prefs.js:45
+#: prefs.js:56
 msgid "Show Espresso in top panel"
 msgstr "Espresso mutatása a felső panelen"
 
-#: prefs.js:62 schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
+#: prefs.js:73 schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
 #: schemas/org.gnome.shell.extensions.espresso.gschema.xml:32
 msgid "Enable when a fullscreen application is running"
 msgstr "Engedélyezés, ha teljes képernyős alkalmazás fut"
 
-#: prefs.js:79
+#: prefs.js:90
 msgid "Restore state across reboots"
 msgstr "Állapot visszaállítása újraindítás közben"
 
-#: prefs.js:95
+#: prefs.js:107
 msgid "Enable notifications"
 msgstr "Értesítések engedélyezése"
 
-#: prefs.js:111
+#: prefs.js:123
 msgid "Pause/resume Night Light if enabled"
 msgstr ""
 
-#: prefs.js:127 schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
+#: prefs.js:142 schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
 msgid "Pause/resume Night Light for defined applications only"
 msgstr ""
 
-#: prefs.js:156
+#: prefs.js:172
 msgid "Applications which enable Espresso automatically"
 msgstr "Alkalmazások, amelyek lehetővé teszik a Espresso automatikus működését"
-
-#: prefs.js:172
-msgid "Add application"
-msgstr "Alkalmazás hozzáadás"
-
-#: prefs.js:186
-msgid "Create new matching rule"
-msgstr "Új egyezési szabály létrehozása"
-
-#: prefs.js:190
-msgid "Add"
-msgstr "Hozzáadás\t"
 
 #: schemas/org.gnome.shell.extensions.espresso.gschema.xml:6
 msgid "Application list"
@@ -118,3 +106,12 @@ msgstr "Értesítések mutatásának engedélyezése/tiltása"
 #: schemas/org.gnome.shell.extensions.espresso.gschema.xml:42
 msgid "Pause/resume Night Light for defined applicationa when enabled/disabled"
 msgstr ""
+
+#~ msgid "Add application"
+#~ msgstr "Alkalmazás hozzáadás"
+
+#~ msgid "Create new matching rule"
+#~ msgstr "Új egyezési szabály létrehozása"
+
+#~ msgid "Add"
+#~ msgstr "Hozzáadás\t"

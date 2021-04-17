@@ -8,7 +8,6 @@ Espresso was derived from a fork of the Caffeine extension and provides the same
 There are several Espresso options that can be configured ... 
 ![Preferences](https://github.com/coadmunkee/gnome-shell-extension-espresso/raw/master/screenshot-prefs.png)
 
-
 ## Installation from gnome.extension.org
 [<img src="https://github.com/coadmunkee/gnome-shell-extension-espresso/raw/master/ego.png" height="100">](https://extensions.gnome.org/extension/4135/espresso)
 
@@ -24,3 +23,6 @@ For additional installation instructions and more information visit [https://git
     cp -r espresso@coadmunkee.github.com ~/.local/share/gnome-shell/extensions
 
 Restart the shell and then enable the extension.
+
+## Bug reports
+Please file bug reports here: [https://github.com/coadmunkee/gnome-shell-extension-espresso/issues](https://github.com/coadmunkee/gnome-shell-extension-espresso/issues).
