@@ -24,3 +24,6 @@ For additional installation instructions and more information visit [https://git
     cp -r espresso@coadmunkee.github.com ~/.local/share/gnome-shell/extensions
 
 Restart the shell and then enable the extension.
+
+## Report Bugs on this site
+[https://github.com/coadmunkee/gnome-shell-extension-espresso/issues](https://github.com/coadmunkee/gnome-shell-extension-espresso/issues)
