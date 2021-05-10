@@ -24,5 +24,5 @@ For additional installation instructions and more information visit [https://git
 
 Restart the shell and then enable the extension.
 
-## Bug reports
-Please file bug reports here: [https://github.com/coadmunkee/gnome-shell-extension-espresso/issues](https://github.com/coadmunkee/gnome-shell-extension-espresso/issues).
+## Report Bugs on this site
+[https://github.com/coadmunkee/gnome-shell-extension-espresso/issues](https://github.com/coadmunkee/gnome-shell-extension-espresso/issues)
