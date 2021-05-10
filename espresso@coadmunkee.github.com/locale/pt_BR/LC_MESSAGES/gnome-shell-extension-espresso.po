@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-23 14:56+0100\n"
+"POT-Creation-Date: 2021-04-17 10:19-0400\n"
 "PO-Revision-Date: 2020-02-25 20:16-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
@@ -40,46 +40,34 @@ msgstr "Suspensão e proteção de tela automáticas ativadas"
 msgid "Auto suspend and screensaver enabled"
 msgstr "Suspensão e proteção de tela automáticas ativadas"
 
-#: prefs.js:45
+#: prefs.js:56
 msgid "Show Espresso in top panel"
 msgstr "Mostrar Espresso no painel superior"
 
-#: prefs.js:62 schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
+#: prefs.js:73 schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
 #: schemas/org.gnome.shell.extensions.espresso.gschema.xml:32
 msgid "Enable when a fullscreen application is running"
 msgstr "Ativar enquanto um aplicativo em tela cheia estiver executando"
 
-#: prefs.js:79
+#: prefs.js:90
 msgid "Restore state across reboots"
 msgstr "Restaurar estado entre reinicializações"
 
-#: prefs.js:95
+#: prefs.js:107
 msgid "Enable notifications"
 msgstr "Ativar as notificações"
 
-#: prefs.js:111
+#: prefs.js:123
 msgid "Pause/resume Night Light if enabled"
 msgstr ""
 
-#: prefs.js:127 schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
+#: prefs.js:142 schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
 msgid "Pause/resume Night Light for defined applications only"
 msgstr ""
 
-#: prefs.js:156
+#: prefs.js:172
 msgid "Applications which enable Espresso automatically"
 msgstr "Aplicativos que ativam o Espresso automaticamente"
-
-#: prefs.js:172
-msgid "Add application"
-msgstr "Adicionar aplicativo"
-
-#: prefs.js:186
-msgid "Create new matching rule"
-msgstr "Criar nova regra"
-
-#: prefs.js:190
-msgid "Add"
-msgstr "Adicionar"
 
 #: schemas/org.gnome.shell.extensions.espresso.gschema.xml:6
 msgid "Application list"
@@ -128,6 +116,15 @@ msgstr "Mostra notificações quando ativado/desativado"
 #: schemas/org.gnome.shell.extensions.espresso.gschema.xml:42
 msgid "Pause/resume Night Light for defined applicationa when enabled/disabled"
 msgstr ""
+
+#~ msgid "Add application"
+#~ msgstr "Adicionar aplicativo"
+
+#~ msgid "Create new matching rule"
+#~ msgstr "Criar nova regra"
+
+#~ msgid "Add"
+#~ msgstr "Adicionar"
 
 #~ msgid "Espresso enabled"
 #~ msgstr "Espresso ativado"

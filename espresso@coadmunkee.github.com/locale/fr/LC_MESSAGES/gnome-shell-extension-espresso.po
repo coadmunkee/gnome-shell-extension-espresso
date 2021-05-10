@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-23 14:56+0100\n"
+"POT-Creation-Date: 2021-04-17 10:19-0400\n"
 "PO-Revision-Date: 2014-11-07 10:01+0100\n"
 "Last-Translator: Jean-Philippe Braun <eon@patapon.info>\n"
 "Language-Team: French\n"
@@ -35,46 +35,34 @@ msgstr "Mise en veille et écran de veille activés"
 msgid "Auto suspend and screensaver enabled"
 msgstr "Mise en veille et écran de veille activés"
 
-#: prefs.js:45
+#: prefs.js:56
 msgid "Show Espresso in top panel"
 msgstr "Afficher Caféine dans le panneau supérieur"
 
-#: prefs.js:62 schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
+#: prefs.js:73 schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
 #: schemas/org.gnome.shell.extensions.espresso.gschema.xml:32
 msgid "Enable when a fullscreen application is running"
 msgstr "Activer lorsqu'une application est en plein écran"
 
-#: prefs.js:79
+#: prefs.js:90
 msgid "Restore state across reboots"
 msgstr ""
 
-#: prefs.js:95
+#: prefs.js:107
 msgid "Enable notifications"
 msgstr "Activer les notifications"
 
-#: prefs.js:111
+#: prefs.js:123
 msgid "Pause/resume Night Light if enabled"
 msgstr ""
 
-#: prefs.js:127 schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
+#: prefs.js:142 schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
 msgid "Pause/resume Night Light for defined applications only"
 msgstr ""
 
-#: prefs.js:156
+#: prefs.js:172
 msgid "Applications which enable Espresso automatically"
 msgstr "Applications qui activent Caféine automatiquement"
-
-#: prefs.js:172
-msgid "Add application"
-msgstr "Ajouter une application"
-
-#: prefs.js:186
-msgid "Create new matching rule"
-msgstr "Nouvelle règle"
-
-#: prefs.js:190
-msgid "Add"
-msgstr "Ajouter"
 
 #: schemas/org.gnome.shell.extensions.espresso.gschema.xml:6
 #, fuzzy
@@ -123,6 +111,15 @@ msgstr ""
 #: schemas/org.gnome.shell.extensions.espresso.gschema.xml:42
 msgid "Pause/resume Night Light for defined applicationa when enabled/disabled"
 msgstr ""
+
+#~ msgid "Add application"
+#~ msgstr "Ajouter une application"
+
+#~ msgid "Create new matching rule"
+#~ msgstr "Nouvelle règle"
+
+#~ msgid "Add"
+#~ msgstr "Ajouter"
 
 #~ msgid "Espresso enabled"
 #~ msgstr "Caféine est activé"
