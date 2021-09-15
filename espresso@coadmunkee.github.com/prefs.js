@@ -307,7 +307,7 @@ const NewInhibitDialog = GObject.registerClass(
     
             this.get_widget().set({
                 show_all: true,
-                show_other: true //, // hide more button
+                show_other: true
             });
     
             this.get_widget().connect('application-selected',
