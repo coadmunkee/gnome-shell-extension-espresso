@@ -49,8 +49,8 @@ class EspressoWidget {
 		  params={};
 		}
 		params.margin_top=10;
-		params.margin_start=12;
-		params.margin_end=12;
+		params.margin_start=10;
+		params.margin_end=10;
 		params.margin_bottom=10;
 		params.row_spacing=6;
 
