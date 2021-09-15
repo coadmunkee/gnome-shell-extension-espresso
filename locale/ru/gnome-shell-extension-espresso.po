@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-shell-extension-espresso\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-15 10:53-0400\n"
+"PO-Revision-Date: 2017-07-30 15:53+0300\n"
+"Last-Translator: Alex Gluck <alexgluck@bk.ru>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 2.0.2\n"
+"X-Poedit-SearchPath-0: ../../..\n"
+
+#: espresso@coadmunkee.github.com/extension.js:307
+#, fuzzy
+msgid "Auto suspend and screensaver disabled. Night Light paused."
+msgstr "Автоматическое отключение экрана выключено"
+
+#: espresso@coadmunkee.github.com/extension.js:309
+msgid "Auto suspend and screensaver disabled"
+msgstr "Автоматическое отключение экрана выключено"
+
+#: espresso@coadmunkee.github.com/extension.js:314
+#, fuzzy
+msgid "Auto suspend and screensaver enabled. Night Light resumed."
+msgstr "Автоматическое отключение экрана включено"
+
+#: espresso@coadmunkee.github.com/extension.js:316
+msgid "Auto suspend and screensaver enabled"
+msgstr "Автоматическое отключение экрана включено"
+
+#: espresso@coadmunkee.github.com/prefs.js:68
+msgid "Show Espresso in top panel"
+msgstr "Отображать значок Espresso на панели"
+
+#: espresso@coadmunkee.github.com/prefs.js:85
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:32
+msgid "Enable when a fullscreen application is running"
+msgstr "Включать при работе приложений в полноэкранном режиме"
+
+#: espresso@coadmunkee.github.com/prefs.js:102
+msgid "Restore state across reboots"
+msgstr "Восстанавливать предыдущее состояние после перезагрузки"
+
+#: espresso@coadmunkee.github.com/prefs.js:119
+msgid "Enable notifications"
+msgstr "Включить уведомления"
+
+#: espresso@coadmunkee.github.com/prefs.js:135
+msgid "Pause/resume Night Light if enabled"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:154
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
+msgid "Pause/resume Night Light for defined applications only"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:184
+msgid "Applications which enable Espresso automatically"
+msgstr "Приложения, которые активируют Espresso автоматически"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:6
+msgid "Application list"
+msgstr "Добавить приложение"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:7
+msgid ""
+"A list of strings, each containing an application id (desktop file name)"
+msgstr "Список строк, содержащих название программы (включая файлы .desktop)"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:11
+msgid "Store espresso user state"
+msgstr "Сохранять пользовательский выбор"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:16
+msgid "Restore espresso state"
+msgstr "Восстанавливать значения приложения"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:21
+msgid "Show indicator"
+msgstr "Показывать значок"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:22
+msgid "Show the indicator on the top panel"
+msgstr "Отображать значок Espresso на панели"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:26
+msgid "Show notifications"
+msgstr "Включить уведомления"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:27
+msgid "Show notifications when enabled/disabled"
+msgstr "Показывать уведомление, когда включено/выключено"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:36
+msgid "Pause/resume Night Light"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:37
+#, fuzzy
+msgid "Pause/resume Night Light when enabled/disabled"
+msgstr "Показывать уведомление, когда включено/выключено"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:42
+msgid "Pause/resume Night Light for defined applicationa when enabled/disabled"
+msgstr ""
+
+#~ msgid "Add application"
+#~ msgstr "Добавить приложение"
+
+#~ msgid "Create new matching rule"
+#~ msgstr "Создайте новое правило соответствия"
+
+#~ msgid "Add"
+#~ msgstr "Добавить"
+
+#~ msgid "Espresso enabled"
+#~ msgstr "Espresso включен"
+
+#~ msgid "Espresso disabled"
+#~ msgstr "Espresso выключен"

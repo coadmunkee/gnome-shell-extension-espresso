@@ -1,0 +1,135 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-shell-extension-espresso\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-15 10:53-0400\n"
+"PO-Revision-Date: 2021-07-11 13:41+0200\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
+"Language-Team: Dutch\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-SearchPath-0: ../../..\n"
+
+#: espresso@coadmunkee.github.com/extension.js:307
+msgid "Auto suspend and screensaver disabled. Night Light paused."
+msgstr ""
+"Automatisch in slaapstand zetten, schermbeveiliging en nachtlicht zijn "
+"uitgeschakeld."
+
+#: espresso@coadmunkee.github.com/extension.js:309
+msgid "Auto suspend and screensaver disabled"
+msgstr ""
+"Automatisch in slaapstand zetten en schermbeveiliging zijn uitgeschakeld"
+
+#: espresso@coadmunkee.github.com/extension.js:314
+msgid "Auto suspend and screensaver enabled. Night Light resumed."
+msgstr ""
+"Automatisch in slaapstand zetten, schermbeveiliging en nachtlicht zijn "
+"ingeschakeld."
+
+#: espresso@coadmunkee.github.com/extension.js:316
+msgid "Auto suspend and screensaver enabled"
+msgstr ""
+"Automatisch in slaapstand zetten en schermbeveiliging zijn ingeschakeld"
+
+#: espresso@coadmunkee.github.com/prefs.js:68
+msgid "Show Espresso in top panel"
+msgstr "Espresso tonen op bovenbalk"
+
+#: espresso@coadmunkee.github.com/prefs.js:85
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:32
+msgid "Enable when a fullscreen application is running"
+msgstr "Inschakelen bij beeldvullende toepassingen"
+
+#: espresso@coadmunkee.github.com/prefs.js:102
+msgid "Restore state across reboots"
+msgstr "Status herstellen na herstart"
+
+#: espresso@coadmunkee.github.com/prefs.js:119
+msgid "Enable notifications"
+msgstr "Meldingen tonen"
+
+#: espresso@coadmunkee.github.com/prefs.js:135
+msgid "Pause/resume Night Light if enabled"
+msgstr "Onderbreek/Hervat nachtlicht bij in-/uitschakelen"
+
+#: espresso@coadmunkee.github.com/prefs.js:154
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
+msgid "Pause/resume Night Light for defined applications only"
+msgstr "Nachtlicht onderbreken/hervatten bij opgegeven toepassingen"
+
+#: espresso@coadmunkee.github.com/prefs.js:184
+msgid "Applications which enable Espresso automatically"
+msgstr "Toepassingen die Espresso in-/uitschakelen"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:6
+msgid "Application list"
+msgstr "Toepassingenlijst"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:7
+msgid ""
+"A list of strings, each containing an application id (desktop file name)"
+msgstr ""
+"Een lijst met tekenreeksen waarvan elk een toepassingsid bevat (naam uit ."
+"desktop-bestand)"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:11
+msgid "Store espresso user state"
+msgstr "Status onthouden"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:16
+msgid "Restore espresso state"
+msgstr "Herstel de Espresso-status"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:21
+msgid "Show indicator"
+msgstr "Indicator tonen"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:22
+msgid "Show the indicator on the top panel"
+msgstr "Toon de indicator op de bovenbalk"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:26
+msgid "Show notifications"
+msgstr "Meldingen tonen"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:27
+msgid "Show notifications when enabled/disabled"
+msgstr "Toon meldingen als Espresso wordt in- of uitgeschakeld"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:36
+msgid "Pause/resume Night Light"
+msgstr "Nachtlicht onderbreken/hervatten"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:37
+msgid "Pause/resume Night Light when enabled/disabled"
+msgstr "Onderbreek/Hervat nachtlicht bij in-/uitschakelen van Espresso"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:42
+msgid "Pause/resume Night Light for defined applicationa when enabled/disabled"
+msgstr ""
+"Onderbreek/Hervat nachtlicht bij een opgegeven toepassing bij in-/"
+"uitschakelen van Espresso"
+
+#~ msgid "Add application"
+#~ msgstr "Anwendung hinzufügen"
+
+#~ msgid "Create new matching rule"
+#~ msgstr "Neue Regel definieren"
+
+#~ msgid "Add"
+#~ msgstr "Hinzufügen"
+
+#~ msgid "Espresso enabled"
+#~ msgstr "Espresso aktiviert"
+
+#~ msgid "Espresso disabled"
+#~ msgstr "Espresso deaktiviert"
