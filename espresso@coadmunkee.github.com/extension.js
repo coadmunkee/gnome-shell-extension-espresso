@@ -25,6 +25,8 @@ const St = imports.gi.St;
 const Gio = imports.gi.Gio;
 const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
+const Meta = imports.gi.Meta;
+const UPower = imports.ui.status.power.UPower;
 const Mainloop = imports.mainloop;
 const PanelMenu = imports.ui.panelMenu;
 const Shell = imports.gi.Shell;
@@ -38,6 +40,7 @@ const SHOW_NOTIFICATIONS_KEY = 'show-notifications';
 const USER_ENABLED_KEY = 'user-enabled';
 const RESTORE_KEY = 'restore-state';
 const FULLSCREEN_KEY = 'enable-fullscreen';
+const DOCKED_KEY = 'enable-docked';
 const NIGHT_LIGHT_KEY = 'control-nightlight';
 const NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';
 
@@ -126,8 +129,8 @@ class Espresso extends PanelMenu.Button {
         this._night_light = false;
 
         this._sessionManager = new DBusSessionManagerProxy(Gio.DBus.session,
-                                                          'org.gnome.SessionManager',
-                                                          '/org/gnome/SessionManager');
+                                                        'org.gnome.SessionManager',
+                                                        '/org/gnome/SessionManager');
         this._inhibitorAddedId = this._sessionManager.connectSignal('InhibitorAdded', this._inhibitorAdded.bind(this));
         this._inhibitorRemovedId = this._sessionManager.connectSignal('InhibitorRemoved', this._inhibitorRemoved.bind(this));
 
@@ -147,6 +150,8 @@ class Espresso extends PanelMenu.Button {
             this._screen = global.display;
             this._display = this._screen;
         }
+
+        this._monitor_manager = Meta.MonitorManager.get();
 
         this._icon = new St.Icon({
             style_class: 'system-status-icon'
@@ -176,11 +181,38 @@ class Espresso extends PanelMenu.Button {
             this.toggleFullscreen();
         }
 
+        // Enable espresso when laptop is docked to external monitors
+        this._isDockedId = this._monitor_manager.connect('monitors-changed', this.toggleDocked.bind(this));
+        this._settings.connect(`changed::${DOCKED_KEY}`, this.toggleDocked.bind(this));
+        this.toggleDocked();
+
         this._appConfigs = [];
         this._appData = new Map();
 
         this._settings.connect(`changed::${INHIBIT_APPS_KEY}`, this._updateAppConfigs.bind(this));
         this._updateAppConfigs();
+    }
+
+    /** returns the UPower proxy for this device */
+    get batteryProxy() {
+        const menu = Main.panel.statusArea.aggregateMenu
+
+        return (menu && menu._power) ? menu._power._proxy : null;
+    }
+
+    /** returns whether the device is currently receiving power */
+    get isCharging() {
+        if (this.batteryProxy.Type !== UPower.DeviceKind.BATTERY) {
+            // this isn't a battery-powered device
+            return false;
+        }
+
+        return this.batteryProxy.State === UPower.DeviceState.FULLY_CHARGED ||
+            this.batteryProxy.State === UPower.DeviceState.CHARGING;
+    }
+
+    get isDocked() {
+        return this._screen.get_n_monitors() > 1 && this.isCharging;
     }
 
     get inFullscreen() {
@@ -205,6 +237,26 @@ class Espresso extends PanelMenu.Button {
 
         if (!this.inFullscreen && this._apps.includes('fullscreen')) {
             this.removeInhibit('fullscreen');
+            this._manageNightLight('enabled');
+        }
+    }
+
+    toggleDocked() {
+        Mainloop.timeout_add_seconds(2, () => {
+            const enabled = this._settings.get_boolean(DOCKED_KEY);
+            const inhibited = this._apps.includes('docked');
+
+            if (enabled && this.isDocked && !inhibited) {
+                this.addInhibit('docked');
+                this._manageNightLight('disabled');
+            }
+        });
+
+        const enabled = this._settings.get_boolean(DOCKED_KEY);
+        const inhibited = this._apps.includes('docked');
+
+        if ((!this.isDocked || !enabled) && inhibited) {
+            this.removeInhibit('docked');
             this._manageNightLight('enabled');
         }
     }
@@ -378,6 +430,7 @@ class Espresso extends PanelMenu.Button {
         // disconnect from signals
         if (this._settings.get_boolean(FULLSCREEN_KEY))
             this._screen.disconnect(this._inFullscreenId);
+        this._monitor_manager.disconnect(this._isDockedId);
         if (this._inhibitorAddedId) {
             this._sessionManager.disconnectSignal(this._inhibitorAddedId);
             this._inhibitorAddedId = 0;

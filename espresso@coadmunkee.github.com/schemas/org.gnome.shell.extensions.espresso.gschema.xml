@@ -31,6 +31,11 @@
             <summary>Enable when a fullscreen application is running</summary>
             <description>Enable when a fullscreen application is running</description>
         </key>
+        <key type="b" name="enable-docked">
+            <default>false</default>
+            <summary>Enable when docked to external monitors</summary>
+            <description>Enable when the device is on ac power and connected to external monitors</description>
+        </key>
         <key type="b" name="control-nightlight">
             <default>false</default>
             <summary>Pause/resume Night Light</summary>

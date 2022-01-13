@@ -30,6 +30,7 @@ const INHIBIT_APPS_KEY = 'inhibit-apps';
 const SHOW_INDICATOR_KEY = 'show-indicator';
 const SHOW_NOTIFICATIONS_KEY = 'show-notifications';
 const FULLSCREEN_KEY = 'enable-fullscreen';
+const DOCKED_KEY = 'enable-docked';
 const RESTORE_KEY = 'restore-state';
 const NIGHT_LIGHT_KEY = 'control-nightlight';
 const NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';
@@ -96,6 +97,23 @@ class EspressoWidget {
 
         this.w.attach(gtkhbox, 0, 1, 1, 1);
 
+        const dockedbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
+                                    spacing: 7});
+
+        const enableDockedLabel = new Gtk.Label({label: _("Enable when docked to external monitors"),
+                hexpand: true,
+                xalign: 0});
+
+        const enableDockedSwitch = new Gtk.Switch({active: this._settings.get_boolean(DOCKED_KEY)});
+        enableDockedSwitch.connect('notify::active', button => {
+            this._settings.set_boolean(DOCKED_KEY, button.active);
+        });
+
+        dockedbox.prepend(enableDockedLabel);
+        dockedbox.append(enableDockedSwitch);
+
+        this.w.attach(dockedbox, 0, 2, 1, 1);
+
         const stateBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                 spacing: 7});
 
@@ -111,7 +129,7 @@ class EspressoWidget {
         stateBox.prepend(stateLabel);
         stateBox.append(stateSwitch);
 
-        this.w.attach(stateBox, 0, 2, 1, 1);
+        this.w.attach(stateBox, 0, 3, 1, 1);
 
         const notificationsBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                         spacing: 7});
@@ -128,7 +146,7 @@ class EspressoWidget {
         notificationsBox.prepend(notificationsLabel);
         notificationsBox.append(notificationsSwitch);
 
-        this.w.attach(notificationsBox, 0, 3, 1, 1);
+        this.w.attach(notificationsBox, 0, 4, 1, 1);
 
         const nightlightBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 7});
 
@@ -146,7 +164,7 @@ class EspressoWidget {
         nightlightBox.prepend(nightlightLabel);
         nightlightBox.append(nightlightSwitch);
 
-        this.w.attach(nightlightBox, 0, 4, 1, 1);
+        this.w.attach(nightlightBox, 0, 5, 1, 1);
 
         const nightlightAppBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                 spacing: 7});
@@ -171,7 +189,7 @@ class EspressoWidget {
         nightlightAppBox.prepend(nightlightAppLabel);
         nightlightAppBox.append(nightlightAppSwitch);
 
-        this.w.attach(nightlightAppBox, 0, 5, 1, 1);
+        this.w.attach(nightlightAppBox, 0, 6, 1, 1);
 
         this._store = new Gtk.ListStore();
         this._store.set_column_types([Gio.AppInfo, GObject.TYPE_STRING, Gio.Icon]);
@@ -190,7 +208,7 @@ class EspressoWidget {
         appColumn.add_attribute(nameRenderer, "text", Columns.DISPLAY_NAME);
         this._treeView.append_column(appColumn);
 
-        this.w.attach(this._treeView, 0, 6, 1, 1);
+        this.w.attach(this._treeView, 0, 7, 1, 1);
 
         const toolbar = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 6});
 
@@ -202,7 +220,7 @@ class EspressoWidget {
         delButton.connect('clicked', this._deleteSelected.bind(this));
         toolbar.append(delButton);
 
-        this.w.attach(toolbar, 0, 7, 1, 1);
+        this.w.attach(toolbar, 0, 8, 1, 1);
 
         this._changedPermitted = true;
         this._refresh();
@@ -302,19 +320,19 @@ const NewInhibitDialog = GObject.registerClass(
                 transient_for: parent,
                 modal: true,
             });
-    
+
             this._settings = ExtensionUtils.getSettings();
-    
+
             this.get_widget().set({
                 show_all: true,
                 show_other: true
             });
-    
+
             this.get_widget().connect('application-selected',
                 this._updateSensitivity.bind(this));
             this._updateSensitivity();
         }
-    
+
         _updateSensitivity() {
             const rules = this._settings.get_strv(INHIBIT_APPS_KEY);
             const appInfo = this.get_widget().get_app_info();
