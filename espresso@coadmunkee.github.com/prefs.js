@@ -45,16 +45,16 @@ let ShellVersion = parseInt(Config.PACKAGE_VERSION.split(".")[1]);
 
 class EspressoWidget {
     constructor(params) {
-		if (params === undefined) {
-		  params={};
-		}
-		params.margin_top=10;
-		params.margin_start=10;
-		params.margin_end=10;
-		params.margin_bottom=10;
-		params.row_spacing=6;
+        if (params === undefined) {
+            params={};
+        }
+        params.margin_top=10;
+        params.margin_start=10;
+        params.margin_end=10;
+        params.margin_bottom=10;
+        params.row_spacing=6;
 
-		this.w = new Gtk.Grid(params);
+        this.w = new Gtk.Grid(params);
         this.w.set_orientation(Gtk.Orientation.VERTICAL);
 
         this._settings = ExtensionUtils.getSettings();
@@ -160,12 +160,12 @@ class EspressoWidget {
             this._settings.set_boolean(NIGHT_LIGHT_APP_ONLY_KEY, button.active);
         });
         nightlightSwitch.connect('notify::active', button => {
-          if (button.active) {
-            nightlightAppSwitch.set_sensitive(true);
-          } else {
-              nightlightAppSwitch.set_active(false);
-              nightlightAppSwitch.set_sensitive(false);
-          }
+            if (button.active) {
+                nightlightAppSwitch.set_sensitive(true);
+            } else {
+                nightlightAppSwitch.set_active(false);
+                nightlightAppSwitch.set_sensitive(false);
+            }
         });
 
         nightlightAppBox.prepend(nightlightAppLabel);
@@ -181,7 +181,7 @@ class EspressoWidget {
         this._treeView.get_selection().set_mode(Gtk.SelectionMode.SINGLE);
 
         const appColumn = new Gtk.TreeViewColumn({ expand: true, sort_column_id: Columns.DISPLAY_NAME,
-                                                 title: _("Applications which enable Espresso automatically") });
+                                                title: _("Applications which enable Espresso automatically") });
         const iconRenderer = new Gtk.CellRendererPixbuf;
         appColumn.pack_start(iconRenderer, false);
         appColumn.add_attribute(iconRenderer, "gicon", Columns.ICON);

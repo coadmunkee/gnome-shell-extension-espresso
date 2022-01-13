@@ -48,46 +48,46 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Convenience =  imports.misc.extensionUtils;
 
 const ColorInterface = '<node> \
-  <interface name="org.gnome.SettingsDaemon.Color"> \
-    <property name="DisabledUntilTomorrow" type="b" access="readwrite"/>\
-    <property name="NightLightActive" type="b" access="read"/>\
-  </interface>\
-  </node>';
+    <interface name="org.gnome.SettingsDaemon.Color"> \
+        <property name="DisabledUntilTomorrow" type="b" access="readwrite"/>\
+        <property name="NightLightActive" type="b" access="read"/>\
+    </interface>\
+</node>';
 
 const ColorProxy = Gio.DBusProxy.makeProxyWrapper(ColorInterface);
 
 const DBusSessionManagerIface = '<node>\
-  <interface name="org.gnome.SessionManager">\
-    <method name="Inhibit">\
-        <arg type="s" direction="in" />\
-        <arg type="u" direction="in" />\
-        <arg type="s" direction="in" />\
-        <arg type="u" direction="in" />\
-        <arg type="u" direction="out" />\
-    </method>\
-    <method name="Uninhibit">\
-        <arg type="u" direction="in" />\
-    </method>\
-       <method name="GetInhibitors">\
-           <arg type="ao" direction="out" />\
-       </method>\
-    <signal name="InhibitorAdded">\
-        <arg type="o" direction="out" />\
-    </signal>\
-    <signal name="InhibitorRemoved">\
-        <arg type="o" direction="out" />\
-    </signal>\
-  </interface>\
+    <interface name="org.gnome.SessionManager">\
+        <method name="Inhibit">\
+            <arg type="s" direction="in" />\
+            <arg type="u" direction="in" />\
+            <arg type="s" direction="in" />\
+            <arg type="u" direction="in" />\
+            <arg type="u" direction="out" />\
+        </method>\
+        <method name="Uninhibit">\
+            <arg type="u" direction="in" />\
+        </method>\
+        <method name="GetInhibitors">\
+            <arg type="ao" direction="out" />\
+        </method>\
+        <signal name="InhibitorAdded">\
+            <arg type="o" direction="out" />\
+        </signal>\
+        <signal name="InhibitorRemoved">\
+            <arg type="o" direction="out" />\
+        </signal>\
+    </interface>\
 </node>';
 
 const DBusSessionManagerProxy = Gio.DBusProxy.makeProxyWrapper(DBusSessionManagerIface);
 
 const DBusSessionManagerInhibitorIface = '<node>\
-  <interface name="org.gnome.SessionManager.Inhibitor">\
-    <method name="GetAppId">\
-        <arg type="s" direction="out" />\
-    </method>\
-  </interface>\
+    <interface name="org.gnome.SessionManager.Inhibitor">\
+        <method name="GetAppId">\
+            <arg type="s" direction="out" />\
+        </method>\
+    </interface>\
 </node>';
 
 const DBusSessionManagerInhibitorProxy = Gio.DBusProxy.makeProxyWrapper(DBusSessionManagerInhibitorIface);
@@ -118,8 +118,8 @@ class Espresso extends PanelMenu.Button {
 
         this._proxy = new ColorProxy(Gio.DBus.session, 'org.gnome.SettingsDaemon.Color', '/org/gnome/SettingsDaemon/Color', (proxy, error) => {
             if (error) {
-              log(error.message);
-              return;
+                log(error.message);
+                return;
             }
         });
 
@@ -239,8 +239,8 @@ class Espresso extends PanelMenu.Button {
         this._sessionManager.GetInhibitorsRemote(([inhibitors]) => {
             for(var i in inhibitors) {
                 let inhibitor = new DBusSessionManagerInhibitorProxy(Gio.DBus.session,
-                                                             'org.gnome.SessionManager',
-                                                             inhibitors[i]);
+                                                                    'org.gnome.SessionManager',
+                                                                    inhibitors[i]);
                 inhibitor.GetAppIdRemote(app_id => {
                     if (app_id != '' && app_id == this._last_app) {
                         if (this._last_app == 'user')
@@ -284,30 +284,30 @@ class Espresso extends PanelMenu.Button {
 
     _manageNightLight(state){
         if (state == 'enabled') {
-          if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._proxy.NightLightActive && !this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)) {
-              this._proxy.DisabledUntilTomorrow = false;
-              this._night_light = true;
-          } else {
-              this._night_light = false;
-          }
+            if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._proxy.NightLightActive && !this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)) {
+                this._proxy.DisabledUntilTomorrow = false;
+                this._night_light = true;
+            } else {
+                this._night_light = false;
+            }
         }
         if (state == 'disabled') {
-          if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._proxy.NightLightActive && !this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)) {
-              this._proxy.DisabledUntilTomorrow = true;
-              this._night_light = true;
-          } else {
-              this._night_light = false;
-          }
+            if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._proxy.NightLightActive && !this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)) {
+                this._proxy.DisabledUntilTomorrow = true;
+                this._night_light = true;
+            } else {
+                this._night_light = false;
+            }
         }
     }
 
     _sendNotification(state){
         if (state == 'enabled') {
-          if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._night_light && this._proxy.DisabledUntilTomorrow) {
-              Main.notify(_('Auto suspend and screensaver disabled. Night Light paused.'));
-          } else {
-              Main.notify(_('Auto suspend and screensaver disabled'));
-          }
+            if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._night_light && this._proxy.DisabledUntilTomorrow) {
+                Main.notify(_('Auto suspend and screensaver disabled. Night Light paused.'));
+            } else {
+                Main.notify(_('Auto suspend and screensaver disabled'));
+            }
         }
         if (state == 'disabled') {
             if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._night_light && !this._proxy.DisabledUntilTomorrow) {
