@@ -175,11 +175,11 @@ class Espresso extends PanelMenu.Button {
         if (this._settings.get_boolean(USER_ENABLED_KEY) && this._settings.get_boolean(RESTORE_KEY)) {
             this.toggleState();
         }
+
         // Enable espresso when fullscreen app is running
-        if (this._settings.get_boolean(FULLSCREEN_KEY)) {
-            this._inFullscreenId = this._screen.connect('in-fullscreen-changed', this.toggleFullscreen.bind(this));
-            this.toggleFullscreen();
-        }
+        this._inFullscreenId = this._screen.connect('in-fullscreen-changed', this.toggleFullscreen.bind(this));
+        this._settings.connect(`changed::${FULLSCREEN_KEY}`, this.toggleFullscreen.bind(this));
+        this.toggleFullscreen();
 
         // Enable espresso when laptop is docked to external monitors
         this._isDockedId = this._monitor_manager.connect('monitors-changed', this.toggleDocked.bind(this));
@@ -229,13 +229,19 @@ class Espresso extends PanelMenu.Button {
 
     toggleFullscreen() {
         Mainloop.timeout_add_seconds(2, () => {
-            if (this.inFullscreen && !this._apps.includes('fullscreen')) {
+            const enabled = this._settings.get_boolean(FULLSCREEN_KEY);
+            const inhibited = this._apps.includes('fullscreen');
+
+            if (this.inFullscreen && enabled && !inhibited) {
                 this.addInhibit('fullscreen');
                 this._manageNightLight('disabled');
             }
         });
 
-        if (!this.inFullscreen && this._apps.includes('fullscreen')) {
+        const enabled = this._settings.get_boolean(FULLSCREEN_KEY);
+        const inhibited = this._apps.includes('fullscreen');
+
+        if ((!this.inFullscreen || !enabled) && inhibited) {
             this.removeInhibit('fullscreen');
             this._manageNightLight('enabled');
         }
@@ -428,8 +434,7 @@ class Espresso extends PanelMenu.Button {
         // remove all inhibitors
         this._apps.forEach(app_id => this.removeInhibit(app_id));
         // disconnect from signals
-        if (this._settings.get_boolean(FULLSCREEN_KEY))
-            this._screen.disconnect(this._inFullscreenId);
+        this._screen.disconnect(this._inFullscreenId);
         this._monitor_manager.disconnect(this._isDockedId);
         if (this._inhibitorAddedId) {
             this._sessionManager.disconnectSignal(this._inhibitorAddedId);
