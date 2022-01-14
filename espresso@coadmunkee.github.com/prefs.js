@@ -31,6 +31,7 @@ const SHOW_INDICATOR_KEY = 'show-indicator';
 const SHOW_NOTIFICATIONS_KEY = 'show-notifications';
 const FULLSCREEN_KEY = 'enable-fullscreen';
 const DOCKED_KEY = 'enable-docked';
+const CHARGING_KEY = 'enable-charging';
 const RESTORE_KEY = 'restore-state';
 const NIGHT_LIGHT_KEY = 'control-nightlight';
 const NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';
@@ -114,6 +115,23 @@ class EspressoWidget {
 
         this.w.attach(dockedbox, 0, 2, 1, 1);
 
+        const chargingbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
+                                       spacing: 7});
+
+        const enableChargingLabel = new Gtk.Label({label: _("Enable when this device is charging"),
+                                                 hexpand: true,
+                                                 xalign: 0});
+
+        const enableChargingSwitch = new Gtk.Switch({active: this._settings.get_boolean(CHARGING_KEY)});
+        enableChargingSwitch.connect('notify::active', button => {
+            this._settings.set_boolean(CHARGING_KEY, button.active);
+        });
+
+        chargingbox.prepend(enableChargingLabel);
+        chargingbox.append(enableChargingSwitch);
+
+        this.w.attach(chargingbox, 0, 3, 1, 1);
+
         const stateBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                 spacing: 7});
 
@@ -129,7 +147,7 @@ class EspressoWidget {
         stateBox.prepend(stateLabel);
         stateBox.append(stateSwitch);
 
-        this.w.attach(stateBox, 0, 3, 1, 1);
+        this.w.attach(stateBox, 0, 4, 1, 1);
 
         const notificationsBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                         spacing: 7});
@@ -146,7 +164,7 @@ class EspressoWidget {
         notificationsBox.prepend(notificationsLabel);
         notificationsBox.append(notificationsSwitch);
 
-        this.w.attach(notificationsBox, 0, 4, 1, 1);
+        this.w.attach(notificationsBox, 0, 5, 1, 1);
 
         const nightlightBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 7});
 
@@ -164,7 +182,7 @@ class EspressoWidget {
         nightlightBox.prepend(nightlightLabel);
         nightlightBox.append(nightlightSwitch);
 
-        this.w.attach(nightlightBox, 0, 5, 1, 1);
+        this.w.attach(nightlightBox, 0, 6, 1, 1);
 
         const nightlightAppBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                 spacing: 7});
@@ -189,13 +207,14 @@ class EspressoWidget {
         nightlightAppBox.prepend(nightlightAppLabel);
         nightlightAppBox.append(nightlightAppSwitch);
 
-        this.w.attach(nightlightAppBox, 0, 6, 1, 1);
+        this.w.attach(nightlightAppBox, 0, 7, 1, 1);
 
         this._store = new Gtk.ListStore();
         this._store.set_column_types([Gio.AppInfo, GObject.TYPE_STRING, Gio.Icon]);
 
         this._treeView = new Gtk.TreeView({ model: this._store,
                                             hexpand: true, vexpand: true });
+        this._treeView.set_size_request(-1, 80); // min height for the app list
         this._treeView.get_selection().set_mode(Gtk.SelectionMode.SINGLE);
 
         const appColumn = new Gtk.TreeViewColumn({ expand: true, sort_column_id: Columns.DISPLAY_NAME,
@@ -208,7 +227,7 @@ class EspressoWidget {
         appColumn.add_attribute(nameRenderer, "text", Columns.DISPLAY_NAME);
         this._treeView.append_column(appColumn);
 
-        this.w.attach(this._treeView, 0, 7, 1, 1);
+        this.w.attach(this._treeView, 0, 8, 1, 1);
 
         const toolbar = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 6});
 
@@ -220,7 +239,7 @@ class EspressoWidget {
         delButton.connect('clicked', this._deleteSelected.bind(this));
         toolbar.append(delButton);
 
-        this.w.attach(toolbar, 0, 8, 1, 1);
+        this.w.attach(toolbar, 0, 9, 1, 1);
 
         this._changedPermitted = true;
         this._refresh();

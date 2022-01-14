@@ -41,6 +41,7 @@ const USER_ENABLED_KEY = 'user-enabled';
 const RESTORE_KEY = 'restore-state';
 const FULLSCREEN_KEY = 'enable-fullscreen';
 const DOCKED_KEY = 'enable-docked';
+const CHARGING_KEY = 'enable-charging';
 const NIGHT_LIGHT_KEY = 'control-nightlight';
 const NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';
 
@@ -186,6 +187,11 @@ class Espresso extends PanelMenu.Button {
         this._settings.connect(`changed::${DOCKED_KEY}`, this.toggleDocked.bind(this));
         this.toggleDocked();
 
+        // Enable espresso when charging
+        this._isChargingId = this.batteryProxy.connect('g-properties-changed', this.toggleCharging.bind(this));
+        this._settings.connect(`changed::${CHARGING_KEY}`, this.toggleCharging.bind(this));
+        this.toggleCharging();
+
         this._appConfigs = [];
         this._appData = new Map();
 
@@ -270,15 +276,41 @@ class Espresso extends PanelMenu.Button {
         }
     }
 
+    toggleCharging() {
+        Mainloop.timeout_add_seconds(2, () => {
+            const enabled = this._settings.get_boolean(CHARGING_KEY);
+            const inhibited = this._apps.includes('charging');
+
+            if (enabled && this.isCharging && !inhibited) {
+                this.addInhibit('charging');
+                this._manageNightLight('disabled');
+            }
+        });
+
+        const enabled = this._settings.get_boolean(CHARGING_KEY);
+        const inhibited = this._apps.includes('charging');
+
+        if ((!this.isCharging || !enabled) && inhibited) {
+            this.removeInhibit('charging');
+            this._manageNightLight('enabled');
+        }
+    }
+
     toggleState() {
         if (this._state) {
             if (this._apps.includes('docked')) {
                 Main.notify(_('Turning off "espresso enabled when docked"'));
                 this._settings.set_boolean(DOCKED_KEY, false);
                 return; // the set_boolean is reactive and will call toggleDocked()
-            } else if (this._apps.includes('fullscreen')) {
+            }
+            if (this._apps.includes('fullscreen')) {
                 Main.notify(_('Turning off "espresso enabled when fullscreen"'));
                 this._settings.set_boolean(FULLSCREEN_KEY, false);
+                return; // the set_boolean is reactive and will call toggleFullscreen()
+            }
+            if (this._apps.includes('charging')) {
+                Main.notify(_('Turning off "espresso enabled when charging"'));
+                this._settings.set_boolean(CHARGING_KEY, false);
                 return; // the set_boolean is reactive and will call toggleFullscreen()
             }
 
@@ -449,6 +481,8 @@ class Espresso extends PanelMenu.Button {
         // disconnect from signals
         this._screen.disconnect(this._inFullscreenId);
         this._monitor_manager.disconnect(this._isDockedId);
+        this.batteryProxy.disconnect(this._isChargingId);
+
         if (this._inhibitorAddedId) {
             this._sessionManager.disconnectSignal(this._inhibitorAddedId);
             this._inhibitorAddedId = 0;

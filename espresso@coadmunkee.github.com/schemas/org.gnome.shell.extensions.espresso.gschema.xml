@@ -36,6 +36,11 @@
             <summary>Enable when docked to external monitors</summary>
             <description>Enable when the device is on ac power and connected to external monitors</description>
         </key>
+        <key type="b" name="enable-charging">
+            <default>false</default>
+            <summary>Enable when charging</summary>
+            <description>Enable when the device is on ac power</description>
+        </key>
         <key type="b" name="control-nightlight">
             <default>false</default>
             <summary>Pause/resume Night Light</summary>
