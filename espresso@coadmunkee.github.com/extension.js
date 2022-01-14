@@ -195,13 +195,16 @@ class Espresso extends PanelMenu.Button {
 
     /** returns the UPower proxy for this device */
     get batteryProxy() {
-        const menu = Main.panel.statusArea.aggregateMenu
-
-        return (menu && menu._power) ? menu._power._proxy : null;
+        return Main.panel.statusArea.aggregateMenu?._power?._proxy ?? null;
     }
 
     /** returns whether the device is currently receiving power */
     get isCharging() {
+        if (this.batteryProxy === null) {
+            // this device has no battery
+            return false;
+        }
+
         if (this.batteryProxy.Type !== UPower.DeviceKind.BATTERY) {
             // this isn't a battery-powered device
             return false;
