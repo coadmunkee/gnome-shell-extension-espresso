@@ -269,6 +269,16 @@ class Espresso extends PanelMenu.Button {
 
     toggleState() {
         if (this._state) {
+            if (this._apps.includes('docked')) {
+                Main.notify(_('Turning off "espresso enabled when docked"'));
+                this._settings.set_boolean(DOCKED_KEY, false);
+                return; // the set_boolean is reactive and will call toggleDocked()
+            } else if (this._apps.includes('fullscreen')) {
+                Main.notify(_('Turning off "espresso enabled when fullscreen"'));
+                this._settings.set_boolean(FULLSCREEN_KEY, false);
+                return; // the set_boolean is reactive and will call toggleFullscreen()
+            }
+
             this._apps.forEach(app_id => this.removeInhibit(app_id));
             this._manageNightLight('enabled');
         }
