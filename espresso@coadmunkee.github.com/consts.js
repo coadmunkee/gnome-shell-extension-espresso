@@ -10,6 +10,7 @@ var USER_ENABLED_KEY = 'user-enabled';
 var FULLSCREEN_KEY = 'enable-fullscreen';
 var DOCKED_KEY = 'enable-docked';
 var CHARGING_KEY = 'enable-charging';
+var OVERRIDE_KEY = 'allow-override';
 var RESTORE_KEY = 'restore-state';
 var NIGHT_LIGHT_KEY = 'control-nightlight';
 var NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';

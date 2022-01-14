@@ -41,6 +41,11 @@
             <summary>Enable when charging</summary>
             <description>Enable when the device is on ac power</description>
         </key>
+        <key type="b" name="allow-override">
+            <default>true</default>
+            <summary>Allow to temporarily override without affecting my settings</summary>
+            <description>Allow turning on/off without changing my settings</description>
+        </key>
         <key type="b" name="control-nightlight">
             <default>false</default>
             <summary>Pause/resume Night Light</summary>

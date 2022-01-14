@@ -21,6 +21,9 @@
 
 'use strict';
 
+// set to true to enable debug notifications
+globalThis.ENABLE_DEBUG = true;
+
 const St = imports.gi.St;
 const Gio = imports.gi.Gio;
 const GObject = imports.gi.GObject;
@@ -184,6 +187,15 @@ class Espresso extends PanelMenu.Button {
         this._settings.connect(`changed::${CHARGING_KEY}`, this.toggleCharging.bind(this));
         this.toggleCharging();
 
+        // Allow overriding
+        this._settings.connect(`changed::${OVERRIDE_KEY}`, () => {
+            if (!this._settings.get_boolean(OVERRIDE_KEY) && !this._state) {
+                this.toggleFullscreen();
+                this.toggleDocked();
+                this.toggleCharging();
+            }
+        });
+
         this._appConfigs = [];
         this._appData = new Map();
 
@@ -208,7 +220,8 @@ class Espresso extends PanelMenu.Button {
             return false;
         }
 
-        return this.batteryProxy.State === UPower.DeviceState.FULLY_CHARGED ||
+        return (this.batteryProxy.State === UPower.DeviceState.FULLY_CHARGED &&
+            this.batteryProxy.TimeToEmpty === 0) ||
             this.batteryProxy.State === UPower.DeviceState.CHARGING;
     }
 
@@ -289,12 +302,17 @@ class Espresso extends PanelMenu.Button {
     }
 
     toggleState() {
-        if (this._state) {
-            const isDocked = this._apps.includes(DOCKED_SYMBOL);
-            const isCharging = this._apps.includes(CHARGING_SYMBOL);
-            const isFullscreen = this._apps.includes(FULLSCREEN_SYMBOL);
-            const allowOverride = this._settings.get_boolean(OVERRIDE_KEY);
+        const isDocked = this._apps.includes(DOCKED_SYMBOL);
+        const isCharging = this._apps.includes(CHARGING_SYMBOL);
+        const isFullscreen = this._apps.includes(FULLSCREEN_SYMBOL);
+        const isUser = this._apps.includes(USER_SYMBOL);
+        const allowOverride = this._settings.get_boolean(OVERRIDE_KEY);
 
+        if (ENABLE_DEBUG) {
+            Main.notify(`Espresso: ${this._state?'on':'off'} ${isUser?'user ':''}${isDocked?'docked ':''}${isCharging?'charging ':''}${isFullscreen?'fullscreen ':''}${allowOverride?'override':''}`);
+        }
+
+        if (this._state) {
             if (!allowOverride && (isDocked || isCharging || isFullscreen)) {
                 if (isDocked) {
                     this._sendNotification(NOTIFY.DOCKED_OFF);
@@ -308,7 +326,6 @@ class Espresso extends PanelMenu.Button {
                     this._sendNotification(NOTIFY.CHARGING_OFF);
                     this._settings.set_boolean(CHARGING_KEY, false);
                 }
-                return; // the set_boolean is reactive and will call the toggle functions
             }
 
             this._apps.forEach(app_id => this.removeInhibit(app_id));
@@ -331,8 +348,16 @@ class Espresso extends PanelMenu.Button {
     }
 
     removeInhibit(app_id) {
-        let index = this._apps.indexOf(app_id);
-        this._sessionManager.UninhibitRemote(this._cookies[index]);
+        for (let [index, _app_id] of Object.entries(this._apps)) {
+            if (app_id === _app_id) {
+                this._sessionManager.UninhibitRemote(this._cookies[index]);
+
+                // ensure we remove every instance of symbolic apps, just in case
+                if (!app_id.startsWith('Symbol')) {
+                    break;
+                }
+            }
+        }
     }
 
     _inhibitorAdded(proxy, sender, [object]) {

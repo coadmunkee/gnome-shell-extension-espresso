@@ -15,10 +15,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
+// set to true to make the settings update automatically
+const REACTIVE_SETTINGS = true;
+
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 const GObject = imports.gi.GObject;
 const Config = imports.misc.config;
+const Mainloop = imports.mainloop;
 
 const Gettext = imports.gettext.domain('gnome-shell-extension-espresso');
 const _ = Gettext.gettext;
@@ -86,6 +90,13 @@ class EspressoWidget {
             this._settings.set_boolean(FULLSCREEN_KEY, button.active);
         });
 
+        // update visually in this prefs widget when modified elsewhere:
+        if (REACTIVE_SETTINGS) this._settings.connect(`changed::${FULLSCREEN_KEY}`, () => {
+            Mainloop.timeout_add_seconds(1, () => {
+                enableFullscreenSwitch.set_active(this._settings.get_boolean(FULLSCREEN_KEY));
+            });
+        });
+
         gtkhbox.prepend(enableFullscreenLabel);
         gtkhbox.append(enableFullscreenSwitch);
 
@@ -101,6 +112,13 @@ class EspressoWidget {
         const enableDockedSwitch = new Gtk.Switch({active: this._settings.get_boolean(DOCKED_KEY)});
         enableDockedSwitch.connect('notify::active', button => {
             this._settings.set_boolean(DOCKED_KEY, button.active);
+        });
+
+        // update visually in this prefs widget when modified elsewhere:
+        if (REACTIVE_SETTINGS) this._settings.connect(`changed::${DOCKED_KEY}`, () => {
+            Mainloop.timeout_add_seconds(1, () => {
+                enableDockedSwitch.set_active(this._settings.get_boolean(DOCKED_KEY));
+            });
         });
 
         dockedbox.prepend(enableDockedLabel);
@@ -120,10 +138,34 @@ class EspressoWidget {
             this._settings.set_boolean(CHARGING_KEY, button.active);
         });
 
+        // update visually in this prefs widget when modified elsewhere:
+        if (REACTIVE_SETTINGS) this._settings.connect(`changed::${CHARGING_KEY}`, () => {
+            Mainloop.timeout_add_seconds(1, () => {
+                enableChargingSwitch.set_active(this._settings.get_boolean(CHARGING_KEY));
+            });
+        });
+
         chargingbox.prepend(enableChargingLabel);
         chargingbox.append(enableChargingSwitch);
 
         this.w.attach(chargingbox, 0, 3, 1, 1);
+
+        const overridebox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
+                                        spacing: 7});
+
+        const enableOverrideLabel = new Gtk.Label({label: _("Allow to temporarily override without affecting my settings"),
+                                                 hexpand: true,
+                                                 xalign: 0});
+
+        const enableOverrideSwitch = new Gtk.Switch({active: this._settings.get_boolean(OVERRIDE_KEY)});
+        enableOverrideSwitch.connect('notify::active', button => {
+            this._settings.set_boolean(OVERRIDE_KEY, button.active);
+        });
+
+        overridebox.prepend(enableOverrideLabel);
+        overridebox.append(enableOverrideSwitch);
+
+        this.w.attach(overridebox, 0, 4, 1, 1);
 
         const stateBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                 spacing: 7});
@@ -140,7 +182,7 @@ class EspressoWidget {
         stateBox.prepend(stateLabel);
         stateBox.append(stateSwitch);
 
-        this.w.attach(stateBox, 0, 4, 1, 1);
+        this.w.attach(stateBox, 0, 5, 1, 1);
 
         const notificationsBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                         spacing: 7});
@@ -157,7 +199,7 @@ class EspressoWidget {
         notificationsBox.prepend(notificationsLabel);
         notificationsBox.append(notificationsSwitch);
 
-        this.w.attach(notificationsBox, 0, 5, 1, 1);
+        this.w.attach(notificationsBox, 0, 6, 1, 1);
 
         const nightlightBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 7});
 
@@ -175,7 +217,7 @@ class EspressoWidget {
         nightlightBox.prepend(nightlightLabel);
         nightlightBox.append(nightlightSwitch);
 
-        this.w.attach(nightlightBox, 0, 6, 1, 1);
+        this.w.attach(nightlightBox, 0, 7, 1, 1);
 
         const nightlightAppBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                 spacing: 7});
@@ -200,7 +242,7 @@ class EspressoWidget {
         nightlightAppBox.prepend(nightlightAppLabel);
         nightlightAppBox.append(nightlightAppSwitch);
 
-        this.w.attach(nightlightAppBox, 0, 7, 1, 1);
+        this.w.attach(nightlightAppBox, 0, 8, 1, 1);
 
         this._store = new Gtk.ListStore();
         this._store.set_column_types([Gio.AppInfo, GObject.TYPE_STRING, Gio.Icon]);
@@ -220,7 +262,7 @@ class EspressoWidget {
         appColumn.add_attribute(nameRenderer, "text", Columns.DISPLAY_NAME);
         this._treeView.append_column(appColumn);
 
-        this.w.attach(this._treeView, 0, 8, 1, 1);
+        this.w.attach(this._treeView, 0, 9, 1, 1);
 
         const toolbar = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 6});
 
@@ -232,7 +274,7 @@ class EspressoWidget {
         delButton.connect('clicked', this._deleteSelected.bind(this));
         toolbar.append(delButton);
 
-        this.w.attach(toolbar, 0, 9, 1, 1);
+        this.w.attach(toolbar, 0, 10, 1, 1);
 
         this._changedPermitted = true;
         this._refresh();
