@@ -34,22 +34,14 @@ const MessageTray = imports.ui.messageTray;
 const Atk = imports.gi.Atk;
 const Config = imports.misc.config;
 
-const INHIBIT_APPS_KEY = 'inhibit-apps';
-const SHOW_INDICATOR_KEY = 'show-indicator';
-const SHOW_NOTIFICATIONS_KEY = 'show-notifications';
-const USER_ENABLED_KEY = 'user-enabled';
-const RESTORE_KEY = 'restore-state';
-const FULLSCREEN_KEY = 'enable-fullscreen';
-const DOCKED_KEY = 'enable-docked';
-const CHARGING_KEY = 'enable-charging';
-const NIGHT_LIGHT_KEY = 'control-nightlight';
-const NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';
-
 const Gettext = imports.gettext.domain('gnome-shell-extension-espresso');
 const _ = Gettext.gettext;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Convenience =  imports.misc.extensionUtils;
+
+// import our constants
+Object.assign(globalThis, Me.imports.consts);
 
 const ColorInterface = '<node> \
     <interface name="org.gnome.SettingsDaemon.Color"> \
@@ -239,19 +231,19 @@ class Espresso extends PanelMenu.Button {
     toggleFullscreen() {
         Mainloop.timeout_add_seconds(2, () => {
             const enabled = this._settings.get_boolean(FULLSCREEN_KEY);
-            const inhibited = this._apps.includes('fullscreen');
+            const inhibited = this._apps.includes(FULLSCREEN_SYMBOL);
 
             if (this.inFullscreen && enabled && !inhibited) {
-                this.addInhibit('fullscreen');
+                this.addInhibit(FULLSCREEN_SYMBOL);
                 this._manageNightLight('disabled');
             }
         });
 
         const enabled = this._settings.get_boolean(FULLSCREEN_KEY);
-        const inhibited = this._apps.includes('fullscreen');
+        const inhibited = this._apps.includes(FULLSCREEN_SYMBOL);
 
         if ((!this.inFullscreen || !enabled) && inhibited) {
-            this.removeInhibit('fullscreen');
+            this.removeInhibit(FULLSCREEN_SYMBOL);
             this._manageNightLight('enabled');
         }
     }
@@ -259,19 +251,19 @@ class Espresso extends PanelMenu.Button {
     toggleDocked() {
         Mainloop.timeout_add_seconds(2, () => {
             const enabled = this._settings.get_boolean(DOCKED_KEY);
-            const inhibited = this._apps.includes('docked');
+            const inhibited = this._apps.includes(DOCKED_SYMBOL);
 
             if (enabled && this.isDocked && !inhibited) {
-                this.addInhibit('docked');
+                this.addInhibit(DOCKED_SYMBOL);
                 this._manageNightLight('disabled');
             }
         });
 
         const enabled = this._settings.get_boolean(DOCKED_KEY);
-        const inhibited = this._apps.includes('docked');
+        const inhibited = this._apps.includes(DOCKED_SYMBOL);
 
         if ((!this.isDocked || !enabled) && inhibited) {
-            this.removeInhibit('docked');
+            this.removeInhibit(DOCKED_SYMBOL);
             this._manageNightLight('enabled');
         }
     }
@@ -279,36 +271,36 @@ class Espresso extends PanelMenu.Button {
     toggleCharging() {
         Mainloop.timeout_add_seconds(2, () => {
             const enabled = this._settings.get_boolean(CHARGING_KEY);
-            const inhibited = this._apps.includes('charging');
+            const inhibited = this._apps.includes(CHARGING_SYMBOL);
 
             if (enabled && this.isCharging && !inhibited) {
-                this.addInhibit('charging');
+                this.addInhibit(CHARGING_SYMBOL);
                 this._manageNightLight('disabled');
             }
         });
 
         const enabled = this._settings.get_boolean(CHARGING_KEY);
-        const inhibited = this._apps.includes('charging');
+        const inhibited = this._apps.includes(CHARGING_SYMBOL);
 
         if ((!this.isCharging || !enabled) && inhibited) {
-            this.removeInhibit('charging');
+            this.removeInhibit(CHARGING_SYMBOL);
             this._manageNightLight('enabled');
         }
     }
 
     toggleState() {
         if (this._state) {
-            if (this._apps.includes('docked')) {
+            if (this._apps.includes(DOCKED_SYMBOL)) {
                 Main.notify(_('Turning off "espresso enabled when docked"'));
                 this._settings.set_boolean(DOCKED_KEY, false);
                 return; // the set_boolean is reactive and will call toggleDocked()
             }
-            if (this._apps.includes('fullscreen')) {
+            if (this._apps.includes(FULLSCREEN_SYMBOL)) {
                 Main.notify(_('Turning off "espresso enabled when fullscreen"'));
                 this._settings.set_boolean(FULLSCREEN_KEY, false);
                 return; // the set_boolean is reactive and will call toggleFullscreen()
             }
-            if (this._apps.includes('charging')) {
+            if (this._apps.includes(CHARGING_SYMBOL)) {
                 Main.notify(_('Turning off "espresso enabled when charging"'));
                 this._settings.set_boolean(CHARGING_KEY, false);
                 return; // the set_boolean is reactive and will call toggleFullscreen()
@@ -318,7 +310,7 @@ class Espresso extends PanelMenu.Button {
             this._manageNightLight('enabled');
         }
         else {
-            this.addInhibit('user');
+            this.addInhibit(USER_SYMBOL);
             this._manageNightLight('disabled');
         }
     }
@@ -346,7 +338,7 @@ class Espresso extends PanelMenu.Button {
                                                                     inhibitors[i]);
                 inhibitor.GetAppIdRemote(app_id => {
                     if (app_id != '' && app_id == this._last_app) {
-                        if (this._last_app == 'user')
+                        if (this._last_app == USER_SYMBOL)
                             this._settings.set_boolean(USER_ENABLED_KEY, true);
                         this._apps.push(this._last_app);
                         this._cookies.push(this._last_cookie);
@@ -369,7 +361,7 @@ class Espresso extends PanelMenu.Button {
     _inhibitorRemoved(proxy, sender, [object]) {
         let index = this._objects.indexOf(object);
         if (index != -1) {
-            if (this._apps[index] == 'user')
+            if (this._apps[index] == USER_SYMBOL)
                 this._settings.set_boolean(USER_ENABLED_KEY, false);
             // Remove app from list
             this._apps.splice(index, 1);

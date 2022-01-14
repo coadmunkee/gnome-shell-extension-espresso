@@ -26,15 +26,8 @@ const _ = Gettext.gettext;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const INHIBIT_APPS_KEY = 'inhibit-apps';
-const SHOW_INDICATOR_KEY = 'show-indicator';
-const SHOW_NOTIFICATIONS_KEY = 'show-notifications';
-const FULLSCREEN_KEY = 'enable-fullscreen';
-const DOCKED_KEY = 'enable-docked';
-const CHARGING_KEY = 'enable-charging';
-const RESTORE_KEY = 'restore-state';
-const NIGHT_LIGHT_KEY = 'control-nightlight';
-const NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';
+// import our constants
+Object.assign(globalThis, Me.imports.consts);
 
 const Columns = {
     APPINFO: 0,
