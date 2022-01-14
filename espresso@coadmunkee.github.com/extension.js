@@ -290,20 +290,25 @@ class Espresso extends PanelMenu.Button {
 
     toggleState() {
         if (this._state) {
-            if (this._apps.includes(DOCKED_SYMBOL)) {
-                Main.notify(_('Turning off "espresso enabled when docked"'));
-                this._settings.set_boolean(DOCKED_KEY, false);
-                return; // the set_boolean is reactive and will call toggleDocked()
-            }
-            if (this._apps.includes(FULLSCREEN_SYMBOL)) {
-                Main.notify(_('Turning off "espresso enabled when fullscreen"'));
-                this._settings.set_boolean(FULLSCREEN_KEY, false);
-                return; // the set_boolean is reactive and will call toggleFullscreen()
-            }
-            if (this._apps.includes(CHARGING_SYMBOL)) {
-                Main.notify(_('Turning off "espresso enabled when charging"'));
-                this._settings.set_boolean(CHARGING_KEY, false);
-                return; // the set_boolean is reactive and will call toggleFullscreen()
+            const isDocked = this._apps.includes(DOCKED_SYMBOL);
+            const isCharging = this._apps.includes(CHARGING_SYMBOL);
+            const isFullscreen = this._apps.includes(FULLSCREEN_SYMBOL);
+            const allowOverride = this._settings.get_boolean(OVERRIDE_KEY);
+
+            if (!allowOverride && (isDocked || isCharging || isFullscreen)) {
+                if (isDocked) {
+                    this._sendNotification(NOTIFY.DOCKED_OFF);
+                    this._settings.set_boolean(DOCKED_KEY, false);
+                }
+                if (isFullscreen) {
+                    this._sendNotification(NOTIFY.FULLSCREEN_OFF);
+                    this._settings.set_boolean(FULLSCREEN_KEY, false);
+                }
+                if (isCharging) {
+                    this._sendNotification(NOTIFY.CHARGING_OFF);
+                    this._settings.set_boolean(CHARGING_KEY, false);
+                }
+                return; // the set_boolean is reactive and will call the toggle functions
             }
 
             this._apps.forEach(app_id => this.removeInhibit(app_id));
@@ -348,9 +353,7 @@ class Espresso extends PanelMenu.Button {
                         if (this._state === false) {
                             this._state = true;
                             this._icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/${EnabledIcon}.svg`);
-                            if (this._settings.get_boolean(SHOW_NOTIFICATIONS_KEY) && !this.inFullscreen) {
-                                this._sendNotification('enabled');
-                            }
+                            this._sendNotification(NOTIFY.ENABLED);
                         }
                     }
                 });
@@ -370,9 +373,7 @@ class Espresso extends PanelMenu.Button {
             if (this._apps.length === 0) {
                 this._state = false;
                 this._icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/${DisabledIcon}.svg`);
-                if(this._settings.get_boolean(SHOW_NOTIFICATIONS_KEY)) {
-                    this._sendNotification('disabled');
-                }
+                this._sendNotification(NOTIFY.DISABLED);
             }
         }
     }
@@ -397,19 +398,34 @@ class Espresso extends PanelMenu.Button {
     }
 
     _sendNotification(state){
-        if (state == 'enabled') {
+        if (!this._settings.get_boolean(SHOW_NOTIFICATIONS_KEY) || this.inFullscreen) {
+            // suppress this notification
+            return;
+        }
+
+        switch (state) {
+        case NOTIFY.ENABLED:
             if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._night_light && this._proxy.DisabledUntilTomorrow) {
                 Main.notify(_('Auto suspend and screensaver disabled. Night Light paused.'));
             } else {
                 Main.notify(_('Auto suspend and screensaver disabled'));
             }
-        }
-        if (state == 'disabled') {
+            break;
+        case NOTIFY.DISABLED:
             if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._night_light && !this._proxy.DisabledUntilTomorrow) {
                 Main.notify(_('Auto suspend and screensaver enabled. Night Light resumed.'));
             } else {
                 Main.notify(_('Auto suspend and screensaver enabled'));
             }
+            break;
+        case NOTIFY.DOCKED_OFF:
+            Main.notify(_('Turning off "espresso enabled when docked"'));
+            break;
+        case NOTIFY.CHARGING_OFF:
+            Main.notify(_('Turning off "espresso enabled when charging"'));
+            break;
+        case NOTIFY.FULLSCREEN_OFF:
+            Main.notify(_('Turning off "espresso enabled when fullscreen"'));
         }
     }
 
