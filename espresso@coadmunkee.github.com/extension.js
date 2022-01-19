@@ -202,6 +202,9 @@ class Espresso extends PanelMenu.Button {
             }
         });
 
+        // React to night light settings
+        this._settings.connect(`changed::${NIGHT_LIGHT_KEY}`, this._manageNightLight.bind(this));
+
         this._appConfigs = [];
         this._appData = new Map();
 
