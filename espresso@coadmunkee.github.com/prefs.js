@@ -105,7 +105,7 @@ class EspressoWidget {
         const dockedbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                     spacing: 7});
 
-        const enableDockedLabel = new Gtk.Label({label: _("Enable when docked to external monitors"),
+        const enableDockedLabel = new Gtk.Label({label: _("Enable when charging and docked to external monitors"),
                 hexpand: true,
                 xalign: 0});
 
@@ -124,7 +124,7 @@ class EspressoWidget {
         dockedbox.prepend(enableDockedLabel);
         dockedbox.append(enableDockedSwitch);
 
-        this.w.attach(dockedbox, 0, 2, 1, 1);
+        this.w.attach(dockedbox, 0, 3, 1, 1);
 
         const chargingbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                        spacing: 7});
@@ -148,7 +148,7 @@ class EspressoWidget {
         chargingbox.prepend(enableChargingLabel);
         chargingbox.append(enableChargingSwitch);
 
-        this.w.attach(chargingbox, 0, 3, 1, 1);
+        this.w.attach(chargingbox, 0, 2, 1, 1);
 
         const overridebox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                         spacing: 7});
