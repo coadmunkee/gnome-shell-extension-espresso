@@ -22,7 +22,7 @@
 'use strict';
 
 // set to true to enable debug notifications
-globalThis.ENABLE_DEBUG = true;
+globalThis.ENABLE_DEBUG = false;
 
 const St = imports.gi.St;
 const Gio = imports.gi.Gio;
@@ -103,6 +103,11 @@ class Espresso extends PanelMenu.Button {
     _init() {
         super._init(null, IndicatorName);
 
+        if (ENABLE_DEBUG) {
+            log(`Espresso: ===================================================`)
+            log(`Espresso: new session`);
+        }
+
         this.accessible_role = Atk.Role.TOGGLE_BUTTON;
 
         this._settings = Convenience.getSettings();
@@ -159,6 +164,9 @@ class Espresso extends PanelMenu.Button {
         this._last_app = "";
         this._last_cookie = "";
         this._apps = [];
+        this._add_queue = new Set();
+        this._delete_queue = new Set();
+        this._lock = 0;
         this._cookies = [];
         this._objects = [];
 
@@ -178,9 +186,8 @@ class Espresso extends PanelMenu.Button {
         this.toggleFullscreen();
 
         // Enable espresso when laptop is docked to external monitors
-        this._isDockedId = this._monitor_manager.connect('monitors-changed', this.toggleDocked.bind(this));
-        this._settings.connect(`changed::${DOCKED_KEY}`, this.toggleDocked.bind(this));
-        this.toggleDocked();
+        this._isDockedId = this._monitor_manager.connect('monitors-changed', this.toggleCharging.bind(this));
+        this._settings.connect(`changed::${DOCKED_KEY}`, this.toggleCharging.bind(this));
 
         // Enable espresso when charging
         this._isChargingId = this.batteryProxy.connect('g-properties-changed', this.toggleCharging.bind(this));
@@ -191,7 +198,6 @@ class Espresso extends PanelMenu.Button {
         this._settings.connect(`changed::${OVERRIDE_KEY}`, () => {
             if (!this._settings.get_boolean(OVERRIDE_KEY) && !this._state) {
                 this.toggleFullscreen();
-                this.toggleDocked();
                 this.toggleCharging();
             }
         });
@@ -247,6 +253,10 @@ class Espresso extends PanelMenu.Button {
             const inhibited = this._apps.includes(FULLSCREEN_SYMBOL);
 
             if (this.inFullscreen && enabled && !inhibited) {
+                if (ENABLE_DEBUG) {
+                    log(`Espresso: fullscreen state changed to true`);
+                }
+
                 this.addInhibit(FULLSCREEN_SYMBOL);
                 this._manageNightLight('disabled');
             }
@@ -256,107 +266,170 @@ class Espresso extends PanelMenu.Button {
         const inhibited = this._apps.includes(FULLSCREEN_SYMBOL);
 
         if ((!this.inFullscreen || !enabled) && inhibited) {
-            this.removeInhibit(FULLSCREEN_SYMBOL);
-            this._manageNightLight('enabled');
-        }
-    }
-
-    toggleDocked() {
-        Mainloop.timeout_add_seconds(2, () => {
-            const enabled = this._settings.get_boolean(DOCKED_KEY);
-            const inhibited = this._apps.includes(DOCKED_SYMBOL);
-
-            if (enabled && this.isDocked && !inhibited) {
-                this.addInhibit(DOCKED_SYMBOL);
-                this._manageNightLight('disabled');
+            if (ENABLE_DEBUG) {
+                log(`Espresso: fullscreen state changed to false`);
             }
-        });
 
-        const enabled = this._settings.get_boolean(DOCKED_KEY);
-        const inhibited = this._apps.includes(DOCKED_SYMBOL);
-
-        if ((!this.isDocked || !enabled) && inhibited) {
-            this.removeInhibit(DOCKED_SYMBOL);
+            this.removeInhibit(FULLSCREEN_SYMBOL);
             this._manageNightLight('enabled');
         }
     }
 
     toggleCharging() {
         Mainloop.timeout_add_seconds(2, () => {
-            const enabled = this._settings.get_boolean(CHARGING_KEY);
-            const inhibited = this._apps.includes(CHARGING_SYMBOL);
+            const checkDocked = this._settings.get_boolean(DOCKED_KEY);
+            const checkCharging = this._settings.get_boolean(CHARGING_KEY);
+            const inhibitedByDock = this._apps.includes(DOCKED_SYMBOL);
+            const inhibitedByCharging = this._apps.includes(CHARGING_SYMBOL);
 
-            if (enabled && this.isCharging && !inhibited) {
-                this.addInhibit(CHARGING_SYMBOL);
-                this._manageNightLight('disabled');
+            if (!inhibitedByDock || !inhibitedByCharging) {
+                if (this.isCharging) {
+                    if (checkCharging && !inhibitedByCharging) {
+                        if (ENABLE_DEBUG) {
+                            log(`Espresso: charging state changed to true`);
+                        }
+
+                        this.addInhibit(CHARGING_SYMBOL);
+                    }
+
+                    if (checkDocked && this.isDocked && !inhibitedByDock) {
+                        if (ENABLE_DEBUG) {
+                            log(`Espresso: docked state changed to true`);
+                        }
+                        this.addInhibit(DOCKED_SYMBOL);
+                    }
+
+                    this._manageNightLight('disabled');
+                }
             }
         });
 
-        const enabled = this._settings.get_boolean(CHARGING_KEY);
-        const inhibited = this._apps.includes(CHARGING_SYMBOL);
+        const checkDocked = this._settings.get_boolean(DOCKED_KEY);
+        const checkCharging = this._settings.get_boolean(CHARGING_KEY);
+        const inhibitedByDock = this._apps.includes(DOCKED_SYMBOL);
+        const inhibitedByCharging = this._apps.includes(CHARGING_SYMBOL);
 
-        if ((!this.isCharging || !enabled) && inhibited) {
-            this.removeInhibit(CHARGING_SYMBOL);
-            this._manageNightLight('enabled');
+        if (inhibitedByDock || inhibitedByCharging) {
+            if (!this.isCharging || !checkCharging) {
+                if (ENABLE_DEBUG) {
+                    log(`Espresso: charging state changed to false`);
+                }
+
+                this.removeInhibit(CHARGING_SYMBOL);
+
+                if (!this.isDocked || !checkDocked) {
+                    if (ENABLE_DEBUG) {
+                        log(`Espresso: docked state changed to false`);
+                    }
+
+                    this.removeInhibit(DOCKED_SYMBOL);
+                }
+
+                this._manageNightLight('enabled');
+            }
         }
     }
 
     toggleState() {
-        const isDocked = this._apps.includes(DOCKED_SYMBOL);
-        const isCharging = this._apps.includes(CHARGING_SYMBOL);
-        const isFullscreen = this._apps.includes(FULLSCREEN_SYMBOL);
-        const isUser = this._apps.includes(USER_SYMBOL);
+        const wasDocked = this._apps.includes(DOCKED_SYMBOL);
+        const wasCharging = this._apps.includes(CHARGING_SYMBOL);
+        const wasFullscreen = this._apps.includes(FULLSCREEN_SYMBOL);
+        const wasByUser = this._apps.includes(USER_SYMBOL);
         const allowOverride = this._settings.get_boolean(OVERRIDE_KEY);
 
         if (ENABLE_DEBUG) {
-            Main.notify(`Espresso: ${this._state?'on':'off'} ${isUser?'user ':''}${isDocked?'docked ':''}${isCharging?'charging ':''}${isFullscreen?'fullscreen ':''}${allowOverride?'override':''}`);
+            const prev_state = `${this._state?'on':'off'} ${wasByUser?'user ':''}${wasDocked?'docked ':''}${wasCharging?'charging ':''}${wasFullscreen?'fullscreen ':''}${allowOverride?'override':''}`;
+            Main.notify(`Espresso: ${prev_state}`);
+            log(`Espresso: toggled by user, previous state: ${prev_state}`);
         }
 
         if (this._state) {
-            if (!allowOverride && (isDocked || isCharging || isFullscreen)) {
-                if (isDocked) {
+            if (!allowOverride && (wasDocked || wasCharging || wasFullscreen)) {
+                if (wasDocked) {
                     this._sendNotification(NOTIFY.DOCKED_OFF);
                     this._settings.set_boolean(DOCKED_KEY, false);
                 }
-                if (isFullscreen) {
+                if (wasFullscreen) {
                     this._sendNotification(NOTIFY.FULLSCREEN_OFF);
                     this._settings.set_boolean(FULLSCREEN_KEY, false);
                 }
-                if (isCharging) {
+                if (wasCharging) {
                     this._sendNotification(NOTIFY.CHARGING_OFF);
                     this._settings.set_boolean(CHARGING_KEY, false);
                 }
             }
 
+            if (ENABLE_DEBUG) {
+                log(`Espresso: removing all inhibitors`);
+            }
+
             this._apps.forEach(app_id => this.removeInhibit(app_id));
-            this._manageNightLight('enabled');
         }
         else {
             this.addInhibit(USER_SYMBOL);
-            this._manageNightLight('disabled');
         }
     }
 
     addInhibit(app_id) {
-        this._sessionManager.InhibitRemote(app_id,
-            0, "Inhibit by %s".format(IndicatorName), 12,
-            cookie => {
-                this._last_cookie = cookie;
-                this._last_app = app_id;
-            }
-        );
+        if (ENABLE_DEBUG) {
+            log(`Espresso: requested to add inhibition by ${app_id}`);
+        }
+
+        this._add_queue.add(app_id);
+        this.processAddRemove();
     }
 
     removeInhibit(app_id) {
-        for (let [index, _app_id] of Object.entries(this._apps)) {
-            if (app_id === _app_id) {
-                this._sessionManager.UninhibitRemote(this._cookies[index]);
+        if (ENABLE_DEBUG) {
+            log(`Espresso: requested to remove inhibition by ${app_id}`);
+        }
 
-                // ensure we remove every instance of symbolic apps, just in case
-                if (!app_id.startsWith('Symbol')) {
-                    break;
-                }
+        this._delete_queue.add(app_id);
+        this.processAddRemove();
+    }
+
+    processAddRemove() {
+        if (this._lock) {
+            // another task is still pending
+            if (ENABLE_DEBUG) {
+                log(`Espresso: trying to process the queue but it is locked by ${this._lock} pending requests`);
             }
+            return;
+        }
+
+        if (this._add_queue.size > 0) {
+            const app_id = this._add_queue.values().next().value;
+
+            if (!this._delete_queue.has(app_id)) {
+                ++this._lock;
+
+                if (ENABLE_DEBUG) {
+                    log(`Espresso: locking the queue and requesting to add ${app_id}`);
+                }
+
+                this._sessionManager.InhibitRemote(app_id,
+                    0, "Inhibit by %s".format(IndicatorName), 12,
+                    cookie => {
+                        this._last_cookie = cookie;
+                        this._last_app = app_id;
+                    }
+                );
+            } else {
+                this._add_queue.delete(app_id);
+                this.processAddRemove();
+            }
+        } else if (this._delete_queue.size > 0) {
+            const app_id = this._delete_queue.values().next().value;
+
+            ++this._lock;
+            this._add_queue.delete(app_id);
+
+            if (ENABLE_DEBUG) {
+                log(`Espresso: locking the queue and requesting to remove ${app_id}`);
+            }
+
+            const index = this._apps.indexOf(app_id);
+            this._sessionManager.UninhibitRemote(this._cookies[index]);
         }
     }
 
@@ -371,6 +444,7 @@ class Espresso extends PanelMenu.Button {
                         if (this._last_app == USER_SYMBOL)
                             this._settings.set_boolean(USER_ENABLED_KEY, true);
                         this._apps.push(this._last_app);
+                        this._add_queue.delete(this._last_app);
                         this._cookies.push(this._last_cookie);
                         this._objects.push(object);
                         this._last_app = "";
@@ -379,7 +453,15 @@ class Espresso extends PanelMenu.Button {
                             this._state = true;
                             this._icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/${EnabledIcon}.svg`);
                             this._sendNotification(NOTIFY.ENABLED);
+                            this._manageNightLight();
                         }
+
+                        if (ENABLE_DEBUG) {
+                            log(`Espresso: inhibitor added: ${app_id}, unlocking queue`);
+                        }
+
+                        --this._lock;
+                        this.processAddRemove();
                     }
                 });
             }
@@ -388,37 +470,46 @@ class Espresso extends PanelMenu.Button {
 
     _inhibitorRemoved(proxy, sender, [object]) {
         let index = this._objects.indexOf(object);
+
         if (index != -1) {
-            if (this._apps[index] == USER_SYMBOL)
+            const app_id = this._apps[index];
+
+            if (app_id == USER_SYMBOL) {
                 this._settings.set_boolean(USER_ENABLED_KEY, false);
+            }
+
             // Remove app from list
             this._apps.splice(index, 1);
             this._cookies.splice(index, 1);
             this._objects.splice(index, 1);
+
             if (this._apps.length === 0) {
                 this._state = false;
                 this._icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/${DisabledIcon}.svg`);
                 this._sendNotification(NOTIFY.DISABLED);
+                this._manageNightLight();
             }
+
+
+            if (!this._apps.includes(app_id)) {
+                this._delete_queue.delete(app_id);
+            }
+
+            if (ENABLE_DEBUG) {
+                log(`Espresso: inhibitor removed: ${app_id}, unlocking queue`);
+            }
+
+            --this._lock;
+            this.processAddRemove();
         }
     }
 
-    _manageNightLight(state){
-        if (state == 'enabled') {
-            if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._proxy.NightLightActive && !this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)) {
-                this._proxy.DisabledUntilTomorrow = false;
-                this._night_light = true;
-            } else {
-                this._night_light = false;
-            }
-        }
-        if (state == 'disabled') {
-            if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._proxy.NightLightActive && !this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)) {
-                this._proxy.DisabledUntilTomorrow = true;
-                this._night_light = true;
-            } else {
-                this._night_light = false;
-            }
+    _manageNightLight(){
+        if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._proxy.NightLightActive && !this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)) {
+            this._proxy.DisabledUntilTomorrow = this._state;
+            this._night_light = true;
+        } else {
+            this._night_light = false;
         }
     }
 
@@ -430,6 +521,9 @@ class Espresso extends PanelMenu.Button {
 
         switch (state) {
         case NOTIFY.ENABLED:
+            if (ENABLE_DEBUG) {
+                return;
+            }
             if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._night_light && this._proxy.DisabledUntilTomorrow) {
                 Main.notify(_('Auto suspend and screensaver disabled. Night Light paused.'));
             } else {
@@ -437,6 +531,9 @@ class Espresso extends PanelMenu.Button {
             }
             break;
         case NOTIFY.DISABLED:
+            if (ENABLE_DEBUG) {
+                return;
+            }
             if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._night_light && !this._proxy.DisabledUntilTomorrow) {
                 Main.notify(_('Auto suspend and screensaver enabled. Night Light resumed.'));
             } else {
