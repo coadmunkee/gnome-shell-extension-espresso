@@ -56,5 +56,10 @@
             <summary>Pause/resume Night Light for defined applications only</summary>
             <description>Pause/resume Night Light for defined applicationa when enabled/disabled</description>
         </key>
+        <key type="b" name="has-battery">
+            <default>true</default>
+            <summary>Whether or not this device has a battery</summary>
+            <description>Auto-determined on startup</description>
+        </key>
     </schema>
 </schemalist>

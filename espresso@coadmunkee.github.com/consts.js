@@ -14,6 +14,7 @@ var OVERRIDE_KEY = 'allow-override';
 var RESTORE_KEY = 'restore-state';
 var NIGHT_LIGHT_KEY = 'control-nightlight';
 var NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';
+var HAS_BATTERY_KEY = 'has-battery';
 
 // virtual apps:
 var FULLSCREEN_SYMBOL = Symbol('espresso/fullscreen').toString();

@@ -213,11 +213,21 @@ class Espresso extends PanelMenu.Button {
 
         this._connect(this._settings, `changed::${INHIBIT_APPS_KEY}`, this._updateAppConfigs.bind(this));
         this._updateAppConfigs();
+
+        Mainloop.timeout_add_seconds(2, () => {
+            // tell the settings widget whether or not we have a battery:
+            this._settings.set_boolean(HAS_BATTERY_KEY, this.hasBattery);
+        });
     }
 
     /** returns the UPower proxy for this device */
     get batteryProxy() {
         return Main.panel.statusArea.aggregateMenu?._power?._proxy ?? null;
+    }
+
+    /** returns whether the device has a battery */
+    get hasBattery() {
+        return this.batteryProxy?.Type === UPower.DeviceKind.BATTERY;
     }
 
     /** returns whether the device is currently receiving power */
@@ -227,7 +237,7 @@ class Espresso extends PanelMenu.Button {
             return false;
         }
 
-        if (this.batteryProxy.Type !== UPower.DeviceKind.BATTERY) {
+        if (!this.hasBattery) {
             // this isn't a battery-powered device
             return false;
         }

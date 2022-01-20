@@ -106,10 +106,14 @@ class EspressoWidget {
                                     spacing: 7});
 
         const enableDockedLabel = new Gtk.Label({label: _("Enable when charging and docked to external monitors"),
-                hexpand: true,
-                xalign: 0});
+                                                hexpand: true,
+                                                xalign: 0,
+                                                sensitive: this._settings.get_boolean(HAS_BATTERY_KEY)});
 
-        const enableDockedSwitch = new Gtk.Switch({active: this._settings.get_boolean(DOCKED_KEY)});
+        const enableDockedSwitch = new Gtk.Switch({
+            active: this._settings.get_boolean(DOCKED_KEY),
+            sensitive: this._settings.get_boolean(HAS_BATTERY_KEY),
+        });
         enableDockedSwitch.connect('notify::active', button => {
             this._settings.set_boolean(DOCKED_KEY, button.active);
         });
@@ -131,9 +135,13 @@ class EspressoWidget {
 
         const enableChargingLabel = new Gtk.Label({label: _("Enable when this device is charging"),
                                                  hexpand: true,
-                                                 xalign: 0});
+                                                 xalign: 0,
+                                                 sensitive: this._settings.get_boolean(HAS_BATTERY_KEY)});
 
-        const enableChargingSwitch = new Gtk.Switch({active: this._settings.get_boolean(CHARGING_KEY)});
+        const enableChargingSwitch = new Gtk.Switch({
+            active: this._settings.get_boolean(CHARGING_KEY),
+            sensitive: this._settings.get_boolean(HAS_BATTERY_KEY),
+        });
         enableChargingSwitch.connect('notify::active', button => {
             this._settings.set_boolean(CHARGING_KEY, button.active);
         });
