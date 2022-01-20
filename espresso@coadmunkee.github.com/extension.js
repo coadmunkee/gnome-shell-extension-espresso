@@ -108,10 +108,13 @@ class Espresso extends PanelMenu.Button {
             log(`Espresso: new session`);
         }
 
+        /** a map of all gjs connections */
+        this._connections = new Map();
+
         this.accessible_role = Atk.Role.TOGGLE_BUTTON;
 
         this._settings = Convenience.getSettings();
-        this._settings.connect(`changed::${SHOW_INDICATOR_KEY}`, () => {
+        this._connect(this._settings, `changed::${SHOW_INDICATOR_KEY}`, () => {
             if (this._settings.get_boolean(SHOW_INDICATOR_KEY))
                 this.show();
             else
@@ -132,14 +135,14 @@ class Espresso extends PanelMenu.Button {
         this._sessionManager = new DBusSessionManagerProxy(Gio.DBus.session,
                                                         'org.gnome.SessionManager',
                                                         '/org/gnome/SessionManager');
-        this._inhibitorAddedId = this._sessionManager.connectSignal('InhibitorAdded', this._inhibitorAdded.bind(this));
-        this._inhibitorRemovedId = this._sessionManager.connectSignal('InhibitorRemoved', this._inhibitorRemoved.bind(this));
+        this._connect(this._sessionManager, 'InhibitorAdded', this._inhibitorAdded.bind(this));
+        this._connect(this._sessionManager, 'InhibitorRemoved', this._inhibitorRemoved.bind(this));
 
         // From auto-move-windows@gnome-shell-extensions.gcampax.github.com
         this._appSystem = Shell.AppSystem.get_default();
 
         this._appsChangedId =
-            this._appSystem.connect('installed-changed',
+            this._connect(this._appSystem, 'installed-changed',
                 this._updateAppData.bind(this));
 
         // ("screen" in global) is false on 3.28, although global.screen exists
@@ -172,8 +175,8 @@ class Espresso extends PanelMenu.Button {
 
         this.add_actor(this._icon);
         this.add_style_class_name('panel-status-button');
-        this.connect('button-press-event', this.toggleState.bind(this));
-        this.connect('touch-event', this.toggleState.bind(this));
+        this._connect(this, 'button-press-event', this.toggleState.bind(this));
+        this._connect(this, 'touch-event', this.toggleState.bind(this));
 
         // Restore user state
         if (this._settings.get_boolean(USER_ENABLED_KEY) && this._settings.get_boolean(RESTORE_KEY)) {
@@ -181,21 +184,21 @@ class Espresso extends PanelMenu.Button {
         }
 
         // Enable espresso when fullscreen app is running
-        this._inFullscreenId = this._screen.connect('in-fullscreen-changed', this.toggleFullscreen.bind(this));
-        this._settings.connect(`changed::${FULLSCREEN_KEY}`, this.toggleFullscreen.bind(this));
+        this._connect(this._screen, 'in-fullscreen-changed', this.toggleFullscreen.bind(this));
+        this._connect(this._settings, `changed::${FULLSCREEN_KEY}`, this.toggleFullscreen.bind(this));
         this.toggleFullscreen();
 
         // Enable espresso when laptop is docked to external monitors
-        this._isDockedId = this._monitor_manager.connect('monitors-changed', this.toggleCharging.bind(this));
-        this._settings.connect(`changed::${DOCKED_KEY}`, this.toggleCharging.bind(this));
+        this._connect(this._monitor_manager, 'monitors-changed', this.toggleCharging.bind(this));
+        this._connect(this._settings, `changed::${DOCKED_KEY}`, this.toggleCharging.bind(this));
 
         // Enable espresso when charging
-        this._isChargingId = this.batteryProxy.connect('g-properties-changed', this.toggleCharging.bind(this));
-        this._settings.connect(`changed::${CHARGING_KEY}`, this.toggleCharging.bind(this));
+        this._connect(this.batteryProxy, 'g-properties-changed', this.toggleCharging.bind(this));
+        this._connect(this._settings, `changed::${CHARGING_KEY}`, this.toggleCharging.bind(this));
         this.toggleCharging();
 
         // Allow overriding
-        this._settings.connect(`changed::${OVERRIDE_KEY}`, () => {
+        this._connect(this._settings, `changed::${OVERRIDE_KEY}`, () => {
             if (!this._settings.get_boolean(OVERRIDE_KEY) && !this._state) {
                 this.toggleFullscreen();
                 this.toggleCharging();
@@ -203,12 +206,12 @@ class Espresso extends PanelMenu.Button {
         });
 
         // React to night light settings
-        this._settings.connect(`changed::${NIGHT_LIGHT_KEY}`, this._manageNightLight.bind(this));
+        this._connect(this._settings, `changed::${NIGHT_LIGHT_KEY}`, this._manageNightLight.bind(this));
 
         this._appConfigs = [];
         this._appData = new Map();
 
-        this._settings.connect(`changed::${INHIBIT_APPS_KEY}`, this._updateAppConfigs.bind(this));
+        this._connect(this._settings, `changed::${INHIBIT_APPS_KEY}`, this._updateAppConfigs.bind(this));
         this._updateAppConfigs();
     }
 
@@ -248,6 +251,48 @@ class Espresso extends PanelMenu.Button {
             }
         }
         return inFullscreen;
+    }
+
+    /**
+     * Connects to a gjs object and listens to a specific signal.
+     * Keeps track of all connections, for easier disconnection.
+     *
+     * @argument {Object} target - the gjs object to connect to
+     * @argument {String} signal - the signal listen to
+     * @argument {Function} hook - the function to invoke when the signal is emitted
+     */
+    _connect(target, signal, hook) {
+        if (target) {
+            const connect = Reflect.has(target, "connectSignal") ? "connectSignal" : "connect";
+
+            if (!this._connections.has(target)) {
+                this._connections.set(target, new Set());
+            }
+
+            const set = this._connections.get(target);
+            const id = target[connect](signal, hook);
+
+            set.add(id);
+        }
+    }
+
+    /**
+     * Disconnects all connected signals
+     */
+    _disconnectAll() {
+        for (const [target, ids] of this._connections) {
+            if (target) {
+                const disconnect = Reflect.has(target, "disconnectSignal") ? "disconnectSignal" : "disconnect";
+
+                for (const id of ids) {
+                    try {
+                        target[disconnect](id);
+                    } catch (err) {
+                        log(`Espresso: unable to disconnect signal`);
+                    }
+                }
+            }
+        }
     }
 
     toggleFullscreen() {
@@ -612,30 +657,7 @@ class Espresso extends PanelMenu.Button {
         // remove all inhibitors
         this._apps.forEach(app_id => this.removeInhibit(app_id));
         // disconnect from signals
-        this._screen.disconnect(this._inFullscreenId);
-        this._monitor_manager.disconnect(this._isDockedId);
-        this.batteryProxy.disconnect(this._isChargingId);
-
-        if (this._inhibitorAddedId) {
-            this._sessionManager.disconnectSignal(this._inhibitorAddedId);
-            this._inhibitorAddedId = 0;
-        }
-        if (this._inhibitorRemovedId) {
-            this._sessionManager.disconnectSignal(this._inhibitorRemovedId);
-            this._inhibitorRemovedId = 0;
-        }
-        if (this._windowCreatedId) {
-            this._display.disconnect(this._windowCreatedId);
-            this._windowCreatedId = 0;
-        }
-        if (this._windowDestroyedId) {
-            global.window_manager.disconnect(this._windowDestroyedId);
-            this._windowDestroyedId = 0;
-        }
-        if (this._appsChangedId) {
-            this._appSystem.disconnect(this._appsChangedId);
-            this._appsChangedId = 0;
-        }
+        this._disconnectAll();
         this._appConfigs.length = 0;
         this._updateAppData();
         super.destroy();
