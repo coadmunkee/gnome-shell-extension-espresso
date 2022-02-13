@@ -54,7 +54,7 @@
         <key type="b" name="control-nightlight-for-app">
             <default>false</default>
             <summary>Pause/resume Night Light for defined applications only</summary>
-            <description>Pause/resume Night Light for defined applicationa when enabled/disabled</description>
+            <description>Pause/resume Night Light for defined applications when enabled/disabled</description>
         </key>
         <key type="b" name="has-battery">
             <default>true</default>
