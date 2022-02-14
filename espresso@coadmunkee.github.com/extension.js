@@ -29,7 +29,7 @@ const Gio = imports.gi.Gio;
 const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const Meta = imports.gi.Meta;
-const UPower = imports.ui.status.power.UPower;
+const UPower = imports.gi.UPowerGlib;
 const Mainloop = imports.mainloop;
 const PanelMenu = imports.ui.panelMenu;
 const Shell = imports.gi.Shell;
@@ -43,18 +43,15 @@ const _ = Gettext.gettext;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Convenience =  imports.misc.extensionUtils;
 
+const { loadInterfaceXML } = imports.misc.fileUtils;
+
 // import our constants
 Object.assign(globalThis, Me.imports.consts);
 
-const ColorInterface = '<node> \
-    <interface name="org.gnome.SettingsDaemon.Color"> \
-        <property name="DisabledUntilTomorrow" type="b" access="readwrite"/>\
-        <property name="NightLightActive" type="b" access="read"/>\
-    </interface>\
-</node>';
-
+const ColorInterface = loadInterfaceXML("org.gnome.SettingsDaemon.Color");
 const ColorProxy = Gio.DBusProxy.makeProxyWrapper(ColorInterface);
 
+// for some reason the method Inhibit isn't in the schema so we can't just load the xml
 const DBusSessionManagerIface = '<node>\
     <interface name="org.gnome.SessionManager">\
         <method name="Inhibit">\
@@ -81,14 +78,10 @@ const DBusSessionManagerIface = '<node>\
 
 const DBusSessionManagerProxy = Gio.DBusProxy.makeProxyWrapper(DBusSessionManagerIface);
 
-const DBusSessionManagerInhibitorIface = '<node>\
-    <interface name="org.gnome.SessionManager.Inhibitor">\
-        <method name="GetAppId">\
-            <arg type="s" direction="out" />\
-        </method>\
-    </interface>\
-</node>';
+const DisplayDeviceInterface = loadInterfaceXML("org.freedesktop.UPower.Device");
+const PowerManagerProxy = Gio.DBusProxy.makeProxyWrapper(DisplayDeviceInterface);
 
+const DBusSessionManagerInhibitorIface = loadInterfaceXML("org.gnome.SessionManager.Inhibitor");
 const DBusSessionManagerInhibitorProxy = Gio.DBusProxy.makeProxyWrapper(DBusSessionManagerInhibitorIface);
 
 const IndicatorName = "Espresso";
@@ -192,10 +185,22 @@ class Espresso extends PanelMenu.Button {
         this._connect(this._monitor_manager, 'monitors-changed', this.toggleCharging.bind(this));
         this._connect(this._settings, `changed::${DOCKED_KEY}`, this.toggleCharging.bind(this));
 
-        // Enable espresso when charging
-        this._connect(this.batteryProxy, 'g-properties-changed', this.toggleCharging.bind(this));
-        this._connect(this._settings, `changed::${CHARGING_KEY}`, this.toggleCharging.bind(this));
-        this.toggleCharging();
+        // Create a battery proxy
+        this.batteryProxy = new PowerManagerProxy(Gio.DBus.system, "org.freedesktop.UPower", "/org/freedesktop/UPower/devices/DisplayDevice", (proxy, error) => {
+            if (error) {
+                log(`Espresso: unable to obtain battery proxy: ${error.message}`);
+            } else {
+                // Enable espresso when charging
+                this._connect(this.batteryProxy, 'g-properties-changed', this.toggleCharging.bind(this));
+                this._connect(this._settings, `changed::${CHARGING_KEY}`, this.toggleCharging.bind(this));
+                this.toggleCharging();
+
+                Mainloop.timeout_add_seconds(2, () => {
+                    // tell the settings widget whether or not we have a battery:
+                    this._settings.set_boolean(HAS_BATTERY_KEY, this.hasBattery);
+                });
+            }
+        });
 
         // Allow overriding
         this._connect(this._settings, `changed::${OVERRIDE_KEY}`, () => {
@@ -213,37 +218,26 @@ class Espresso extends PanelMenu.Button {
 
         this._connect(this._settings, `changed::${INHIBIT_APPS_KEY}`, this._updateAppConfigs.bind(this));
         this._updateAppConfigs();
-
-        Mainloop.timeout_add_seconds(2, () => {
-            // tell the settings widget whether or not we have a battery:
-            this._settings.set_boolean(HAS_BATTERY_KEY, this.hasBattery);
-        });
-    }
-
-    /** returns the UPower proxy for this device */
-    get batteryProxy() {
-        return Main.panel.statusArea.aggregateMenu?._power?._proxy ?? null;
     }
 
     /** returns whether the device has a battery */
     get hasBattery() {
-        return this.batteryProxy?.Type === UPower.DeviceKind.BATTERY;
+        return this.batteryProxy?.IsPresent || false;
     }
 
     /** returns whether the device is currently receiving power */
     get isCharging() {
-        if (this.batteryProxy === null) {
-            // this device has no battery
-            return false;
-        }
-
         if (!this.hasBattery) {
             // this isn't a battery-powered device
             return false;
         }
 
         return (this.batteryProxy.State === UPower.DeviceState.FULLY_CHARGED &&
-            this.batteryProxy.TimeToEmpty === 0) ||
+                this.batteryProxy.TimeToEmpty === 0) ||
+            // PENDING_CHARGE: power is connected and the battery is almost fully charged but the power manager is
+            //                 delaying charging to prevent battery wear and extend its life
+            this.batteryProxy.State === UPower.DeviceState.PENDING_CHARGE ||
+            // CHARGING: power is connected and battery is charging
             this.batteryProxy.State === UPower.DeviceState.CHARGING;
     }
 
@@ -273,14 +267,18 @@ class Espresso extends PanelMenu.Button {
      */
     _connect(target, signal, hook) {
         if (target) {
-            const connect = Reflect.has(target, "connectSignal") ? "connectSignal" : "connect";
-
             if (!this._connections.has(target)) {
                 this._connections.set(target, new Set());
             }
 
             const set = this._connections.get(target);
-            const id = target[connect](signal, hook);
+            let id;
+
+            try {
+                id = target.connect(signal, hook);
+            } catch (err) {
+                id = target.connectSignal(signal, hook);
+            }
 
             set.add(id);
         }
@@ -292,13 +290,16 @@ class Espresso extends PanelMenu.Button {
     _disconnectAll() {
         for (const [target, ids] of this._connections) {
             if (target) {
-                const disconnect = Reflect.has(target, "disconnectSignal") ? "disconnectSignal" : "disconnect";
 
                 for (const id of ids) {
                     try {
-                        target[disconnect](id);
+                        target.disconnect(id);
                     } catch (err) {
-                        log(`Espresso: unable to disconnect signal`);
+                        try {
+                            target.disconnectSignal(id);
+                        } catch (err) {
+                            log(`Espresso: unable to disconnect signal`);
+                        }
                     }
                 }
             }
@@ -334,33 +335,35 @@ class Espresso extends PanelMenu.Button {
     }
 
     toggleCharging() {
-        Mainloop.timeout_add_seconds(2, () => {
-            const checkDocked = this._settings.get_boolean(DOCKED_KEY);
-            const checkCharging = this._settings.get_boolean(CHARGING_KEY);
-            const inhibitedByDock = this._apps.includes(DOCKED_SYMBOL);
-            const inhibitedByCharging = this._apps.includes(CHARGING_SYMBOL);
+        if (this.hasBattery) {
+            Mainloop.timeout_add_seconds(2, () => {
+                const checkDocked = this._settings.get_boolean(DOCKED_KEY);
+                const checkCharging = this._settings.get_boolean(CHARGING_KEY);
+                const inhibitedByDock = this._apps.includes(DOCKED_SYMBOL);
+                const inhibitedByCharging = this._apps.includes(CHARGING_SYMBOL);
 
-            if (!inhibitedByDock || !inhibitedByCharging) {
-                if (this.isCharging) {
-                    if (checkCharging && !inhibitedByCharging) {
-                        if (ENABLE_DEBUG) {
-                            log(`Espresso: charging state changed to true`);
+                if (!inhibitedByDock || !inhibitedByCharging) {
+                    if (this.isCharging) {
+                        if (checkCharging && !inhibitedByCharging) {
+                            if (ENABLE_DEBUG) {
+                                log(`Espresso: charging state changed to true`);
+                            }
+
+                            this.addInhibit(CHARGING_SYMBOL);
                         }
 
-                        this.addInhibit(CHARGING_SYMBOL);
-                    }
-
-                    if (checkDocked && this.isDocked && !inhibitedByDock) {
-                        if (ENABLE_DEBUG) {
-                            log(`Espresso: docked state changed to true`);
+                        if (checkDocked && this.isDocked && !inhibitedByDock) {
+                            if (ENABLE_DEBUG) {
+                                log(`Espresso: docked state changed to true`);
+                            }
+                            this.addInhibit(DOCKED_SYMBOL);
                         }
-                        this.addInhibit(DOCKED_SYMBOL);
-                    }
 
-                    this._manageNightLight('disabled');
+                        this._manageNightLight('disabled');
+                    }
                 }
-            }
-        });
+            });
+        }
 
         const checkDocked = this._settings.get_boolean(DOCKED_KEY);
         const checkCharging = this._settings.get_boolean(CHARGING_KEY);
@@ -375,7 +378,7 @@ class Espresso extends PanelMenu.Button {
 
                 this.removeInhibit(CHARGING_SYMBOL);
 
-                if (!this.isDocked || !checkDocked) {
+                if (inhibitedByDock && (!this.isDocked || !checkDocked)) {
                     if (ENABLE_DEBUG) {
                         log(`Espresso: docked state changed to false`);
                     }
