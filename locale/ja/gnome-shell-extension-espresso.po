@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-15 10:53-0400\n"
+"POT-Creation-Date: 2022-02-14 17:24-0500\n"
 "PO-Revision-Date: 2017-05-05 22:28+0900\n"
 "Last-Translator: Jean-Philippe Braun <eon@patapon.info>\n"
 "Language-Team: French\n"
@@ -17,52 +17,77 @@ msgstr ""
 "X-Generator: Poedit 2.0.1\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
-#: espresso@coadmunkee.github.com/extension.js:307
+#: espresso@coadmunkee.github.com/extension.js:589
 #, fuzzy
 msgid "Auto suspend and screensaver disabled. Night Light paused."
 msgstr "自動サスペンドを無効にしました"
 
-#: espresso@coadmunkee.github.com/extension.js:309
+#: espresso@coadmunkee.github.com/extension.js:591
 msgid "Auto suspend and screensaver disabled"
 msgstr "自動サスペンドを無効にしました"
 
-#: espresso@coadmunkee.github.com/extension.js:314
+#: espresso@coadmunkee.github.com/extension.js:599
 #, fuzzy
 msgid "Auto suspend and screensaver enabled. Night Light resumed."
 msgstr "自動サスペンドを有効にしました"
 
-#: espresso@coadmunkee.github.com/extension.js:316
+#: espresso@coadmunkee.github.com/extension.js:601
 msgid "Auto suspend and screensaver enabled"
 msgstr "自動サスペンドを有効にしました"
 
-#: espresso@coadmunkee.github.com/prefs.js:68
+#: espresso@coadmunkee.github.com/extension.js:605
+msgid "Turning off \"espresso enabled when docked\""
+msgstr ""
+
+#: espresso@coadmunkee.github.com/extension.js:608
+msgid "Turning off \"espresso enabled when charging\""
+msgstr ""
+
+#: espresso@coadmunkee.github.com/extension.js:611
+msgid "Turning off \"espresso enabled when fullscreen\""
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:67
 msgid "Show Espresso in top panel"
 msgstr "Espresso をトップバーに表示する"
 
-#: espresso@coadmunkee.github.com/prefs.js:85
+#: espresso@coadmunkee.github.com/prefs.js:84
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:32
 msgid "Enable when a fullscreen application is running"
 msgstr "フルスクリーンアプリケーション実行時に有効にする"
 
-#: espresso@coadmunkee.github.com/prefs.js:102
+#: espresso@coadmunkee.github.com/prefs.js:108
+msgid "Enable when charging and docked to external monitors"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:136
+msgid "Enable when this device is charging"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:164
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:46
+msgid "Allow to temporarily override without affecting my settings"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:181
 msgid "Restore state across reboots"
 msgstr "再起動後も状態を維持する"
 
-#: espresso@coadmunkee.github.com/prefs.js:119
+#: espresso@coadmunkee.github.com/prefs.js:198
 msgid "Enable notifications"
 msgstr "通知を有効にする"
 
-#: espresso@coadmunkee.github.com/prefs.js:135
+#: espresso@coadmunkee.github.com/prefs.js:214
 msgid "Pause/resume Night Light if enabled"
 msgstr ""
 
-#: espresso@coadmunkee.github.com/prefs.js:154
-#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
+#: espresso@coadmunkee.github.com/prefs.js:233
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:56
 msgid "Pause/resume Night Light for defined applications only"
 msgstr ""
 
-#: espresso@coadmunkee.github.com/prefs.js:184
+#: espresso@coadmunkee.github.com/prefs.js:264
 msgid "Applications which enable Espresso automatically"
 msgstr "Espresso を自動的に有効にするアプリケーション"
 
@@ -100,15 +125,45 @@ msgid "Show notifications when enabled/disabled"
 msgstr ""
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:36
-msgid "Pause/resume Night Light"
+msgid "Enable when docked to external monitors"
 msgstr ""
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:37
+msgid ""
+"Enable when the device is on ac power and connected to external monitors"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
+#, fuzzy
+msgid "Enable when charging"
+msgstr "通知を有効にする"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:42
+msgid "Enable when the device is on ac power"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:47
+msgid "Allow turning on/off without changing my settings"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:51
+msgid "Pause/resume Night Light"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:52
 msgid "Pause/resume Night Light when enabled/disabled"
 msgstr ""
 
-#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:42
-msgid "Pause/resume Night Light for defined applicationa when enabled/disabled"
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:57
+msgid "Pause/resume Night Light for defined applications when enabled/disabled"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:61
+msgid "Whether or not this device has a battery"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:62
+msgid "Auto-determined on startup"
 msgstr ""
 
 #~ msgid "Add application"

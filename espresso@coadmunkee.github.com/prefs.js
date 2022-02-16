@@ -102,6 +102,83 @@ class EspressoWidget {
 
         this.w.attach(gtkhbox, 0, 1, 1, 1);
 
+        const stateBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
+            spacing: 7});
+
+        const stateLabel = new Gtk.Label({label: _("Restore state across reboots"),
+                                hexpand: true,
+                                xalign: 0});
+
+        const stateSwitch = new Gtk.Switch({active: this._settings.get_boolean(RESTORE_KEY)});
+        stateSwitch.connect('notify::active', button => {
+        this._settings.set_boolean(RESTORE_KEY, button.active);
+        });
+
+        stateBox.prepend(stateLabel);
+        stateBox.append(stateSwitch);
+
+        this.w.attach(stateBox, 0, 2, 1, 1);
+
+        const notificationsBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
+                            spacing: 7});
+
+        const notificationsLabel = new Gtk.Label({label: _("Enable notifications"),
+                                        hexpand: true,
+                                        xalign: 0});
+
+        const notificationsSwitch = new Gtk.Switch({active: this._settings.get_boolean(SHOW_NOTIFICATIONS_KEY)});
+        notificationsSwitch.connect('notify::active', button => {
+        this._settings.set_boolean(SHOW_NOTIFICATIONS_KEY, button.active);
+        });
+
+        notificationsBox.prepend(notificationsLabel);
+        notificationsBox.append(notificationsSwitch);
+
+        this.w.attach(notificationsBox, 0, 3, 1, 1);
+
+        const nightlightBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 7});
+
+        const nightlightLabel = new Gtk.Label({label: _("Pause/resume Night Light if enabled"),
+                                                hexpand: true,
+                                                xalign: 0,
+                                                max_width_chars: 25});
+
+
+        const nightlightSwitch = new Gtk.Switch({active: this._settings.get_boolean(NIGHT_LIGHT_KEY)});
+        nightlightSwitch.connect('notify::active', button => {
+            this._settings.set_boolean(NIGHT_LIGHT_KEY, button.active);
+        });
+
+        nightlightBox.prepend(nightlightLabel);
+        nightlightBox.append(nightlightSwitch);
+
+        this.w.attach(nightlightBox, 0, 4, 1, 1);
+
+        const nightlightAppBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
+                                spacing: 7});
+
+        const nightlightAppLabel = new Gtk.Label({label: _("Pause/resume Night Light for defined applications only"),
+                                                    hexpand: true,
+                                                    xalign: 0});
+
+        const nightlightAppSwitch = new Gtk.Switch({active: this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)});
+        nightlightAppSwitch.connect('notify::active', button => {
+            this._settings.set_boolean(NIGHT_LIGHT_APP_ONLY_KEY, button.active);
+        });
+        nightlightSwitch.connect('notify::active', button => {
+            if (button.active) {
+                nightlightAppSwitch.set_sensitive(true);
+            } else {
+                nightlightAppSwitch.set_active(false);
+                nightlightAppSwitch.set_sensitive(false);
+            }
+        });
+
+        nightlightAppBox.prepend(nightlightAppLabel);
+        nightlightAppBox.append(nightlightAppSwitch);
+
+        this.w.attach(nightlightAppBox, 0, 5, 1, 1);
+
         const dockedbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                     spacing: 7});
 
@@ -128,7 +205,7 @@ class EspressoWidget {
         dockedbox.prepend(enableDockedLabel);
         dockedbox.append(enableDockedSwitch);
 
-        this.w.attach(dockedbox, 0, 3, 1, 1);
+        this.w.attach(dockedbox, 0, 6, 1, 1);
 
         const chargingbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                        spacing: 7});
@@ -156,7 +233,7 @@ class EspressoWidget {
         chargingbox.prepend(enableChargingLabel);
         chargingbox.append(enableChargingSwitch);
 
-        this.w.attach(chargingbox, 0, 2, 1, 1);
+        this.w.attach(chargingbox, 0, 7, 1, 1);
 
         const overridebox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
                                         spacing: 7});
@@ -173,84 +250,7 @@ class EspressoWidget {
         overridebox.prepend(enableOverrideLabel);
         overridebox.append(enableOverrideSwitch);
 
-        this.w.attach(overridebox, 0, 4, 1, 1);
-
-        const stateBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-                                spacing: 7});
-
-        const stateLabel = new Gtk.Label({label: _("Restore state across reboots"),
-                                            hexpand: true,
-                                            xalign: 0});
-
-        const stateSwitch = new Gtk.Switch({active: this._settings.get_boolean(RESTORE_KEY)});
-        stateSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(RESTORE_KEY, button.active);
-        });
-
-        stateBox.prepend(stateLabel);
-        stateBox.append(stateSwitch);
-
-        this.w.attach(stateBox, 0, 5, 1, 1);
-
-        const notificationsBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-                                        spacing: 7});
-
-        const notificationsLabel = new Gtk.Label({label: _("Enable notifications"),
-                                                    hexpand: true,
-                                                    xalign: 0});
-
-        const notificationsSwitch = new Gtk.Switch({active: this._settings.get_boolean(SHOW_NOTIFICATIONS_KEY)});
-        notificationsSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(SHOW_NOTIFICATIONS_KEY, button.active);
-        });
-
-        notificationsBox.prepend(notificationsLabel);
-        notificationsBox.append(notificationsSwitch);
-
-        this.w.attach(notificationsBox, 0, 6, 1, 1);
-
-        const nightlightBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 7});
-
-        const nightlightLabel = new Gtk.Label({label: _("Pause/resume Night Light if enabled"),
-                                                hexpand: true,
-                                                xalign: 0,
-                                                max_width_chars: 25});
-
-
-        const nightlightSwitch = new Gtk.Switch({active: this._settings.get_boolean(NIGHT_LIGHT_KEY)});
-        nightlightSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(NIGHT_LIGHT_KEY, button.active);
-        });
-
-        nightlightBox.prepend(nightlightLabel);
-        nightlightBox.append(nightlightSwitch);
-
-        this.w.attach(nightlightBox, 0, 7, 1, 1);
-
-        const nightlightAppBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-                                spacing: 7});
-
-        const nightlightAppLabel = new Gtk.Label({label: _("Pause/resume Night Light for defined applications only"),
-                                                    hexpand: true,
-                                                    xalign: 0});
-
-        const nightlightAppSwitch = new Gtk.Switch({active: this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)});
-        nightlightAppSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(NIGHT_LIGHT_APP_ONLY_KEY, button.active);
-        });
-        nightlightSwitch.connect('notify::active', button => {
-            if (button.active) {
-                nightlightAppSwitch.set_sensitive(true);
-            } else {
-                nightlightAppSwitch.set_active(false);
-                nightlightAppSwitch.set_sensitive(false);
-            }
-        });
-
-        nightlightAppBox.prepend(nightlightAppLabel);
-        nightlightAppBox.append(nightlightAppSwitch);
-
-        this.w.attach(nightlightAppBox, 0, 8, 1, 1);
+        this.w.attach(overridebox, 0, 8, 1, 1);
 
         this._store = new Gtk.ListStore();
         this._store.set_column_types([Gio.AppInfo, GObject.TYPE_STRING, Gio.Icon]);
