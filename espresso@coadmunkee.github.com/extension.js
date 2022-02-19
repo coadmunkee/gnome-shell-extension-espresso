@@ -22,7 +22,7 @@
 'use strict';
 
 // set to true to enable debug notifications
-globalThis.ENABLE_DEBUG = false;
+globalThis.ENABLE_DEBUG = true;
 
 const St = imports.gi.St;
 const Gio = imports.gi.Gio;
@@ -94,13 +94,47 @@ let ShellVersion = parseInt(Config.PACKAGE_VERSION.split(".")[1]);
 const Espresso = GObject.registerClass(
 class Espresso extends PanelMenu.Button {
     _init() {
+        this._logDebugMsg(`=========New Session=======================================\nCalling super._init(null, ${IndicatorName})`);
         super._init(null, IndicatorName);
+/*        
+        // for some reason the method Inhibit isn't in the schema so we can't just load the xml
+        const DBusSessionManagerIface = '<node>\
+            <interface name="org.gnome.SessionManager">\
+                <method name="Inhibit">\
+                    <arg type="s" direction="in" />\
+                    <arg type="u" direction="in" />\
+                    <arg type="s" direction="in" />\
+                    <arg type="u" direction="in" />\
+                    <arg type="u" direction="out" />\
+                </method>\
+                <method name="Uninhibit">\
+                    <arg type="u" direction="in" />\
+                </method>\
+                <method name="GetInhibitors">\
+                    <arg type="ao" direction="out" />\
+                </method>\
+                <signal name="InhibitorAdded">\
+                    <arg type="o" direction="out" />\
+                </signal>\
+                <signal name="InhibitorRemoved">\
+                    <arg type="o" direction="out" />\
+                </signal>\
+            </interface>\
+        </node>';
 
-        if (ENABLE_DEBUG) {
-            log(`Espresso: ===================================================`)
-            log(`Espresso: new session`);
-        }
+        const DBusSessionManagerProxy = Gio.DBusProxy.makeProxyWrapper(DBusSessionManagerIface);
 
+        const DisplayDeviceInterface = loadInterfaceXML("org.freedesktop.UPower.Device");
+        const PowerManagerProxy = Gio.DBusProxy.makeProxyWrapper(DisplayDeviceInterface);
+
+        const DBusSessionManagerInhibitorIface = loadInterfaceXML("org.gnome.SessionManager.Inhibitor");
+        const DBusSessionManagerInhibitorProxy = Gio.DBusProxy.makeProxyWrapper(DBusSessionManagerInhibitorIface);
+*/
+        this._logDebugMsg(`DBusSessionManagerProxy is:\n${DBusSessionManagerProxy}`);
+        this._logDebugMsg(`PowerManagerProxy is:\n${PowerManagerProxy}`);
+        this._logDebugMsg(`DBusSessionManagerInhibitorProxy is:\n${DBusSessionManagerInhibitorProxy}`);
+        
+        
         /** a map of all gjs connections */
         this._connections = new Map();
 
@@ -128,6 +162,7 @@ class Espresso extends PanelMenu.Button {
         this._sessionManager = new DBusSessionManagerProxy(Gio.DBus.session,
                                                         'org.gnome.SessionManager',
                                                         '/org/gnome/SessionManager');
+        this._logDebugMsg(`this._sessionManager is: ${this._sessionManager}`);
         this._connect(this._sessionManager, 'InhibitorAdded', this._inhibitorAdded.bind(this));
         this._connect(this._sessionManager, 'InhibitorRemoved', this._inhibitorRemoved.bind(this));
 
@@ -195,7 +230,7 @@ class Espresso extends PanelMenu.Button {
                 this._connect(this._settings, `changed::${CHARGING_KEY}`, this.toggleCharging.bind(this));
                 this.toggleCharging();
 
-                Mainloop.timeout_add_seconds(2, () => {
+                this._batteryProxytimeout = Mainloop.timeout_add_seconds(2, () => {
                     // tell the settings widget whether or not we have a battery:
                     this._settings.set_boolean(HAS_BATTERY_KEY, this.hasBattery);
                 });
@@ -266,20 +301,24 @@ class Espresso extends PanelMenu.Button {
      * @argument {Function} hook - the function to invoke when the signal is emitted
      */
     _connect(target, signal, hook) {
+        this._logDebugMsg(`this._connect called with\ntarget: ${target}\nsignal: ${signal}\nhook: ${hook}`);
         if (target) {
             if (!this._connections.has(target)) {
+                this._logDebugMsg(`calling this._connections.set(${target}, new Set()`);
                 this._connections.set(target, new Set());
             }
 
             const set = this._connections.get(target);
             let id;
 
+            this._logDebugMsg(`trying target.connect(${signal}, ${hook}`);
             try {
                 id = target.connect(signal, hook);
             } catch (err) {
+                this._logDebugMsg(`trying target.connectSignal(${signal}, ${hook}`);
                 id = target.connectSignal(signal, hook);
             }
-
+            this._logDebugMsg(`calling set.add(${id})`);
             set.add(id);
         }
     }
@@ -307,14 +346,12 @@ class Espresso extends PanelMenu.Button {
     }
 
     toggleFullscreen() {
-        Mainloop.timeout_add_seconds(2, () => {
+        this._toggleFullscreentimeout = Mainloop.timeout_add_seconds(2, () => {
             const enabled = this._settings.get_boolean(FULLSCREEN_KEY);
             const inhibited = this._apps.includes(FULLSCREEN_SYMBOL);
 
             if (this.inFullscreen && enabled && !inhibited) {
-                if (ENABLE_DEBUG) {
-                    log(`Espresso: fullscreen state changed to true`);
-                }
+                this._logDebugMsg(`Fullscreen state changed to true`);
 
                 this.addInhibit(FULLSCREEN_SYMBOL);
                 this._manageNightLight('disabled');
@@ -325,9 +362,7 @@ class Espresso extends PanelMenu.Button {
         const inhibited = this._apps.includes(FULLSCREEN_SYMBOL);
 
         if ((!this.inFullscreen || !enabled) && inhibited) {
-            if (ENABLE_DEBUG) {
-                log(`Espresso: fullscreen state changed to false`);
-            }
+            this._logDebugMsg(`Fullscreen state changed to false`);
 
             this.removeInhibit(FULLSCREEN_SYMBOL);
             this._manageNightLight('enabled');
@@ -336,7 +371,7 @@ class Espresso extends PanelMenu.Button {
 
     toggleCharging() {
         if (this.hasBattery) {
-            Mainloop.timeout_add_seconds(2, () => {
+            this._hasBatterytimeout = Mainloop.timeout_add_seconds(2, () => {
                 const checkDocked = this._settings.get_boolean(DOCKED_KEY);
                 const checkCharging = this._settings.get_boolean(CHARGING_KEY);
                 const inhibitedByDock = this._apps.includes(DOCKED_SYMBOL);
@@ -345,17 +380,14 @@ class Espresso extends PanelMenu.Button {
                 if (!inhibitedByDock || !inhibitedByCharging) {
                     if (this.isCharging) {
                         if (checkCharging && !inhibitedByCharging) {
-                            if (ENABLE_DEBUG) {
-                                log(`Espresso: charging state changed to true`);
-                            }
+                            this._logDebugMsg(`Charging state changed to true`);
 
                             this.addInhibit(CHARGING_SYMBOL);
                         }
 
                         if (checkDocked && this.isDocked && !inhibitedByDock) {
-                            if (ENABLE_DEBUG) {
-                                log(`Espresso: docked state changed to true`);
-                            }
+                            this._logDebugMsg(`docked state changed to true`);
+
                             this.addInhibit(DOCKED_SYMBOL);
                         }
 
@@ -372,16 +404,12 @@ class Espresso extends PanelMenu.Button {
 
         if (inhibitedByDock || inhibitedByCharging) {
             if (!this.isCharging || !checkCharging) {
-                if (ENABLE_DEBUG) {
-                    log(`Espresso: charging state changed to false`);
-                }
+                this._logDebugMsg(`Charging state changed to false`);
 
                 this.removeInhibit(CHARGING_SYMBOL);
 
                 if (inhibitedByDock && (!this.isDocked || !checkDocked)) {
-                    if (ENABLE_DEBUG) {
-                        log(`Espresso: docked state changed to false`);
-                    }
+                    this._logDebugMsg(`Docked state changed to false`);
 
                     this.removeInhibit(DOCKED_SYMBOL);
                 }
@@ -398,12 +426,9 @@ class Espresso extends PanelMenu.Button {
         const wasByUser = this._apps.includes(USER_SYMBOL);
         const allowOverride = this._settings.get_boolean(OVERRIDE_KEY);
 
-        if (ENABLE_DEBUG) {
-            const prev_state = `${this._state?'on':'off'} ${wasByUser?'user ':''}${wasDocked?'docked ':''}${wasCharging?'charging ':''}${wasFullscreen?'fullscreen ':''}${allowOverride?'override':''}`;
-            Main.notify(`Espresso: ${prev_state}`);
-            log(`Espresso: toggled by user, previous state: ${prev_state}`);
-        }
-
+        //const prev_state = `${this._state?'on':'off'} ${wasByUser?'user ':''} ${wasDocked?'docked ':''} ${wasCharging?'charging ':''} ${wasFullscreen?'fullscreen ':''} ${allowOverride?'override':''}`;
+        this._logDebugMsg(`Toggle enabled. Previous state was ${this._state?'on':'off'} ${wasByUser?'user ':''} ${wasDocked?'docked ':''} ${wasCharging?'charging ':''} ${wasFullscreen?'fullscreen ':''} ${allowOverride?'override':''}`);
+        
         if (this._state) {
             if (!allowOverride && (wasDocked || wasCharging || wasFullscreen)) {
                 if (wasDocked) {
@@ -420,30 +445,25 @@ class Espresso extends PanelMenu.Button {
                 }
             }
 
-            if (ENABLE_DEBUG) {
-                log(`Espresso: removing all inhibitors`);
-            }
+            this._logDebugMsg(`Removing all inhibitors`);
 
             this._apps.forEach(app_id => this.removeInhibit(app_id));
         }
         else {
             this.addInhibit(USER_SYMBOL);
+            this._logDebugMsg(`addInhibit called with ${USER_SYMBOL}`);
         }
     }
 
     addInhibit(app_id) {
-        if (ENABLE_DEBUG) {
-            log(`Espresso: requested to add inhibition by ${app_id}`);
-        }
+        this._logDebugMsg(`Requested to add inhibition by ${app_id}`);
 
         this._add_queue.add(app_id);
         this.processAddRemove();
     }
 
     removeInhibit(app_id) {
-        if (ENABLE_DEBUG) {
-            log(`Espresso: requested to remove inhibition by ${app_id}`);
-        }
+        this._logDebugMsg(`Requested to remove inhibition by ${app_id}`);
 
         this._delete_queue.add(app_id);
         this.processAddRemove();
@@ -452,9 +472,7 @@ class Espresso extends PanelMenu.Button {
     processAddRemove() {
         if (this._lock) {
             // another task is still pending
-            if (ENABLE_DEBUG) {
-                log(`Espresso: trying to process the queue but it is locked by ${this._lock} pending requests`);
-            }
+            this._logDebugMsg(`Trying to process the queue but it is locked by ${this._lock} pending requests`);
             return;
         }
 
@@ -464,17 +482,19 @@ class Espresso extends PanelMenu.Button {
             if (!this._delete_queue.has(app_id)) {
                 ++this._lock;
 
-                if (ENABLE_DEBUG) {
-                    log(`Espresso: locking the queue and requesting to add ${app_id}`);
+                this._logDebugMsg(`Locking the queue and requesting to add ${app_id}`);
+
+                try {
+                    this._sessionManager.InhibitRemote(app_id,
+                        0, "Inhibit by %s".format(IndicatorName), 12,
+                        cookie => {
+                            this._last_cookie = cookie;
+                            this._last_app = app_id;
+                        });
+                } catch (err) {
+                    this._logDebugMsg(`InhibitRemote failed: ${err}`);
                 }
 
-                this._sessionManager.InhibitRemote(app_id,
-                    0, "Inhibit by %s".format(IndicatorName), 12,
-                    cookie => {
-                        this._last_cookie = cookie;
-                        this._last_app = app_id;
-                    }
-                );
             } else {
                 this._add_queue.delete(app_id);
                 this.processAddRemove();
@@ -485,9 +505,7 @@ class Espresso extends PanelMenu.Button {
             ++this._lock;
             this._add_queue.delete(app_id);
 
-            if (ENABLE_DEBUG) {
-                log(`Espresso: locking the queue and requesting to remove ${app_id}`);
-            }
+            this._logDebugMsg(`Locking the queue and requesting to remove ${app_id}`);
 
             const index = this._apps.indexOf(app_id);
             this._sessionManager.UninhibitRemote(this._cookies[index]);
@@ -517,9 +535,7 @@ class Espresso extends PanelMenu.Button {
                             this._manageNightLight();
                         }
 
-                        if (ENABLE_DEBUG) {
-                            log(`Espresso: inhibitor added: ${app_id}, unlocking queue`);
-                        }
+                        this._logDebugMsg(`Inhibitor added: ${app_id}, unlocking queue`);
 
                         --this._lock;
                         this.processAddRemove();
@@ -556,9 +572,7 @@ class Espresso extends PanelMenu.Button {
                 this._delete_queue.delete(app_id);
             }
 
-            if (ENABLE_DEBUG) {
-                log(`Espresso: inhibitor removed: ${app_id}, unlocking queue`);
-            }
+            this._logDebugMsg(`Inhibitor removed: ${app_id}, unlocking queue`);
 
             --this._lock;
             this.processAddRemove();
@@ -582,9 +596,6 @@ class Espresso extends PanelMenu.Button {
 
         switch (state) {
         case NOTIFY.ENABLED:
-            if (ENABLE_DEBUG) {
-                return;
-            }
             if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._night_light && this._proxy.DisabledUntilTomorrow) {
                 Main.notify(_('Auto suspend and screensaver disabled. Night Light paused.'));
             } else {
@@ -592,9 +603,6 @@ class Espresso extends PanelMenu.Button {
             }
             break;
         case NOTIFY.DISABLED:
-            if (ENABLE_DEBUG) {
-                return;
-            }
             if (this._settings.get_boolean(NIGHT_LIGHT_KEY) && this._night_light && !this._proxy.DisabledUntilTomorrow) {
                 Main.notify(_('Auto suspend and screensaver enabled. Night Light resumed.'));
             } else {
@@ -666,6 +674,13 @@ class Espresso extends PanelMenu.Button {
         }
     }
 
+    _logDebugMsg(debugmsg){
+        if (ENABLE_DEBUG) {
+            debugmsg = debugmsg.replace(/\n/g,"\nEspresso: ");
+            log(`Espresso: ${debugmsg}`);
+        }
+    }
+
     destroy() {
         // remove all inhibitors
         this._apps.forEach(app_id => this.removeInhibit(app_id));
@@ -673,6 +688,19 @@ class Espresso extends PanelMenu.Button {
         this._disconnectAll();
         this._appConfigs.length = 0;
         this._updateAppData();
+        // cleanup mainloops
+        if(this._batteryProxytimeout) {
+            Mainloop.remove(this._batteryProxytimeout);
+            this._batteryProxytimeout = null;
+        }
+        if(this._hasBatterytimeout) {
+            Mainloop.remove(this._hasBatterytimeout);
+            this._hasBatterytimeout = null;
+        }
+        if(this._toggleFullscreentimeout) {
+            Mainloop.remove(this._toggleFullscreentimeout);
+            this._toggleFullscreentimeout = null;
+        }
         super.destroy();
     }
 });
@@ -682,7 +710,9 @@ function init(extensionMeta) {
 }
 
 function enable() {
+
     EspressoIndicator = new Espresso();
+    //EspressoIndicator = new Espresso(IndicatorName, DBusSessionManagerProxy, PowerManagerProxy, DBusSessionManagerInhibitorProxy);
     Main.panel.addToStatusArea(IndicatorName, EspressoIndicator);
 }
 

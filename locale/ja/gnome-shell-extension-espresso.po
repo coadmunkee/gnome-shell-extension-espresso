@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-14 17:24-0500\n"
+"POT-Creation-Date: 2022-02-18 17:57-0500\n"
 "PO-Revision-Date: 2017-05-05 22:28+0900\n"
 "Last-Translator: Jean-Philippe Braun <eon@patapon.info>\n"
 "Language-Team: French\n"
@@ -58,33 +58,33 @@ msgid "Enable when a fullscreen application is running"
 msgstr "フルスクリーンアプリケーション実行時に有効にする"
 
 #: espresso@coadmunkee.github.com/prefs.js:108
-msgid "Enable when charging and docked to external monitors"
-msgstr ""
-
-#: espresso@coadmunkee.github.com/prefs.js:136
-msgid "Enable when this device is charging"
-msgstr ""
-
-#: espresso@coadmunkee.github.com/prefs.js:164
-#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:46
-msgid "Allow to temporarily override without affecting my settings"
-msgstr ""
-
-#: espresso@coadmunkee.github.com/prefs.js:181
 msgid "Restore state across reboots"
 msgstr "再起動後も状態を維持する"
 
-#: espresso@coadmunkee.github.com/prefs.js:198
+#: espresso@coadmunkee.github.com/prefs.js:125
 msgid "Enable notifications"
 msgstr "通知を有効にする"
 
-#: espresso@coadmunkee.github.com/prefs.js:214
+#: espresso@coadmunkee.github.com/prefs.js:141
 msgid "Pause/resume Night Light if enabled"
 msgstr ""
 
-#: espresso@coadmunkee.github.com/prefs.js:233
+#: espresso@coadmunkee.github.com/prefs.js:160
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:56
 msgid "Pause/resume Night Light for defined applications only"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:185
+msgid "Enable when charging and docked to external monitors"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:213
+msgid "Enable when this device is charging"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:241
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:46
+msgid "Allow to temporarily override without affecting my settings"
 msgstr ""
 
 #: espresso@coadmunkee.github.com/prefs.js:264
