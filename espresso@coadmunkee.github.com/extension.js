@@ -30,7 +30,7 @@ const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const Meta = imports.gi.Meta;
 const UPower = imports.gi.UPowerGlib;
-const Mainloop = imports.mainloop;
+const GLib = imports.gi.GLib;
 const PanelMenu = imports.ui.panelMenu;
 const Shell = imports.gi.Shell;
 const MessageTray = imports.ui.messageTray;
@@ -134,7 +134,6 @@ class Espresso extends PanelMenu.Button {
         this._logDebugMsg(`PowerManagerProxy is:\n${PowerManagerProxy}`);
         this._logDebugMsg(`DBusSessionManagerInhibitorProxy is:\n${DBusSessionManagerInhibitorProxy}`);
         
-        
         /** a map of all gjs connections */
         this._connections = new Map();
 
@@ -230,7 +229,7 @@ class Espresso extends PanelMenu.Button {
                 this._connect(this._settings, `changed::${CHARGING_KEY}`, this.toggleCharging.bind(this));
                 this.toggleCharging();
 
-                this._batteryProxytimeout = Mainloop.timeout_add_seconds(2, () => {
+                this._batteryProxytimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
                     // tell the settings widget whether or not we have a battery:
                     this._settings.set_boolean(HAS_BATTERY_KEY, this.hasBattery);
                 });
@@ -346,7 +345,7 @@ class Espresso extends PanelMenu.Button {
     }
 
     toggleFullscreen() {
-        this._toggleFullscreentimeout = Mainloop.timeout_add_seconds(2, () => {
+        this._toggleFullscreentimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
             const enabled = this._settings.get_boolean(FULLSCREEN_KEY);
             const inhibited = this._apps.includes(FULLSCREEN_SYMBOL);
 
@@ -371,7 +370,7 @@ class Espresso extends PanelMenu.Button {
 
     toggleCharging() {
         if (this.hasBattery) {
-            this._hasBatterytimeout = Mainloop.timeout_add_seconds(2, () => {
+            this._hasBatterytimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
                 const checkDocked = this._settings.get_boolean(DOCKED_KEY);
                 const checkCharging = this._settings.get_boolean(CHARGING_KEY);
                 const inhibitedByDock = this._apps.includes(DOCKED_SYMBOL);
@@ -688,17 +687,17 @@ class Espresso extends PanelMenu.Button {
         this._disconnectAll();
         this._appConfigs.length = 0;
         this._updateAppData();
-        // cleanup mainloops
+        // cleanup GLib loops
         if(this._batteryProxytimeout) {
-            Mainloop.remove(this._batteryProxytimeout);
+            GLib.Source.remove(this._batteryProxytimeout);
             this._batteryProxytimeout = null;
         }
         if(this._hasBatterytimeout) {
-            Mainloop.remove(this._hasBatterytimeout);
+            GLib.Source.remove(this._hasBatterytimeout);
             this._hasBatterytimeout = null;
         }
         if(this._toggleFullscreentimeout) {
-            Mainloop.remove(this._toggleFullscreentimeout);
+            GLib.Source.remove(this._toggleFullscreentimeout);
             this._toggleFullscreentimeout = null;
         }
         super.destroy();
