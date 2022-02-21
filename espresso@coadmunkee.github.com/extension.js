@@ -22,7 +22,7 @@
 'use strict';
 
 // set to true to enable debug notifications
-globalThis.ENABLE_DEBUG = true;
+globalThis.ENABLE_DEBUG = false;
 
 const St = imports.gi.St;
 const Gio = imports.gi.Gio;
@@ -88,52 +88,18 @@ const IndicatorName = "Espresso";
 const DisabledIcon = 'my-espresso-off-symbolic';
 const EnabledIcon = 'my-espresso-on-symbolic';
 
+const ESPRESSO_DEBUG_MSG = "Debug";
+const ESPRESSO_ERROR_MSG = "Error";
+
 let EspressoIndicator;
 let ShellVersion = parseInt(Config.PACKAGE_VERSION.split(".")[1]);
 
 const Espresso = GObject.registerClass(
 class Espresso extends PanelMenu.Button {
     _init() {
-        this._logDebugMsg(`=========New Session=======================================\nCalling super._init(null, ${IndicatorName})`);
+        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `=========New Session=======================================\nCalling super._init(null, ${IndicatorName})`);
         super._init(null, IndicatorName);
-/*        
-        // for some reason the method Inhibit isn't in the schema so we can't just load the xml
-        const DBusSessionManagerIface = '<node>\
-            <interface name="org.gnome.SessionManager">\
-                <method name="Inhibit">\
-                    <arg type="s" direction="in" />\
-                    <arg type="u" direction="in" />\
-                    <arg type="s" direction="in" />\
-                    <arg type="u" direction="in" />\
-                    <arg type="u" direction="out" />\
-                </method>\
-                <method name="Uninhibit">\
-                    <arg type="u" direction="in" />\
-                </method>\
-                <method name="GetInhibitors">\
-                    <arg type="ao" direction="out" />\
-                </method>\
-                <signal name="InhibitorAdded">\
-                    <arg type="o" direction="out" />\
-                </signal>\
-                <signal name="InhibitorRemoved">\
-                    <arg type="o" direction="out" />\
-                </signal>\
-            </interface>\
-        </node>';
 
-        const DBusSessionManagerProxy = Gio.DBusProxy.makeProxyWrapper(DBusSessionManagerIface);
-
-        const DisplayDeviceInterface = loadInterfaceXML("org.freedesktop.UPower.Device");
-        const PowerManagerProxy = Gio.DBusProxy.makeProxyWrapper(DisplayDeviceInterface);
-
-        const DBusSessionManagerInhibitorIface = loadInterfaceXML("org.gnome.SessionManager.Inhibitor");
-        const DBusSessionManagerInhibitorProxy = Gio.DBusProxy.makeProxyWrapper(DBusSessionManagerInhibitorIface);
-*/
-        this._logDebugMsg(`DBusSessionManagerProxy is:\n${DBusSessionManagerProxy}`);
-        this._logDebugMsg(`PowerManagerProxy is:\n${PowerManagerProxy}`);
-        this._logDebugMsg(`DBusSessionManagerInhibitorProxy is:\n${DBusSessionManagerInhibitorProxy}`);
-        
         /** a map of all gjs connections */
         this._connections = new Map();
 
@@ -151,7 +117,7 @@ class Espresso extends PanelMenu.Button {
 
         this._proxy = new ColorProxy(Gio.DBus.session, 'org.gnome.SettingsDaemon.Color', '/org/gnome/SettingsDaemon/Color', (proxy, error) => {
             if (error) {
-                log(error.message);
+                this.logEspressoMsg(`Error`,error.message);
                 return;
             }
         });
@@ -161,7 +127,7 @@ class Espresso extends PanelMenu.Button {
         this._sessionManager = new DBusSessionManagerProxy(Gio.DBus.session,
                                                         'org.gnome.SessionManager',
                                                         '/org/gnome/SessionManager');
-        this._logDebugMsg(`this._sessionManager is: ${this._sessionManager}`);
+        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `this._sessionManager is: ${this._sessionManager}`);
         this._connect(this._sessionManager, 'InhibitorAdded', this._inhibitorAdded.bind(this));
         this._connect(this._sessionManager, 'InhibitorRemoved', this._inhibitorRemoved.bind(this));
 
@@ -222,7 +188,7 @@ class Espresso extends PanelMenu.Button {
         // Create a battery proxy
         this.batteryProxy = new PowerManagerProxy(Gio.DBus.system, "org.freedesktop.UPower", "/org/freedesktop/UPower/devices/DisplayDevice", (proxy, error) => {
             if (error) {
-                log(`Espresso: unable to obtain battery proxy: ${error.message}`);
+                this.logEspressoMsg(ESPRESSO_ERROR_MSG,`Unable to obtain battery proxy: ${error.message}`);
             } else {
                 // Enable espresso when charging
                 this._connect(this.batteryProxy, 'g-properties-changed', this.toggleCharging.bind(this));
@@ -300,24 +266,24 @@ class Espresso extends PanelMenu.Button {
      * @argument {Function} hook - the function to invoke when the signal is emitted
      */
     _connect(target, signal, hook) {
-        this._logDebugMsg(`this._connect called with\ntarget: ${target}\nsignal: ${signal}\nhook: ${hook}`);
+        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `this._connect called with\ntarget: ${target}\nsignal: ${signal}\nhook: ${hook}`);
         if (target) {
             if (!this._connections.has(target)) {
-                this._logDebugMsg(`calling this._connections.set(${target}, new Set()`);
+                this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Calling this._connections.set(${target}, new Set()`);
                 this._connections.set(target, new Set());
             }
 
             const set = this._connections.get(target);
             let id;
 
-            this._logDebugMsg(`trying target.connect(${signal}, ${hook}`);
+            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Trying target.connect(${signal}, ${hook}`);
             try {
                 id = target.connect(signal, hook);
             } catch (err) {
-                this._logDebugMsg(`trying target.connectSignal(${signal}, ${hook}`);
+                this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Trying target.connectSignal(${signal}, ${hook}`);
                 id = target.connectSignal(signal, hook);
             }
-            this._logDebugMsg(`calling set.add(${id})`);
+            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Calling set.add(${id})`);
             set.add(id);
         }
     }
@@ -336,7 +302,7 @@ class Espresso extends PanelMenu.Button {
                         try {
                             target.disconnectSignal(id);
                         } catch (err) {
-                            log(`Espresso: unable to disconnect signal`);
+                            this.logEspressoMsg(ESPRESSO_ERROR_MSG,`Unable to disconnect signal`);
                         }
                     }
                 }
@@ -350,7 +316,7 @@ class Espresso extends PanelMenu.Button {
             const inhibited = this._apps.includes(FULLSCREEN_SYMBOL);
 
             if (this.inFullscreen && enabled && !inhibited) {
-                this._logDebugMsg(`Fullscreen state changed to true`);
+                this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Fullscreen state changed to true`);
 
                 this.addInhibit(FULLSCREEN_SYMBOL);
                 this._manageNightLight('disabled');
@@ -361,7 +327,7 @@ class Espresso extends PanelMenu.Button {
         const inhibited = this._apps.includes(FULLSCREEN_SYMBOL);
 
         if ((!this.inFullscreen || !enabled) && inhibited) {
-            this._logDebugMsg(`Fullscreen state changed to false`);
+            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Fullscreen state changed to false`);
 
             this.removeInhibit(FULLSCREEN_SYMBOL);
             this._manageNightLight('enabled');
@@ -379,13 +345,13 @@ class Espresso extends PanelMenu.Button {
                 if (!inhibitedByDock || !inhibitedByCharging) {
                     if (this.isCharging) {
                         if (checkCharging && !inhibitedByCharging) {
-                            this._logDebugMsg(`Charging state changed to true`);
+                            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Charging state changed to true`);
 
                             this.addInhibit(CHARGING_SYMBOL);
                         }
 
                         if (checkDocked && this.isDocked && !inhibitedByDock) {
-                            this._logDebugMsg(`docked state changed to true`);
+                            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Docked state changed to true`);
 
                             this.addInhibit(DOCKED_SYMBOL);
                         }
@@ -403,12 +369,12 @@ class Espresso extends PanelMenu.Button {
 
         if (inhibitedByDock || inhibitedByCharging) {
             if (!this.isCharging || !checkCharging) {
-                this._logDebugMsg(`Charging state changed to false`);
+                this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Charging state changed to false`);
 
                 this.removeInhibit(CHARGING_SYMBOL);
 
                 if (inhibitedByDock && (!this.isDocked || !checkDocked)) {
-                    this._logDebugMsg(`Docked state changed to false`);
+                    this.logEspressoMsg(`Docked state changed to false`);
 
                     this.removeInhibit(DOCKED_SYMBOL);
                 }
@@ -426,7 +392,7 @@ class Espresso extends PanelMenu.Button {
         const allowOverride = this._settings.get_boolean(OVERRIDE_KEY);
 
         //const prev_state = `${this._state?'on':'off'} ${wasByUser?'user ':''} ${wasDocked?'docked ':''} ${wasCharging?'charging ':''} ${wasFullscreen?'fullscreen ':''} ${allowOverride?'override':''}`;
-        this._logDebugMsg(`Toggle enabled. Previous state was ${this._state?'on':'off'} ${wasByUser?'user ':''} ${wasDocked?'docked ':''} ${wasCharging?'charging ':''} ${wasFullscreen?'fullscreen ':''} ${allowOverride?'override':''}`);
+        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Toggle enabled. Previous state was ${this._state?'on':'off'} ${wasByUser?'user ':''} ${wasDocked?'docked ':''} ${wasCharging?'charging ':''} ${wasFullscreen?'fullscreen ':''} ${allowOverride?'override':''}`);
         
         if (this._state) {
             if (!allowOverride && (wasDocked || wasCharging || wasFullscreen)) {
@@ -444,25 +410,25 @@ class Espresso extends PanelMenu.Button {
                 }
             }
 
-            this._logDebugMsg(`Removing all inhibitors`);
+            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Removing all inhibitors`);
 
             this._apps.forEach(app_id => this.removeInhibit(app_id));
         }
         else {
             this.addInhibit(USER_SYMBOL);
-            this._logDebugMsg(`addInhibit called with ${USER_SYMBOL}`);
+            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `addInhibit called with ${USER_SYMBOL}`);
         }
     }
 
     addInhibit(app_id) {
-        this._logDebugMsg(`Requested to add inhibition by ${app_id}`);
+        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Requested to add inhibition by ${app_id}`);
 
         this._add_queue.add(app_id);
         this.processAddRemove();
     }
 
     removeInhibit(app_id) {
-        this._logDebugMsg(`Requested to remove inhibition by ${app_id}`);
+        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Requested to remove inhibition by ${app_id}`);
 
         this._delete_queue.add(app_id);
         this.processAddRemove();
@@ -471,7 +437,7 @@ class Espresso extends PanelMenu.Button {
     processAddRemove() {
         if (this._lock) {
             // another task is still pending
-            this._logDebugMsg(`Trying to process the queue but it is locked by ${this._lock} pending requests`);
+            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Trying to process the queue but it is locked by ${this._lock} pending requests`);
             return;
         }
 
@@ -481,7 +447,7 @@ class Espresso extends PanelMenu.Button {
             if (!this._delete_queue.has(app_id)) {
                 ++this._lock;
 
-                this._logDebugMsg(`Locking the queue and requesting to add ${app_id}`);
+                this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Locking the queue and requesting to add ${app_id}`);
 
                 try {
                     this._sessionManager.InhibitRemote(app_id,
@@ -491,7 +457,7 @@ class Espresso extends PanelMenu.Button {
                             this._last_app = app_id;
                         });
                 } catch (err) {
-                    this._logDebugMsg(`InhibitRemote failed: ${err}`);
+                    this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `InhibitRemote failed: ${err}`);
                 }
 
             } else {
@@ -504,7 +470,7 @@ class Espresso extends PanelMenu.Button {
             ++this._lock;
             this._add_queue.delete(app_id);
 
-            this._logDebugMsg(`Locking the queue and requesting to remove ${app_id}`);
+            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Locking the queue and requesting to remove ${app_id}`);
 
             const index = this._apps.indexOf(app_id);
             this._sessionManager.UninhibitRemote(this._cookies[index]);
@@ -534,7 +500,7 @@ class Espresso extends PanelMenu.Button {
                             this._manageNightLight();
                         }
 
-                        this._logDebugMsg(`Inhibitor added: ${app_id}, unlocking queue`);
+                        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Inhibitor added: ${app_id}, unlocking queue`);
 
                         --this._lock;
                         this.processAddRemove();
@@ -571,7 +537,7 @@ class Espresso extends PanelMenu.Button {
                 this._delete_queue.delete(app_id);
             }
 
-            this._logDebugMsg(`Inhibitor removed: ${app_id}, unlocking queue`);
+            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Inhibitor removed: ${app_id}, unlocking queue`);
 
             --this._lock;
             this.processAddRemove();
@@ -673,10 +639,12 @@ class Espresso extends PanelMenu.Button {
         }
     }
 
-    _logDebugMsg(debugmsg){
-        if (ENABLE_DEBUG) {
-            debugmsg = debugmsg.replace(/\n/g,"\nEspresso: ");
-            log(`Espresso: ${debugmsg}`);
+    // Check msgtype and determine whether or not to write a message to the log. Write if the 
+    // message type is not ESPRESSO_DEBUG_MSG or if the ENABLE_DEBUG flag is set.
+    logEspressoMsg(msgtype, msgcontent){
+        if ( (msgtype!=ESPRESSO_DEBUG_MSG)||ENABLE_DEBUG) {
+            msgcontent = msgcontent.replace(/\n/g,`\nEspresso: ${msgtype}: `);
+            log(`Espresso: ${msgtype}: ${msgcontent}`);
         }
     }
 
@@ -711,7 +679,6 @@ function init(extensionMeta) {
 function enable() {
 
     EspressoIndicator = new Espresso();
-    //EspressoIndicator = new Espresso(IndicatorName, DBusSessionManagerProxy, PowerManagerProxy, DBusSessionManagerInhibitorProxy);
     Main.panel.addToStatusArea(IndicatorName, EspressoIndicator);
 }
 
