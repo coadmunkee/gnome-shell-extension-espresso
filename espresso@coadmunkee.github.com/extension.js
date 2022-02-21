@@ -194,6 +194,7 @@ class Espresso extends PanelMenu.Button {
                 this._connect(this.batteryProxy, 'g-properties-changed', this.toggleCharging.bind(this));
                 this._connect(this._settings, `changed::${CHARGING_KEY}`, this.toggleCharging.bind(this));
                 this.toggleCharging();
+                this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `this.batteryProxy is: ${this.batteryProxy}`);
 
                 this._batteryProxytimeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
                     // tell the settings widget whether or not we have a battery:
@@ -269,7 +270,6 @@ class Espresso extends PanelMenu.Button {
         this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `this._connect called with\ntarget: ${target}\nsignal: ${signal}\nhook: ${hook}`);
         if (target) {
             if (!this._connections.has(target)) {
-                this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Calling this._connections.set(${target}, new Set()`);
                 this._connections.set(target, new Set());
             }
 
@@ -280,7 +280,7 @@ class Espresso extends PanelMenu.Button {
             try {
                 id = target.connect(signal, hook);
             } catch (err) {
-                this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Trying target.connectSignal(${signal}, ${hook}`);
+                this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Failed to connect target.connectSignal(${signal}, ${hook}`);
                 id = target.connectSignal(signal, hook);
             }
             this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Calling set.add(${id})`);
@@ -642,7 +642,7 @@ class Espresso extends PanelMenu.Button {
     // Check msgtype and determine whether or not to write a message to the log. Write if the 
     // message type is not ESPRESSO_DEBUG_MSG or if the ENABLE_DEBUG flag is set.
     logEspressoMsg(msgtype, msgcontent){
-        if ( (msgtype!=ESPRESSO_DEBUG_MSG)||ENABLE_DEBUG) {
+        if ( (msgtype!=ESPRESSO_DEBUG_MSG) || ENABLE_DEBUG) {
             msgcontent = msgcontent.replace(/\n/g,`\nEspresso: ${msgtype}: `);
             log(`Espresso: ${msgtype}: ${msgcontent}`);
         }
