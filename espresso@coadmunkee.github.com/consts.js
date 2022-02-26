@@ -22,6 +22,13 @@ var DOCKED_SYMBOL = Symbol('espresso/docked').toString();
 var CHARGING_SYMBOL = Symbol('espresso/charging').toString();
 var USER_SYMBOL = Symbol('espresso/user').toString();
 
+// logging debug and error message control:
+var ESPRESSO_DEBUG_MSG = "Debug";
+var ESPRESSO_ERROR_MSG = "Error";
+// set to true to enable logging debug messages to the journal 
+// - choose wisely as debug messages are quite verbose
+var ESPRESSO_ENABLE_DEBUG = false;
+
 // notification states:
 var NOTIFY = {
     ENABLED: Symbol("espresso/notifyState/enabled"),

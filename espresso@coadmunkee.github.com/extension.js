@@ -21,9 +21,6 @@
 
 'use strict';
 
-// set to true to enable debug notifications
-globalThis.ENABLE_DEBUG = false;
-
 const St = imports.gi.St;
 const Gio = imports.gi.Gio;
 const GObject = imports.gi.GObject;
@@ -88,9 +85,6 @@ const IndicatorName = "Espresso";
 const DisabledIcon = 'my-espresso-off-symbolic';
 const EnabledIcon = 'my-espresso-on-symbolic';
 
-const ESPRESSO_DEBUG_MSG = "Debug";
-const ESPRESSO_ERROR_MSG = "Error";
-
 let EspressoIndicator;
 let ShellVersion = parseInt(Config.PACKAGE_VERSION.split(".")[1]);
 
@@ -134,9 +128,7 @@ class Espresso extends PanelMenu.Button {
         // From auto-move-windows@gnome-shell-extensions.gcampax.github.com
         this._appSystem = Shell.AppSystem.get_default();
 
-        this._appsChangedId =
-            this._connect(this._appSystem, 'installed-changed',
-                this._updateAppData.bind(this));
+        this._appsChangedId = this._connect(this._appSystem, 'installed-changed', this._updateAppData.bind(this));
 
         // ("screen" in global) is false on 3.28, although global.screen exists
         if (typeof global.screen !== "undefined") {
@@ -640,9 +632,9 @@ class Espresso extends PanelMenu.Button {
     }
 
     // Check msgtype and determine whether or not to write a message to the log. Write if the 
-    // message type is not ESPRESSO_DEBUG_MSG or if the ENABLE_DEBUG flag is set.
+    // message type is not ESPRESSO_DEBUG_MSG or if the ESPRESSO_ENABLE_DEBUG flag is set.
     logEspressoMsg(msgtype, msgcontent){
-        if ( (msgtype!=ESPRESSO_DEBUG_MSG) || ENABLE_DEBUG) {
+        if ( (msgtype!=ESPRESSO_DEBUG_MSG) || ESPRESSO_ENABLE_DEBUG) {
             msgcontent = msgcontent.replace(/\n/g,`\nEspresso: ${msgtype}: `);
             log(`Espresso: ${msgtype}: ${msgcontent}`);
         }
@@ -677,7 +669,6 @@ function init(extensionMeta) {
 }
 
 function enable() {
-
     EspressoIndicator = new Espresso();
     Main.panel.addToStatusArea(IndicatorName, EspressoIndicator);
 }
