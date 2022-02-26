@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-14 17:24-0500\n"
+"POT-Creation-Date: 2022-02-18 17:57-0500\n"
 "PO-Revision-Date: 2022-02-06 11:40+0100\n"
 "Last-Translator: Jose Riha <jose1711@gmail.com>\n"
 "Language-Team: Slovak\n"
@@ -60,34 +60,34 @@ msgid "Enable when a fullscreen application is running"
 msgstr "Povoliť, keď je spustená aplikácia v režime na celú obrazovku"
 
 #: espresso@coadmunkee.github.com/prefs.js:108
-msgid "Enable when charging and docked to external monitors"
-msgstr ""
-
-#: espresso@coadmunkee.github.com/prefs.js:136
-msgid "Enable when this device is charging"
-msgstr ""
-
-#: espresso@coadmunkee.github.com/prefs.js:164
-#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:46
-msgid "Allow to temporarily override without affecting my settings"
-msgstr ""
-
-#: espresso@coadmunkee.github.com/prefs.js:181
 msgid "Restore state across reboots"
 msgstr "Obnoviť stav medzi spusteniami"
 
-#: espresso@coadmunkee.github.com/prefs.js:198
+#: espresso@coadmunkee.github.com/prefs.js:125
 msgid "Enable notifications"
 msgstr "Povoliť oznámenia"
 
-#: espresso@coadmunkee.github.com/prefs.js:214
+#: espresso@coadmunkee.github.com/prefs.js:141
 msgid "Pause/resume Night Light if enabled"
 msgstr "Pozastaviť/znova aktivovať nočné svetlo, ak je zapnuté"
 
-#: espresso@coadmunkee.github.com/prefs.js:233
+#: espresso@coadmunkee.github.com/prefs.js:160
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:56
 msgid "Pause/resume Night Light for defined applications only"
 msgstr "Pozastaviť/znova aktivovať nočné svetlo pre zadanú aplikáciu"
+
+#: espresso@coadmunkee.github.com/prefs.js:185
+msgid "Enable when charging and docked to external monitors"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:213
+msgid "Enable when this device is charging"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:241
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:46
+msgid "Allow to temporarily override without affecting my settings"
+msgstr ""
 
 #: espresso@coadmunkee.github.com/prefs.js:264
 msgid "Applications which enable Espresso automatically"

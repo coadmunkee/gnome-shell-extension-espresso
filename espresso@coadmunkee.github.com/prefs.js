@@ -380,7 +380,7 @@ const NewInhibitDialog = GObject.registerClass(
         _init(parent) {
             super._init({
                 transient_for: parent,
-                modal: true,
+                modal: true
             });
 
             this._settings = ExtensionUtils.getSettings();
