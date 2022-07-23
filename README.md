@@ -18,7 +18,7 @@ For additional installation instructions and more information visit [https://git
 
 
 ## Installation from git
-    git clone git://github.com/coadmunkee/gnome-shell-extension-espresso.git
+    git clone https://github.com/coadmunkee/gnome-shell-extension-espresso.git
     cd gnome-shell-extension-espresso
     ./update-locale.sh
     glib-compile-schemas --strict --targetdir=espresso@coadmunkee.github.com/schemas/ espresso@coadmunkee.github.com/schemas
