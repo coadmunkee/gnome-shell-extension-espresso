@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-18 17:57-0500\n"
+"POT-Creation-Date: 2022-08-11 15:09-0400\n"
 "PO-Revision-Date: 2022-05-19 22:00+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -10,38 +10,39 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: espresso@coadmunkee.github.com/extension.js:589
+#: espresso@coadmunkee.github.com/extension.js:557
 msgid "Auto suspend and screensaver disabled. Night Light paused."
 msgstr ""
 "Автоматический режим ожидания и заставка отключены.\n"
 "Ночной свет приостановлен."
 
-#: espresso@coadmunkee.github.com/extension.js:591
+#: espresso@coadmunkee.github.com/extension.js:559
 msgid "Auto suspend and screensaver disabled"
 msgstr "Автоматический режим ожидания и заставка выключены"
 
-#: espresso@coadmunkee.github.com/extension.js:599
+#: espresso@coadmunkee.github.com/extension.js:564
 msgid "Auto suspend and screensaver enabled. Night Light resumed."
 msgstr ""
 "Автоматический режим ожидания и заставка включены.\n"
 "Ночной свет возобновлен."
 
-#: espresso@coadmunkee.github.com/extension.js:601
+#: espresso@coadmunkee.github.com/extension.js:566
 msgid "Auto suspend and screensaver enabled"
 msgstr "Автоматический режим ожидания и заставка включены"
 
-#: espresso@coadmunkee.github.com/extension.js:605
+#: espresso@coadmunkee.github.com/extension.js:570
 msgid "Turning off \"espresso enabled when docked\""
 msgstr "Выключение \"espresso включается при подключении\""
 
-#: espresso@coadmunkee.github.com/extension.js:608
+#: espresso@coadmunkee.github.com/extension.js:573
 msgid "Turning off \"espresso enabled when charging\""
 msgstr "Выключение \"espresso включается при зарядке\""
 
-#: espresso@coadmunkee.github.com/extension.js:611
+#: espresso@coadmunkee.github.com/extension.js:576
 msgid "Turning off \"espresso enabled when fullscreen\""
 msgstr "Выключение \"espresso включается при полноэкранном режиме\""
 
@@ -94,7 +95,8 @@ msgid "Application list"
 msgstr "Список приложений"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:7
-msgid "A list of strings, each containing an application id (desktop file name)"
+msgid ""
+"A list of strings, each containing an application id (desktop file name)"
 msgstr "Список строк, содержащих название программы (включая файлы .desktop)"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:11
@@ -126,8 +128,11 @@ msgid "Enable when docked to external monitors"
 msgstr "Включать при подключении к внешним мониторам"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:37
-msgid "Enable when the device is on ac power and connected to external monitors"
-msgstr "Включать, когда устройство работает от сети переменного тока и подключено к внешним мониторам"
+msgid ""
+"Enable when the device is on ac power and connected to external monitors"
+msgstr ""
+"Включать, когда устройство работает от сети переменного тока и подключено к "
+"внешним мониторам"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
 msgid "Enable when charging"
@@ -151,7 +156,9 @@ msgstr "Пауза/возобновление Ночного света, ког�
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:57
 msgid "Pause/resume Night Light for defined applications when enabled/disabled"
-msgstr "Пауза/возобновление Ночного света для определенных приложений, когда включено/выключено"
+msgstr ""
+"Пауза/возобновление Ночного света для определенных приложений, когда "
+"включено/выключено"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:61
 msgid "Whether or not this device has a battery"

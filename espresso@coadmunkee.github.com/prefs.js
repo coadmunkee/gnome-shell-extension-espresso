@@ -62,11 +62,11 @@ class EspressoWidget {
 
 
         let showEspressoBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-                                spacing: 7});
+                                           spacing: 7});
 
         let showEspressoLabel = new Gtk.Label({label: _("Show Espresso in top panel"),
-                                            hexpand: true,
-                                            xalign: 0});
+                                               hexpand: true,
+                                               xalign: 0});
 
         let showEspressoSwitch = new Gtk.Switch({active: this._settings.get_boolean(SHOW_INDICATOR_KEY)});
         showEspressoSwitch.connect('notify::active', button => {

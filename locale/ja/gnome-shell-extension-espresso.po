@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-18 17:57-0500\n"
+"POT-Creation-Date: 2022-08-11 15:09-0400\n"
 "PO-Revision-Date: 2017-05-05 22:28+0900\n"
 "Last-Translator: Jean-Philippe Braun <eon@patapon.info>\n"
 "Language-Team: French\n"
@@ -17,33 +17,33 @@ msgstr ""
 "X-Generator: Poedit 2.0.1\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
-#: espresso@coadmunkee.github.com/extension.js:589
+#: espresso@coadmunkee.github.com/extension.js:557
 #, fuzzy
 msgid "Auto suspend and screensaver disabled. Night Light paused."
 msgstr "自動サスペンドを無効にしました"
 
-#: espresso@coadmunkee.github.com/extension.js:591
+#: espresso@coadmunkee.github.com/extension.js:559
 msgid "Auto suspend and screensaver disabled"
 msgstr "自動サスペンドを無効にしました"
 
-#: espresso@coadmunkee.github.com/extension.js:599
+#: espresso@coadmunkee.github.com/extension.js:564
 #, fuzzy
 msgid "Auto suspend and screensaver enabled. Night Light resumed."
 msgstr "自動サスペンドを有効にしました"
 
-#: espresso@coadmunkee.github.com/extension.js:601
+#: espresso@coadmunkee.github.com/extension.js:566
 msgid "Auto suspend and screensaver enabled"
 msgstr "自動サスペンドを有効にしました"
 
-#: espresso@coadmunkee.github.com/extension.js:605
+#: espresso@coadmunkee.github.com/extension.js:570
 msgid "Turning off \"espresso enabled when docked\""
 msgstr ""
 
-#: espresso@coadmunkee.github.com/extension.js:608
+#: espresso@coadmunkee.github.com/extension.js:573
 msgid "Turning off \"espresso enabled when charging\""
 msgstr ""
 
-#: espresso@coadmunkee.github.com/extension.js:611
+#: espresso@coadmunkee.github.com/extension.js:576
 msgid "Turning off \"espresso enabled when fullscreen\""
 msgstr ""
 
