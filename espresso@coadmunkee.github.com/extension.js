@@ -168,6 +168,12 @@ class Espresso extends PanelMenu.Button {
             this.toggleState();
         }
 
+        // Capture initial hotkey value and implement hotkey for toggling state
+        this.logEspressoMsg(ESPRESSO_DEBUG_MSG,`Initializing hotkey binding`);
+        this._espressokey = [];
+        this._connect(this._settings, `changed::${HOTKEY_KEY}`, this.manageKeybinding.bind(this));
+        this.manageKeybinding();
+
         // Enable espresso when fullscreen app is running
         this._connect(this._screen, 'in-fullscreen-changed', this.toggleFullscreen.bind(this));
         this._connect(this._settings, `changed::${FULLSCREEN_KEY}`, this.toggleFullscreen.bind(this));
@@ -286,7 +292,6 @@ class Espresso extends PanelMenu.Button {
     _disconnectAll() {
         for (const [target, ids] of this._connections) {
             if (target) {
-
                 for (const id of ids) {
                     try {
                         target.disconnect(id);
@@ -424,6 +429,20 @@ class Espresso extends PanelMenu.Button {
 
         this._delete_queue.add(app_id);
         this.processAddRemove();
+    }
+
+    manageKeybinding() {
+        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Handling the key binding management`);
+        // if there is an existing binding, remove it
+        if (this._espressokey.length > 0 ) Main.wm.removeKeybinding(this._espressokey.toString());
+        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Removed key binding for ${this._espressokey.toString()}`);
+        // get the new value from the changed setting
+        this._espressokey = this._settings.get_strv(HOTKEY_KEY);
+        if (this._espressokey.length > 0 ) {
+            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Creating the new key binding for ${this._espressokey.toString()}`);
+            Main.wm.addKeybinding(HOTKEY_KEY, this._settings, Meta.KeyBindingFlags.IGNORE_AUTOREPEAT, Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW, this.toggleState.bind(this));
+        }
+        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Finished handling the key binding management to ${this._espressokey.toString()}`);
     }
 
     processAddRemove() {
@@ -641,6 +660,8 @@ class Espresso extends PanelMenu.Button {
     }
 
     destroy() {
+        // remove keybinding if one exists
+        if (this._espressokey.length > 0 ) Main.wm.removeKeybinding(HOTKEY_KEY);
         // remove all inhibitors
         this._apps.forEach(app_id => this.removeInhibit(app_id));
         // disconnect from signals

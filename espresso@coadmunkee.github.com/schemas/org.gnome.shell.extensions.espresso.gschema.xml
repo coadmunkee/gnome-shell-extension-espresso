@@ -61,5 +61,15 @@
             <summary>Whether or not this device has a battery</summary>
             <description>Auto-determined on startup</description>
         </key>
+        <key type="as" name="espresso-key">
+            <default><![CDATA[['<Ctrl><Super>E']]]></default>
+            <summary>Hotkey to toggle espresso state</summary>
+            <description>Hotkey to use to toggle espresso state on/off</description>
+        </key>
+        <key type="as" name="espresso-key-holding">
+            <default><![CDATA[['']]]></default>
+            <summary>Hotkey to toggle espresso state</summary>
+            <description>Hotkey to use to toggle espresso state on/off</description>
+        </key>
     </schema>
 </schemalist>

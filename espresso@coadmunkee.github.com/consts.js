@@ -15,6 +15,7 @@ var RESTORE_KEY = 'restore-state';
 var NIGHT_LIGHT_KEY = 'control-nightlight';
 var NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';
 var HAS_BATTERY_KEY = 'has-battery';
+var HOTKEY_KEY = 'espresso-key';
 
 // virtual apps:
 var FULLSCREEN_SYMBOL = Symbol('espresso/fullscreen').toString();

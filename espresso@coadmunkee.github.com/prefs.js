@@ -20,6 +20,8 @@ const REACTIVE_SETTINGS = true;
 
 const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
+const Adw = imports.gi.Adw;
+const GdkPixbuf = imports.gi.GdkPixbuf;
 const GObject = imports.gi.GObject;
 const Config = imports.misc.config;
 const Mainloop = imports.mainloop;
@@ -284,6 +286,43 @@ class EspressoWidget {
 
         this.w.attach(toolbar, 0, 10, 1, 1);
 
+        const togglekeyBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
+            spacing: 7});
+
+        const togglekeyLabel = new Gtk.Label({label: _("Current Hotkey to toggle Espresso on/off"),
+                                hexpand: true,
+                                xalign: 0});
+
+        const togglekeyName = this._settings.get_strv(HOTKEY_KEY);
+
+        const togglekeyButton = new Gtk.Button({label : togglekeyName.toString()});
+//        stateSwitch.connect('notify::active', button => {
+//        this._settings.set_strv(HOTKEY_KEY, button.active);
+//        });
+
+        togglekeyButton.connect('clicked', () => {
+            let dialog = new HotkeyDialog(this._settings, this);
+            dialog.show();
+            dialog.connect('response', (_w, response) => {
+                if(response === Gtk.ResponseType.APPLY) {
+                    this._settings.set_strv(HOTKEY_KEY, [dialog.resultsText]);
+                    togglekeyButton.label = dialog.resultsText;
+                    // shortcutCell.accelerator = dialog.resultsText;
+                    dialog.destroy();
+                }
+                else {
+                    togglekeyButton.label = this._settings.get_strv(HOTKEY_KEY).toString();
+                    //shortcutCell.accelerator = this._settings.get_strv(HOTKEY_KEY).toString();
+                    dialog.destroy();
+                }
+            });
+        });
+
+        togglekeyBox.prepend(togglekeyLabel);
+        togglekeyBox.append(togglekeyButton);
+
+        this.w.attach(togglekeyBox, 0, 11, 1, 1);
+        
         this._changedPermitted = true;
         this._refresh();
     }
@@ -411,3 +450,168 @@ function buildPrefsWidget() {
     const widget = new EspressoWidget();
     return widget.w;
 }
+
+var HotkeyDialog = GObject.registerClass({
+    Signals: {
+        'response': { param_types: [GObject.TYPE_INT] },
+    },
+},
+class Espresso_HotkeyDialog extends Gtk.Window {
+    _init(settings, parent) {
+        this._settings = settings;
+        this.keyEventController = new Gtk.EventControllerKey();
+
+        super._init({
+            modal: true,
+            title: _("Set Custom Hotkey") //,
+//            transient_for: parent.get_root()
+        });
+        let vbox = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            spacing: 20,
+            homogeneous: false,
+            margin_top: 5,
+            margin_bottom: 5,
+            margin_start: 5,
+            margin_end: 5,
+            hexpand: true,
+            halign: Gtk.Align.FILL
+        });
+        this.set_child(vbox);
+        this._createLayout(vbox);
+        this.add_controller(this.keyEventController);
+        this.set_size_request(500, 250);
+    }
+
+    _createLayout(vbox) {
+        let hotkeyKey = '';
+
+        let modFrame = new Adw.PreferencesGroup()
+        let modRow = new Adw.ActionRow({
+            title: _("Choose Modifiers")
+        });
+
+        let buttonBox = new Gtk.Box({
+            hexpand: true,
+            halign: Gtk.Align.END,
+            spacing: 5
+        });
+        modRow.add_suffix(buttonBox);
+        let ctrlButton = new Gtk.ToggleButton({
+            label: _("Ctrl"),
+            valign: Gtk.Align.CENTER
+        });
+        let superButton = new Gtk.ToggleButton({
+            label: _("Super"),
+            valign: Gtk.Align.CENTER
+        });
+        let shiftButton = new Gtk.ToggleButton({
+            label: _("Shift"),
+            valign: Gtk.Align.CENTER
+        });
+        let altButton = new Gtk.ToggleButton({
+            label: _("Alt"),
+            valign: Gtk.Align.CENTER
+        });
+        ctrlButton.connect('toggled', () => {
+            this.resultsText="";
+            if(ctrlButton.get_active()) this.resultsText += "<Ctrl>";
+            if(superButton.get_active()) this.resultsText += "<Super>";
+            if(shiftButton.get_active()) this.resultsText += "<Shift>";
+            if(altButton.get_active()) this.resultsText += "<Alt>";
+            this.resultsText += hotkeyKey;
+            resultsWidget.accelerator =  this.resultsText;
+            applyButton.set_sensitive(true);
+        });
+        superButton.connect('toggled', () => {
+            this.resultsText="";
+            if(ctrlButton.get_active()) this.resultsText += "<Ctrl>";
+            if(superButton.get_active()) this.resultsText += "<Super>";
+            if(shiftButton.get_active()) this.resultsText += "<Shift>";
+            if(altButton.get_active()) this.resultsText += "<Alt>";
+            this.resultsText += hotkeyKey;
+            resultsWidget.accelerator =  this.resultsText;
+            applyButton.set_sensitive(true);
+        });
+        shiftButton.connect('toggled', () => {
+            this.resultsText="";
+            if(ctrlButton.get_active()) this.resultsText += "<Ctrl>";
+            if(superButton.get_active()) this.resultsText += "<Super>";
+            if(shiftButton.get_active()) this.resultsText += "<Shift>";
+            if(altButton.get_active()) this.resultsText += "<Alt>";
+            this.resultsText += hotkeyKey;
+            resultsWidget.accelerator =  this.resultsText;
+            applyButton.set_sensitive(true);
+        });
+        altButton.connect('toggled', () => {
+            this.resultsText="";
+            if(ctrlButton.get_active()) this.resultsText += "<Ctrl>";
+            if(superButton.get_active()) this.resultsText += "<Super>";
+            if(shiftButton.get_active()) this.resultsText += "<Shift>";
+            if(altButton.get_active()) this.resultsText += "<Alt>";
+            this.resultsText += hotkeyKey;
+            resultsWidget.accelerator =  this.resultsText;
+            applyButton.set_sensitive(true);
+        });
+        buttonBox.append(ctrlButton);
+        buttonBox.append(superButton);
+        buttonBox.append(shiftButton);
+        buttonBox.append(altButton);
+        modFrame.add(modRow);
+        vbox.append(modFrame);
+
+        let keyFrame = new Adw.PreferencesGroup();
+        let keyLabel = new Gtk.Label({
+            label: _("Press any key"),
+            use_markup: true,
+            xalign: .5,
+            hexpand: true,
+            halign: Gtk.Align.CENTER
+        });
+        vbox.append(keyLabel);
+
+        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path+'/icons/keyboard-symbolic.svg', 256, 72);
+        let keyboardImage = Gtk.Picture.new_for_pixbuf(pixbuf);
+        keyboardImage.hexpand = true;
+        keyboardImage.vexpand = true;
+        keyboardImage.halign = Gtk.Align.CENTER;
+        keyboardImage.valign = Gtk.Align.CENTER;
+        vbox.append(keyboardImage)
+
+        let resultsRow = new Adw.ActionRow({
+            title: _("New Hotkey")
+        });
+        let resultsWidget = new Gtk.ShortcutsShortcut({
+            hexpand: true,
+            halign: Gtk.Align.END
+        });
+        resultsRow.add_suffix(resultsWidget);
+        keyFrame.add(resultsRow);
+
+        let applyButton = new Gtk.Button({
+            label: _("Apply"),
+            halign: Gtk.Align.END,
+            css_classes: ['suggested-action']
+        });
+        applyButton.connect('clicked', () => {
+            this.emit("response", Gtk.ResponseType.APPLY);
+        });
+        applyButton.set_sensitive(false);
+
+        this.keyEventController.connect('key-released', (controller, keyval, keycode, state) =>  {
+            this.resultsText = "";
+            let key = keyval;
+            hotkeyKey = Gtk.accelerator_name(key, 0);
+            if(ctrlButton.get_active()) this.resultsText += "<Ctrl>";
+            if(superButton.get_active()) this.resultsText += "<Super>";
+            if(shiftButton.get_active()) this.resultsText += "<Shift>";
+            if(altButton.get_active()) this.resultsText += "<Alt>";
+            this.resultsText += Gtk.accelerator_name(key,0);
+            resultsWidget.accelerator =  this.resultsText;
+            applyButton.set_sensitive(true);
+        });
+
+        vbox.append(keyFrame);
+        vbox.append(applyButton);
+    }
+});

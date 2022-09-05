@@ -22,7 +22,7 @@ For additional installation instructions and more information visit [https://git
     cd gnome-shell-extension-espresso
     ./update-locale.sh
     glib-compile-schemas --strict --targetdir=espresso@coadmunkee.github.com/schemas/ espresso@coadmunkee.github.com/schemas
-    cp -r espresso@coadmunkee.github.com ~/.local/share/gnome-shell/extensions
+    cp -r espresso@coadmunkee.github.com ~/.local/share/gnome-shell/extensions/
 
 Restart the shell and then enable the extension.
 
