@@ -95,8 +95,6 @@ class Espresso extends PanelMenu.Button {
         /** a map of all gjs connections */
         this._connections = new Map();
 
-        this.accessible_role = Atk.Role.TOGGLE_BUTTON;
-
         this._settings = Convenience.getSettings();
         this._connect(this._settings, `changed::${SHOW_INDICATOR_KEY}`, () => {
             if (this._settings.get_boolean(SHOW_INDICATOR_KEY))
@@ -160,6 +158,7 @@ class Espresso extends PanelMenu.Button {
         this.add_style_class_name('panel-status-button');
         this._connect(this, 'button-press-event', this.toggleState.bind(this));
         this._connect(this, 'touch-event', this.toggleState.bind(this));
+        this._connect(this._settings, `changed::${USER_ENABLED_KEY}`, this.toggleState.bind(this));
 
         // Restore user state
         if (this._settings.get_boolean(USER_ENABLED_KEY) && this._settings.get_boolean(RESTORE_KEY)) {
