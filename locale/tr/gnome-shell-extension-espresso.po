@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-11 15:09-0400\n"
+"POT-Creation-Date: 2022-09-06 18:17-0400\n"
 "PO-Revision-Date: 2019-03-21 06:48+0300\n"
 "Last-Translator: Serdar Sağlam <teknomobil@yandex.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -18,79 +18,119 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Gtranslator 3.32.0\n"
 
-#: espresso@coadmunkee.github.com/extension.js:557
+#: espresso@coadmunkee.github.com/extension.js:569
 #, fuzzy
 msgid "Auto suspend and screensaver disabled. Night Light paused."
 msgstr "Ekran koruyucu ve otomatik karartma kapalı"
 
-#: espresso@coadmunkee.github.com/extension.js:559
+#: espresso@coadmunkee.github.com/extension.js:571
 msgid "Auto suspend and screensaver disabled"
 msgstr "Ekran koruyucu ve otomatik karartma kapalı"
 
-#: espresso@coadmunkee.github.com/extension.js:564
+#: espresso@coadmunkee.github.com/extension.js:576
 #, fuzzy
 msgid "Auto suspend and screensaver enabled. Night Light resumed."
 msgstr "Ekran koruyucu ve otomatik karartma açık"
 
-#: espresso@coadmunkee.github.com/extension.js:566
+#: espresso@coadmunkee.github.com/extension.js:578
 msgid "Auto suspend and screensaver enabled"
 msgstr "Ekran koruyucu ve otomatik karartma açık"
 
-#: espresso@coadmunkee.github.com/extension.js:570
+#: espresso@coadmunkee.github.com/extension.js:582
 msgid "Turning off \"espresso enabled when docked\""
 msgstr ""
 
-#: espresso@coadmunkee.github.com/extension.js:573
+#: espresso@coadmunkee.github.com/extension.js:585
 msgid "Turning off \"espresso enabled when charging\""
 msgstr ""
 
-#: espresso@coadmunkee.github.com/extension.js:576
+#: espresso@coadmunkee.github.com/extension.js:588
 msgid "Turning off \"espresso enabled when fullscreen\""
 msgstr ""
 
-#: espresso@coadmunkee.github.com/prefs.js:67
+#: espresso@coadmunkee.github.com/prefs.js:69
 msgid "Show Espresso in top panel"
 msgstr "Espresso üst panelde görünsün"
 
-#: espresso@coadmunkee.github.com/prefs.js:84
+#: espresso@coadmunkee.github.com/prefs.js:86
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:32
 msgid "Enable when a fullscreen application is running"
 msgstr "Tam ekran uygulama çalıştırıldığı zaman aktif olacaktır"
 
-#: espresso@coadmunkee.github.com/prefs.js:108
+#: espresso@coadmunkee.github.com/prefs.js:110
 msgid "Restore state across reboots"
 msgstr "Yeniden başlatma arasında durumu geri yükle"
 
-#: espresso@coadmunkee.github.com/prefs.js:125
+#: espresso@coadmunkee.github.com/prefs.js:127
 msgid "Enable notifications"
 msgstr "Bildirimleri aktif et"
 
-#: espresso@coadmunkee.github.com/prefs.js:141
+#: espresso@coadmunkee.github.com/prefs.js:143
 msgid "Pause/resume Night Light if enabled"
 msgstr ""
 
-#: espresso@coadmunkee.github.com/prefs.js:160
+#: espresso@coadmunkee.github.com/prefs.js:162
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:56
 msgid "Pause/resume Night Light for defined applications only"
 msgstr ""
 
-#: espresso@coadmunkee.github.com/prefs.js:185
+#: espresso@coadmunkee.github.com/prefs.js:187
 msgid "Enable when charging and docked to external monitors"
 msgstr ""
 
-#: espresso@coadmunkee.github.com/prefs.js:213
+#: espresso@coadmunkee.github.com/prefs.js:215
 msgid "Enable when this device is charging"
 msgstr ""
 
-#: espresso@coadmunkee.github.com/prefs.js:241
+#: espresso@coadmunkee.github.com/prefs.js:243
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:46
 msgid "Allow to temporarily override without affecting my settings"
 msgstr ""
 
-#: espresso@coadmunkee.github.com/prefs.js:264
+#: espresso@coadmunkee.github.com/prefs.js:260
+msgid "Hotkey to toggle Espresso on/off"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:300
 msgid "Applications which enable Espresso automatically"
 msgstr "Kafeini otomatik olarak etkinleştiren uygulamalar"
+
+#: espresso@coadmunkee.github.com/prefs.js:452
+msgid "Set Custom Hotkey"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:477
+msgid "Choose Modifiers"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:487
+msgid "Ctrl"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:491
+msgid "Super"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:495
+msgid "Shift"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:499
+msgid "Alt"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:551
+msgid "Press any key"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:568
+msgid "New Hotkey"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:578
+msgid "Apply"
+msgstr ""
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:6
 msgid "Application list"
@@ -168,6 +208,15 @@ msgstr ""
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:62
 msgid "Auto-determined on startup"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:66
+#, fuzzy
+msgid "Hotkey to toggle espresso state"
+msgstr "Kafein durumunu geri yükle"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:67
+msgid "Hotkey to use to toggle espresso state on/off"
 msgstr ""
 
 #~ msgid "Add application"

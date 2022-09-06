@@ -66,10 +66,5 @@
             <summary>Hotkey to toggle espresso state</summary>
             <description>Hotkey to use to toggle espresso state on/off</description>
         </key>
-        <key type="as" name="espresso-key-holding">
-            <default><![CDATA[['']]]></default>
-            <summary>Hotkey to toggle espresso state</summary>
-            <description>Hotkey to use to toggle espresso state on/off</description>
-        </key>
     </schema>
 </schemalist>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-11 15:09-0400\n"
+"POT-Creation-Date: 2022-09-06 18:17-0400\n"
 "PO-Revision-Date: 2022-08-22 11:39+0200\n"
 "Last-Translator: Ludek Vydra <lvtran@u.k2.cz>\n"
 "Language-Team: \n"
@@ -22,84 +22,129 @@ msgstr ""
 "X-Generator: Poedit 3.1.1\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
-#: espresso@coadmunkee.github.com/extension.js:557
+#: espresso@coadmunkee.github.com/extension.js:569
 msgid "Auto suspend and screensaver disabled. Night Light paused."
-msgstr "Automatické uspání a šetřič obrazovky jsou zakázány. Noční světlo je pozastaveno."
+msgstr ""
+"Automatické uspání a šetřič obrazovky jsou zakázány. Noční světlo je "
+"pozastaveno."
 
-#: espresso@coadmunkee.github.com/extension.js:559
+#: espresso@coadmunkee.github.com/extension.js:571
 msgid "Auto suspend and screensaver disabled"
 msgstr "Automatické uspání a šetřič obrazovky je zakázán"
 
-#: espresso@coadmunkee.github.com/extension.js:564
+#: espresso@coadmunkee.github.com/extension.js:576
 msgid "Auto suspend and screensaver enabled. Night Light resumed."
-msgstr "Automatické uspání a šetřič obrazovky je povolen. Noční světlo je opět aktivováno."
+msgstr ""
+"Automatické uspání a šetřič obrazovky je povolen. Noční světlo je opět "
+"aktivováno."
 
-#: espresso@coadmunkee.github.com/extension.js:566
+#: espresso@coadmunkee.github.com/extension.js:578
 msgid "Auto suspend and screensaver enabled"
 msgstr "Automatické uspání a šetřič obrazovky je povolen"
 
-#: espresso@coadmunkee.github.com/extension.js:570
+#: espresso@coadmunkee.github.com/extension.js:582
 msgid "Turning off \"espresso enabled when docked\""
 msgstr "Vypnout \"Espresso je při dokování povoleno\""
 
-#: espresso@coadmunkee.github.com/extension.js:573
+#: espresso@coadmunkee.github.com/extension.js:585
 msgid "Turning off \"espresso enabled when charging\""
 msgstr "Vypnout \"Espresso je při nabíjení povoleno\""
 
-#: espresso@coadmunkee.github.com/extension.js:576
+#: espresso@coadmunkee.github.com/extension.js:588
 msgid "Turning off \"espresso enabled when fullscreen\""
 msgstr "Vypnout \"Espresso je při celoobrazovkovém režimu povoleno\""
 
-#: espresso@coadmunkee.github.com/prefs.js:67
+#: espresso@coadmunkee.github.com/prefs.js:69
 msgid "Show Espresso in top panel"
 msgstr "Zobrazit Espresso v horní liště"
 
-#: espresso@coadmunkee.github.com/prefs.js:84
+#: espresso@coadmunkee.github.com/prefs.js:86
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:32
 msgid "Enable when a fullscreen application is running"
 msgstr "Povolit, když je spuštěna aplikace v celoobrazovkovém režimu"
 
-#: espresso@coadmunkee.github.com/prefs.js:108
+#: espresso@coadmunkee.github.com/prefs.js:110
 msgid "Restore state across reboots"
 msgstr "Obnovit stav mezi spuštěními"
 
-#: espresso@coadmunkee.github.com/prefs.js:125
+#: espresso@coadmunkee.github.com/prefs.js:127
 msgid "Enable notifications"
 msgstr "Povolit oznámení"
 
-#: espresso@coadmunkee.github.com/prefs.js:141
+#: espresso@coadmunkee.github.com/prefs.js:143
 msgid "Pause/resume Night Light if enabled"
 msgstr "Pozastavit/znova aktivovat noční světlo, je-li zapnuto"
 
-#: espresso@coadmunkee.github.com/prefs.js:160
+#: espresso@coadmunkee.github.com/prefs.js:162
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:56
 msgid "Pause/resume Night Light for defined applications only"
 msgstr "Pozastavit/znova aktivovat noční světlo pro zadanou aplikaci"
 
-#: espresso@coadmunkee.github.com/prefs.js:185
+#: espresso@coadmunkee.github.com/prefs.js:187
 msgid "Enable when charging and docked to external monitors"
 msgstr "Povolit při nabíjení a připojení do externích monitorů"
 
-#: espresso@coadmunkee.github.com/prefs.js:213
+#: espresso@coadmunkee.github.com/prefs.js:215
 msgid "Enable when this device is charging"
 msgstr "Povolit při nabíjení zařízení"
 
-#: espresso@coadmunkee.github.com/prefs.js:241
+#: espresso@coadmunkee.github.com/prefs.js:243
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:46
 msgid "Allow to temporarily override without affecting my settings"
 msgstr "Povolit dočasné přepsání bez vlivu na má nastavení"
 
-#: espresso@coadmunkee.github.com/prefs.js:264
+#: espresso@coadmunkee.github.com/prefs.js:260
+msgid "Hotkey to toggle Espresso on/off"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:300
 msgid "Applications which enable Espresso automatically"
 msgstr "Aplikace, které automaticky zapnou Espresso"
+
+#: espresso@coadmunkee.github.com/prefs.js:452
+msgid "Set Custom Hotkey"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:477
+msgid "Choose Modifiers"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:487
+msgid "Ctrl"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:491
+msgid "Super"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:495
+msgid "Shift"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:499
+msgid "Alt"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:551
+msgid "Press any key"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:568
+msgid "New Hotkey"
+msgstr ""
+
+#: espresso@coadmunkee.github.com/prefs.js:578
+msgid "Apply"
+msgstr ""
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:6
 msgid "Application list"
 msgstr "Seznam aplikací"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:7
-msgid "A list of strings, each containing an application id (desktop file name)"
+msgid ""
+"A list of strings, each containing an application id (desktop file name)"
 msgstr "Seznam řetězců, kde každý obsahuje ID aplikace (název desktop souboru)"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:11
@@ -131,7 +176,8 @@ msgid "Enable when docked to external monitors"
 msgstr "Povolit při připojení k externímu monitoru"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:37
-msgid "Enable when the device is on ac power and connected to external monitors"
+msgid ""
+"Enable when the device is on ac power and connected to external monitors"
 msgstr "Povolit při napájení ze sítě a připojení k externímu monitoru"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
@@ -156,7 +202,9 @@ msgstr "Pozastavit/znova aktivovat noční světlo, je-li zapnuto/vypnuto"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:57
 msgid "Pause/resume Night Light for defined applications when enabled/disabled"
-msgstr "Pozastavit/znova aktivovat noční světlo pro definované aplikace jsou-li povoleny/zakázány"
+msgstr ""
+"Pozastavit/znova aktivovat noční světlo pro definované aplikace jsou-li "
+"povoleny/zakázány"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:61
 msgid "Whether or not this device has a battery"
@@ -165,3 +213,12 @@ msgstr "Má-li zařízení baterii"
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:62
 msgid "Auto-determined on startup"
 msgstr "Automaticky určeno při spuštění"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:66
+#, fuzzy
+msgid "Hotkey to toggle espresso state"
+msgstr "Obnovit stav Espressa"
+
+#: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:67
+msgid "Hotkey to use to toggle espresso state on/off"
+msgstr ""
