@@ -426,14 +426,14 @@ class Espresso extends PanelMenu.Button {
 
     manageKeybinding() {
         this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Handling the key binding management`);
-        // if there is an existing binding, remove it
-        if (this._espressokey.length > 0 ) Main.wm.removeKeybinding(this._espressokey.toString());
-        this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Removed key binding for ${this._espressokey.toString()}`);
         // get the new value from the changed setting
         this._espressokey = this._settings.get_strv(HOTKEY_KEY);
         if (this._espressokey.length > 0 ) {
             this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Creating the new key binding for ${this._espressokey.toString()}`);
             Main.wm.addKeybinding(HOTKEY_KEY, this._settings, Meta.KeyBindingFlags.IGNORE_AUTOREPEAT, Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW, this.toggleState.bind(this));
+        } else {
+            this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Creating the new key binding with an empty string - i.e. no hotkey`);
+            Main.wm.addKeybinding(HOTKEY_KEY, '', Meta.KeyBindingFlags.IGNORE_AUTOREPEAT, Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW, this.toggleState.bind(this));
         }
         this.logEspressoMsg(ESPRESSO_DEBUG_MSG, `Finished handling the key binding management to ${this._espressokey.toString()}`);
     }
