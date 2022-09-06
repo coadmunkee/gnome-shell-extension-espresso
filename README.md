@@ -19,18 +19,29 @@ For additional installation instructions and more information visit [https://git
 
 ## Installation from git
 Clone the repository:
+```
     git clone https://github.com/coadmunkee/gnome-shell-extension-espresso.git
+```
 Enter the cloned directory:
+```
     cd gnome-shell-extension-espresso
+```
 Optionally, if you want to try a specific branch use the following command replacing [branch_name] with the desired branch:
+```
     git switch [branch_name]
+```
 Create updated locale files:
+```
     ./update-locale.sh
+```
 Compile the current version of the settings schema:
+```
     glib-compile-schemas --strict --targetdir=espresso@coadmunkee.github.com/schemas/ espresso@coadmunkee.github.com/schemas
+```
 Copy the extension files into place:
+```
     cp -r espresso@coadmunkee.github.com ~/.local/share/gnome-shell/extensions/
-
+```
 Restart the shell and then enable the extension.
 
 ## Report bugs on this site
