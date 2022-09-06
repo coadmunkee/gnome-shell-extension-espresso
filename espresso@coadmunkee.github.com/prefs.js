@@ -1,6 +1,6 @@
-// -*- mode: js2; indent-tabs-mode: nil; js2-basic-offset: 4 -*-
-// Adapted from auto-move-windows@gnome-shell-extensions.gcampax.github.com
 /**
+    prefs.js
+    
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 2 of the License, or

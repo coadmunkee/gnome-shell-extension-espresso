@@ -32,10 +32,10 @@ var ESPRESSO_ERROR_MSG = "Error";
 var ESPRESSO_ENABLE_DEBUG = false;
 
 // defining icon resources
-var DisabledIcon = 'beta-espresso-off-symbolic';
-var EnabledIcon = 'beta-espresso-on-symbolic';
-//var DisabledIcon = 'my-espresso-off-symbolic';
-//var EnabledIcon = 'my-espresso-on-symbolic';
+//var DisabledIcon = 'beta-espresso-off-symbolic';
+//var EnabledIcon = 'beta-espresso-on-symbolic';
+var DisabledIcon = 'my-espresso-off-symbolic';
+var EnabledIcon = 'my-espresso-on-symbolic';
 var KeyboardIcon = 'keyboard-symbolic';
 
 // notification states:

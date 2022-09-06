@@ -1,10 +1,6 @@
-/* -*- mode: js2 - indent-tabs-mode: nil - js2-basic-offset: 4 -*- */
-/*jshint multistr:true */
-/*jshint esnext:true */
-/*global imports: true */
-/*global global: true */
-/*global log: true */
 /**
+    extension.js
+    
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 2 of the License, or
