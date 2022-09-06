@@ -28,7 +28,15 @@ var ESPRESSO_DEBUG_MSG = "Debug";
 var ESPRESSO_ERROR_MSG = "Error";
 // set to true to enable logging debug messages to the journal 
 // - choose wisely as debug messages are quite verbose
+//var ESPRESSO_ENABLE_DEBUG = true;
 var ESPRESSO_ENABLE_DEBUG = false;
+
+// defining icon resources
+var DisabledIcon = 'beta-espresso-off-symbolic';
+var EnabledIcon = 'beta-espresso-on-symbolic';
+//var DisabledIcon = 'my-espresso-off-symbolic';
+//var EnabledIcon = 'my-espresso-on-symbolic';
+var KeyboardIcon = 'keyboard-symbolic';
 
 // notification states:
 var NOTIFY = {

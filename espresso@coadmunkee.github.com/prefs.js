@@ -254,6 +254,40 @@ class EspressoWidget {
 
         this.w.attach(overridebox, 0, 8, 1, 1);
 
+        const togglekeyBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
+            spacing: 7});
+
+        const togglekeyLabel = new Gtk.Label({label: _("Hotkey to toggle Espresso on/off"),
+                                hexpand: true,
+                                xalign: 0});
+
+        const togglekeyName = this._settings.get_strv(HOTKEY_KEY);
+
+        const togglekeyButton = new Gtk.Button({label : togglekeyName.toString()});
+
+        togglekeyButton.connect('clicked', () => {
+            let dialog = new HotkeyDialog(this._settings, this.w);
+            dialog.show();
+            dialog.connect('response', (_w, response) => {
+                if(response === Gtk.ResponseType.APPLY) {
+                    this._settings.set_strv(HOTKEY_KEY, [dialog.resultsText]);
+                    togglekeyButton.label = dialog.resultsText;
+                    dialog.destroy();
+                }
+                else {
+                    togglekeyButton.label = this._settings.get_strv(HOTKEY_KEY).toString();
+                    dialog.destroy();
+                }
+            });
+        });
+
+        togglekeyBox.prepend(togglekeyLabel);
+        togglekeyBox.append(togglekeyButton);
+
+        this.w.attach(togglekeyBox, 0, 9, 1, 1);
+        
+        const toolbar = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 6});
+
         this._store = new Gtk.ListStore();
         this._store.set_column_types([Gio.AppInfo, GObject.TYPE_STRING, Gio.Icon]);
 
@@ -272,9 +306,7 @@ class EspressoWidget {
         appColumn.add_attribute(nameRenderer, "text", Columns.DISPLAY_NAME);
         this._treeView.append_column(appColumn);
 
-        this.w.attach(this._treeView, 0, 9, 1, 1);
-
-        const toolbar = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 6});
+        this.w.attach(this._treeView, 0, 10, 1, 1);
 
         const newButton = new Gtk.Button( { icon_name : 'list-add-symbolic' });
         newButton.connect('clicked', this._createNew.bind(this));
@@ -284,44 +316,7 @@ class EspressoWidget {
         delButton.connect('clicked', this._deleteSelected.bind(this));
         toolbar.append(delButton);
 
-        this.w.attach(toolbar, 0, 10, 1, 1);
-
-        const togglekeyBox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 7});
-
-        const togglekeyLabel = new Gtk.Label({label: _("Current Hotkey to toggle Espresso on/off"),
-                                hexpand: true,
-                                xalign: 0});
-
-        const togglekeyName = this._settings.get_strv(HOTKEY_KEY);
-
-        const togglekeyButton = new Gtk.Button({label : togglekeyName.toString()});
-//        stateSwitch.connect('notify::active', button => {
-//        this._settings.set_strv(HOTKEY_KEY, button.active);
-//        });
-
-        togglekeyButton.connect('clicked', () => {
-            let dialog = new HotkeyDialog(this._settings, this);
-            dialog.show();
-            dialog.connect('response', (_w, response) => {
-                if(response === Gtk.ResponseType.APPLY) {
-                    this._settings.set_strv(HOTKEY_KEY, [dialog.resultsText]);
-                    togglekeyButton.label = dialog.resultsText;
-                    // shortcutCell.accelerator = dialog.resultsText;
-                    dialog.destroy();
-                }
-                else {
-                    togglekeyButton.label = this._settings.get_strv(HOTKEY_KEY).toString();
-                    //shortcutCell.accelerator = this._settings.get_strv(HOTKEY_KEY).toString();
-                    dialog.destroy();
-                }
-            });
-        });
-
-        togglekeyBox.prepend(togglekeyLabel);
-        togglekeyBox.append(togglekeyButton);
-
-        this.w.attach(togglekeyBox, 0, 11, 1, 1);
+        this.w.attach(toolbar, 0, 11, 1, 1);
         
         this._changedPermitted = true;
         this._refresh();
@@ -442,15 +437,6 @@ const NewInhibitDialog = GObject.registerClass(
         }
     });
 
-function init() {
-    ExtensionUtils.initTranslations();
-}
-
-function buildPrefsWidget() {
-    const widget = new EspressoWidget();
-    return widget.w;
-}
-
 var HotkeyDialog = GObject.registerClass({
     Signals: {
         'response': { param_types: [GObject.TYPE_INT] },
@@ -463,8 +449,8 @@ class Espresso_HotkeyDialog extends Gtk.Window {
 
         super._init({
             modal: true,
-            title: _("Set Custom Hotkey") //,
-//            transient_for: parent.get_root()
+            title: _("Set Custom Hotkey"),
+            transient_for: parent.get_root()
         });
         let vbox = new Gtk.Box({
             orientation: Gtk.Orientation.VERTICAL,
@@ -570,7 +556,7 @@ class Espresso_HotkeyDialog extends Gtk.Window {
         });
         vbox.append(keyLabel);
 
-        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path+'/icons/keyboard-symbolic.svg', 256, 72);
+        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path+'/icons/'+KeyboardIcon+'.svg', 256, 72);
         let keyboardImage = Gtk.Picture.new_for_pixbuf(pixbuf);
         keyboardImage.hexpand = true;
         keyboardImage.vexpand = true;
@@ -606,7 +592,7 @@ class Espresso_HotkeyDialog extends Gtk.Window {
             if(superButton.get_active()) this.resultsText += "<Super>";
             if(shiftButton.get_active()) this.resultsText += "<Shift>";
             if(altButton.get_active()) this.resultsText += "<Alt>";
-            this.resultsText += Gtk.accelerator_name(key,0);
+            this.resultsText += Gtk.accelerator_name(key, 0);
             resultsWidget.accelerator =  this.resultsText;
             applyButton.set_sensitive(true);
         });
@@ -615,3 +601,12 @@ class Espresso_HotkeyDialog extends Gtk.Window {
         vbox.append(applyButton);
     }
 });
+
+function init() {
+    ExtensionUtils.initTranslations();
+}
+
+function buildPrefsWidget() {
+    const widget = new EspressoWidget();
+    return widget.w;
+}

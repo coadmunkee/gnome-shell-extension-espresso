@@ -82,8 +82,6 @@ const DBusSessionManagerInhibitorIface = loadInterfaceXML("org.gnome.SessionMana
 const DBusSessionManagerInhibitorProxy = Gio.DBusProxy.makeProxyWrapper(DBusSessionManagerInhibitorIface);
 
 const IndicatorName = "Espresso";
-const DisabledIcon = 'my-espresso-off-symbolic';
-const EnabledIcon = 'my-espresso-on-symbolic';
 
 let EspressoIndicator;
 let ShellVersion = parseInt(Config.PACKAGE_VERSION.split(".")[1]);
