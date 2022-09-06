@@ -8,7 +8,7 @@ Espresso is a fork of the Caffeine extension (https://github.com/eonpatapon/gnom
 ![Screenshot](https://github.com/coadmunkee/gnome-shell-extension-espresso/raw/master/screenshot.png)
 
 There are several Espresso options that can be configured ... <br>
-![Preferences](https://github.com/coadmunkee/gnome-shell-extension-espresso/raw/master/screenshot-prefs.png)
+![Preferences](https://github.com/coadmunkee/gnome-shell-extension-espresso/screenshot-prefs.png)
 
 ## Installation from extensions.gnome.org
 [<img src="https://github.com/coadmunkee/gnome-shell-extension-espresso/raw/master/ego.png" height="100">](https://extensions.gnome.org/extension/4135/espresso)
