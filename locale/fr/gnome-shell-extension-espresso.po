@@ -1,10 +1,15 @@
+# FRENCH TRANSLATION OF GNOME EXTENSION "ESPRESSO"
+# This file is distributed under the same license as the Espresso extension.
+# Jean-Philippe Braun <eon@patapon.info>, 2014.
+# Simon Elst <kirmaha@duck.com>, 2022.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-espresso\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-11 15:09-0400\n"
-"PO-Revision-Date: 2014-11-07 10:01+0100\n"
-"Last-Translator: Jean-Philippe Braun <eon@patapon.info>\n"
+"PO-Revision-Date: 2022-10-09 14:39+0200\n"
+"Last-Translator: Simon Elst <kirmaha@duck.com>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -14,13 +19,13 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 3.1.1\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
 #: espresso@coadmunkee.github.com/extension.js:557
 #, fuzzy
 msgid "Auto suspend and screensaver disabled. Night Light paused."
-msgstr "Mise en veille et écran de veille désactivés"
+msgstr "Mise en veille et écran de veille désactivés. Mode nuit suspendu."
 
 #: espresso@coadmunkee.github.com/extension.js:559
 msgid "Auto suspend and screensaver disabled"
@@ -29,7 +34,7 @@ msgstr "Mise en veille et écran de veille désactivés"
 #: espresso@coadmunkee.github.com/extension.js:564
 #, fuzzy
 msgid "Auto suspend and screensaver enabled. Night Light resumed."
-msgstr "Mise en veille et écran de veille activés"
+msgstr "Mise en veille et écran de veille activés. Mode nuit réactivé."
 
 #: espresso@coadmunkee.github.com/extension.js:566
 msgid "Auto suspend and screensaver enabled"
@@ -37,29 +42,29 @@ msgstr "Mise en veille et écran de veille activés"
 
 #: espresso@coadmunkee.github.com/extension.js:570
 msgid "Turning off \"espresso enabled when docked\""
-msgstr ""
+msgstr "Désactiver \"espresso activé lorsqu’arrimé\""
 
 #: espresso@coadmunkee.github.com/extension.js:573
 msgid "Turning off \"espresso enabled when charging\""
-msgstr ""
+msgstr "Désactiver \"espresso activé en charge\""
 
 #: espresso@coadmunkee.github.com/extension.js:576
 msgid "Turning off \"espresso enabled when fullscreen\""
-msgstr ""
+msgstr "Désactiver \"espresso activé en plein écran\""
 
 #: espresso@coadmunkee.github.com/prefs.js:67
 msgid "Show Espresso in top panel"
-msgstr "Afficher Caféine dans le panneau supérieur"
+msgstr "Afficher Espresso dans la barre supérieure"
 
 #: espresso@coadmunkee.github.com/prefs.js:84
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:31
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:32
 msgid "Enable when a fullscreen application is running"
-msgstr "Activer lorsqu'une application est en plein écran"
+msgstr "Activer lorsqu’une application est en plein écran"
 
 #: espresso@coadmunkee.github.com/prefs.js:108
 msgid "Restore state across reboots"
-msgstr ""
+msgstr "Rétablir l’état au-delà des redémarrages"
 
 #: espresso@coadmunkee.github.com/prefs.js:125
 msgid "Enable notifications"
@@ -72,102 +77,102 @@ msgstr ""
 #: espresso@coadmunkee.github.com/prefs.js:160
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:56
 msgid "Pause/resume Night Light for defined applications only"
-msgstr ""
+msgstr "Suspendre/réactiver le Mode nuit"
 
 #: espresso@coadmunkee.github.com/prefs.js:185
 msgid "Enable when charging and docked to external monitors"
-msgstr ""
+msgstr "Activer en charge et lorsqu’arrimé à des moniteurs externes"
 
 #: espresso@coadmunkee.github.com/prefs.js:213
 msgid "Enable when this device is charging"
-msgstr ""
+msgstr "Activer lorsque cet appareil est en charge"
 
 #: espresso@coadmunkee.github.com/prefs.js:241
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:46
 msgid "Allow to temporarily override without affecting my settings"
-msgstr ""
+msgstr "Autoriser à outrepasser temporairement sans affecter mes paramètres"
 
 #: espresso@coadmunkee.github.com/prefs.js:264
 msgid "Applications which enable Espresso automatically"
-msgstr "Applications qui activent Caféine automatiquement"
+msgstr "Applications qui activent Espresso automatiquement"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:6
 #, fuzzy
 msgid "Application list"
-msgstr "Application"
+msgstr "Liste des applications"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:7
 msgid ""
 "A list of strings, each containing an application id (desktop file name)"
-msgstr ""
+msgstr "Liste de chaînes, chacune contenant l’id d’une application (nom de fichier desktop)"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:11
 msgid "Store espresso user state"
-msgstr ""
+msgstr "Enregistrer l’état utilisateur d’Espresso"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:16
 msgid "Restore espresso state"
-msgstr ""
+msgstr "Rétablir l’état utilisateur d’Espresso"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:21
 msgid "Show indicator"
-msgstr ""
+msgstr "Afficher l’indicateur"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:22
 #, fuzzy
 msgid "Show the indicator on the top panel"
-msgstr "Afficher Caféine dans le panneau supérieur"
+msgstr "Afficher Espresso dans la barre supérieure"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:26
 #, fuzzy
 msgid "Show notifications"
-msgstr "Activer les notifications"
+msgstr "Afficher les notifications"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:27
 msgid "Show notifications when enabled/disabled"
-msgstr ""
+msgstr "Afficher les notifications si activé/désactivé"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:36
 msgid "Enable when docked to external monitors"
-msgstr ""
+msgstr "Activer lorsqu’arrimé à des moniteurs externes"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:37
 msgid ""
 "Enable when the device is on ac power and connected to external monitors"
-msgstr ""
+msgstr "Activer lorsque l’appareil est relié à une source de courant et connecté à des moniteurs externes"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
 #, fuzzy
 msgid "Enable when charging"
-msgstr "Activer les notifications"
+msgstr "Activer en charge"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:42
 msgid "Enable when the device is on ac power"
-msgstr ""
+msgstr "Activer lorsque l’appareil est relié à une source de courant"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:47
 msgid "Allow turning on/off without changing my settings"
-msgstr ""
+msgstr "Autoriser à activer/désactiver sans modifier mes paramètres"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:51
 msgid "Pause/resume Night Light"
-msgstr ""
+msgstr "Suspendre/réactiver le Mode nuit"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:52
 msgid "Pause/resume Night Light when enabled/disabled"
-msgstr ""
+msgstr "Suspendre/réactiver le Mode nuit si activé/désactivé"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:57
 msgid "Pause/resume Night Light for defined applications when enabled/disabled"
-msgstr ""
+msgstr "Suspendre/réactiver le Mode nuit pour les applications choisies si activé/désactivé"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:61
 msgid "Whether or not this device has a battery"
-msgstr ""
+msgstr "Que cet appareil ait une batterie ou non"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:62
 msgid "Auto-determined on startup"
-msgstr ""
+msgstr "Auto-déterminé au lancement"
 
 #~ msgid "Add application"
 #~ msgstr "Ajouter une application"
@@ -179,7 +184,7 @@ msgstr ""
 #~ msgstr "Ajouter"
 
 #~ msgid "Espresso enabled"
-#~ msgstr "Caféine est activé"
+#~ msgstr "Espresso est activé"
 
 #~ msgid "Espresso disabled"
-#~ msgstr "Caféine est désactivé"
+#~ msgstr "Espresso est désactivé"
