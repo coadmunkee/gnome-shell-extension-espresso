@@ -20,24 +20,22 @@ msgstr ""
 #: espresso@coadmunkee.github.com/extension.js:557
 msgid "Auto suspend and screensaver disabled. Night Light paused."
 msgstr ""
-"Automatisch in slaapstand zetten, schermbeveiliging en nachtlicht zijn "
-"uitgeschakeld."
+"Uitgeschakeld: Automatisch in slaapstand zetten, schermbeveiliging en nachtlicht."
 
 #: espresso@coadmunkee.github.com/extension.js:559
 msgid "Auto suspend and screensaver disabled"
 msgstr ""
-"Automatisch in slaapstand zetten en schermbeveiliging zijn uitgeschakeld"
+"Uitgeschakeld: Automatisch in slaapstand zetten en schermbeveiliging"
 
 #: espresso@coadmunkee.github.com/extension.js:564
 msgid "Auto suspend and screensaver enabled. Night Light resumed."
 msgstr ""
-"Automatisch in slaapstand zetten, schermbeveiliging en nachtlicht zijn "
-"ingeschakeld."
+"Ingeschakeld: Automatisch in slaapstand zetten, schermbeveiliging en nachtlicht"
 
 #: espresso@coadmunkee.github.com/extension.js:566
 msgid "Auto suspend and screensaver enabled"
 msgstr ""
-"Automatisch in slaapstand zetten en schermbeveiliging zijn ingeschakeld"
+"Ingeschakeld: Automatisch in slaapstand zetten en schermbeveiliging"
 
 #: espresso@coadmunkee.github.com/extension.js:570
 msgid "Turning off \"espresso enabled when docked\""
