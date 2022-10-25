@@ -20,7 +20,7 @@ msgstr ""
 #: espresso@coadmunkee.github.com/extension.js:557
 #, fuzzy
 msgid "Auto suspend and screensaver disabled. Night Light paused."
-msgstr "Bereitschaftsmodus und Bildschirmschoner deaktiviert"
+msgstr "Bereitschaftsmodus und Bildschirmschoner deaktiviert. Nachtmodus pausiert."
 
 #: espresso@coadmunkee.github.com/extension.js:559
 msgid "Auto suspend and screensaver disabled"
@@ -29,7 +29,7 @@ msgstr "Bereitschaftsmodus und Bildschirmschoner deaktiviert"
 #: espresso@coadmunkee.github.com/extension.js:564
 #, fuzzy
 msgid "Auto suspend and screensaver enabled. Night Light resumed."
-msgstr "Bereitschaftsmodus und Bildschirmschoner aktiviert"
+msgstr "Bereitschaftsmodus und Bildschirmschoner aktiviert. Nachtmodus fortgesetzt."
 
 #: espresso@coadmunkee.github.com/extension.js:566
 msgid "Auto suspend and screensaver enabled"
@@ -67,12 +67,12 @@ msgstr "Benachrichtigungen aktivieren"
 
 #: espresso@coadmunkee.github.com/prefs.js:141
 msgid "Pause/resume Night Light if enabled"
-msgstr ""
+msgstr "Nachtmodus pausieren/fortsetzen wenn aktiviert"
 
 #: espresso@coadmunkee.github.com/prefs.js:160
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:56
 msgid "Pause/resume Night Light for defined applications only"
-msgstr ""
+msgstr "Nachtmodus nur für festgelegte Anwendungen pausieren/fortsetzen"
 
 #: espresso@coadmunkee.github.com/prefs.js:185
 msgid "Enable when charging and docked to external monitors"
@@ -93,7 +93,7 @@ msgstr "Anwendungen, welche Espresso automatisch aktivieren"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:6
 msgid "Application list"
-msgstr "Anwendung hinzufügen"
+msgstr "Anwendungsliste"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:7
 msgid ""
@@ -124,7 +124,7 @@ msgstr "Benachrichtigungen aktivieren"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:27
 msgid "Show notifications when enabled/disabled"
-msgstr "Benachrichtigungen anzeigen, wenn aktiviert/ deaktiviert"
+msgstr "Benachrichtigungen anzeigen, wenn aktiviert/deaktiviert"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:36
 msgid "Enable when docked to external monitors"
@@ -150,17 +150,17 @@ msgstr ""
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:51
 msgid "Pause/resume Night Light"
-msgstr ""
+msgstr "Nachtmodus pausieren/fortsetzen"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:52
 #, fuzzy
 msgid "Pause/resume Night Light when enabled/disabled"
-msgstr "Benachrichtigungen anzeigen, wenn aktiviert/ deaktiviert"
+msgstr "Nachtmodus pausieren/fortsetzen, wenn aktiviert/deaktiviert"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:57
 #, fuzzy
 msgid "Pause/resume Night Light for defined applications when enabled/disabled"
-msgstr "Benachrichtigungen anzeigen, wenn aktiviert/ deaktiviert"
+msgstr "Nachtmodus für festgelegte Anwendungen pausieren/fortsetzen, wenn aktiviert/deaktiviert"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:61
 msgid "Whether or not this device has a battery"
