@@ -67,25 +67,25 @@ msgstr "Abilita notifiche"
 
 #: espresso@coadmunkee.github.com/prefs.js:141
 msgid "Pause/resume Night Light if enabled"
-msgstr ""
+msgstr "Pausa/riprendi Modalità Notturna se abilitato"
 
 #: espresso@coadmunkee.github.com/prefs.js:160
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:56
 msgid "Pause/resume Night Light for defined applications only"
-msgstr ""
+msgstr "Pausa/riprendi Modalità Notturna solo per le applicazioni scelte"
 
 #: espresso@coadmunkee.github.com/prefs.js:185
 msgid "Enable when charging and docked to external monitors"
-msgstr ""
+msgstr "Abilita quando in carica o connesso a monitor esterni"
 
 #: espresso@coadmunkee.github.com/prefs.js:213
 msgid "Enable when this device is charging"
-msgstr ""
+msgstr "Abilita quando questo dispositivo è in carica"
 
 #: espresso@coadmunkee.github.com/prefs.js:241
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:46
 msgid "Allow to temporarily override without affecting my settings"
-msgstr ""
+msgstr "Permetti l'override temporaneo senza modificare le mie configurazioni"
 
 #: espresso@coadmunkee.github.com/prefs.js:264
 msgid "Applications which enable Espresso automatically"
@@ -128,12 +128,12 @@ msgstr "Mostra notifiche quando abilitato/disabilitato"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:36
 msgid "Enable when docked to external monitors"
-msgstr ""
+msgstr "Abilitato quando collegato a monitor esterni"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:37
 msgid ""
 "Enable when the device is on ac power and connected to external monitors"
-msgstr ""
+msgstr "Abilitato quando il dispositivo è alimentato a corrente e connesso a monitor esterni"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:41
 #, fuzzy
@@ -142,7 +142,7 @@ msgstr "Abilita notifiche"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:42
 msgid "Enable when the device is on ac power"
-msgstr ""
+msgstr "Abilitato quando il dispositivo è connesso alla corrente"
 
 #: espresso@coadmunkee.github.com/schemas/org.gnome.shell.extensions.espresso.gschema.xml:47
 msgid "Allow turning on/off without changing my settings"
