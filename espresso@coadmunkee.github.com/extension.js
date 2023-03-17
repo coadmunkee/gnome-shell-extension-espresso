@@ -140,7 +140,11 @@ class Espresso extends PanelMenu.Button {
             this._display = this._screen;
         }
 
-        this._monitor_manager = Meta.MonitorManager.get();
+        if (Meta.MonitorManager.get) {
+            this._monitor_manager = Meta.MonitorManager.get();
+        } else {
+            this._monitor_manager = global.backend.get_monitor_manager();
+        }
 
         this._icon = new St.Icon({
             style_class: 'system-status-icon'
