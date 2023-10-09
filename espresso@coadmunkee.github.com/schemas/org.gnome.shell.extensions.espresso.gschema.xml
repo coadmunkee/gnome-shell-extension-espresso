@@ -1,45 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="gnome-shell-extensions-espresso-daemon">
-  <schema path="/org/gnome/shell/extensions/espresso/" id="org.gnome.shell.extensions.espresso">
-    <key type="as" name="inhibit-apps">
-        <default>[ ]</default>
-        <summary>Application list</summary>
-        <description>A list of strings, each containing an application id (desktop file name)</description>
-    </key>
-    <key type="b" name="user-enabled">
-        <default>false</default>
-        <summary>Store espresso user state</summary>
-        <description></description>
-    </key>
-    <key type="b" name="restore-state">
-        <default>false</default>
-        <summary>Restore espresso state</summary>
-        <description></description>
-    </key>
-    <key type="b" name="show-indicator">
-        <default>true</default>
-        <summary>Show indicator</summary>
-        <description>Show the indicator on the top panel</description>
-    </key>
-    <key type="b" name="show-notifications">
-        <default>true</default>
-        <summary>Show notifications</summary>
-        <description>Show notifications when enabled/disabled</description>
-    </key>
-    <key type="b" name="enable-fullscreen">
-        <default>true</default>
-        <summary>Enable when a fullscreen application is running</summary>
-        <description>Enable when a fullscreen application is running</description>
-    </key>
-    <key type="b" name="control-nightlight">
-        <default>false</default>
-        <summary>Pause/resume Night Light</summary>
-        <description>Pause/resume Night Light when enabled/disabled</description>
-    </key>
-    <key type="b" name="control-nightlight-for-app">
-        <default>false</default>
-        <summary>Pause/resume Night Light for defined applications only</summary>
-        <description>Pause/resume Night Light for defined applicationa when enabled/disabled</description>
-    </key>
-  </schema>
+    <schema path="/org/gnome/shell/extensions/espresso/" id="org.gnome.shell.extensions.espresso">
+        <key type="as" name="inhibit-apps">
+            <default>[ ]</default>
+            <summary>Application list</summary>
+            <description>A list of strings, each containing an application id (desktop file name)</description>
+        </key>
+        <key type="b" name="user-enabled">
+            <default>false</default>
+            <summary>Store espresso user state</summary>
+            <description></description>
+        </key>
+        <key type="b" name="restore-state">
+            <default>false</default>
+            <summary>Restore espresso state</summary>
+            <description></description>
+        </key>
+        <key type="b" name="show-indicator">
+            <default>true</default>
+            <summary>Show indicator</summary>
+            <description>Show the indicator on the top panel</description>
+        </key>
+        <key type="b" name="show-notifications">
+            <default>true</default>
+            <summary>Show notifications</summary>
+            <description>Show notifications when enabled/disabled</description>
+        </key>
+        <key type="b" name="enable-fullscreen">
+            <default>true</default>
+            <summary>Enable when a fullscreen application is running</summary>
+            <description>Enable when a fullscreen application is running</description>
+        </key>
+        <key type="b" name="enable-docked">
+            <default>false</default>
+            <summary>Enable when docked to external monitors</summary>
+            <description>Enable when the device is on ac power and connected to external monitors</description>
+        </key>
+        <key type="b" name="enable-charging">
+            <default>false</default>
+            <summary>Enable when charging</summary>
+            <description>Enable when the device is on ac power</description>
+        </key>
+        <key type="b" name="allow-override">
+            <default>true</default>
+            <summary>Allow to temporarily override without affecting my settings</summary>
+            <description>Allow turning on/off without changing my settings</description>
+        </key>
+        <key type="b" name="control-nightlight">
+            <default>false</default>
+            <summary>Pause/resume Night Light</summary>
+            <description>Pause/resume Night Light when enabled/disabled</description>
+        </key>
+        <key type="b" name="control-nightlight-for-app">
+            <default>false</default>
+            <summary>Pause/resume Night Light for defined applications only</summary>
+            <description>Pause/resume Night Light for defined applications when enabled/disabled</description>
+        </key>
+        <key type="b" name="has-battery">
+            <default>true</default>
+            <summary>Whether or not this device has a battery</summary>
+            <description>Auto-determined on startup</description>
+        </key>
+    </schema>
 </schemalist>
