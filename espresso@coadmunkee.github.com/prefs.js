@@ -18,20 +18,17 @@
 // set to true to make the settings update automatically
 const REACTIVE_SETTINGS = true;
 
-const Gio = imports.gi.Gio;
-const Gtk = imports.gi.Gtk;
-const GObject = imports.gi.GObject;
-const Config = imports.misc.config;
-const Mainloop = imports.mainloop;
+import Adw from 'gi://Adw';
+import Gio from 'gi://Gio';
+import Gtk from 'gi://Gtk';
+import GObject from 'gi://GObject';
+import GLib from 'gi://GLib';
 
-const Gettext = imports.gettext.domain('gnome-shell-extension-espresso');
-const _ = Gettext.gettext;
+import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import * as Consts from './consts.js';
 
-// import our constants
-Object.assign(globalThis, Me.imports.consts);
+const Mainloop = GLib.Mainloop;
 
 const Columns = {
     APPINFO: 0,
@@ -39,14 +36,15 @@ const Columns = {
     ICON: 2
 };
 
-let MajorShellVersion = parseInt(Config.PACKAGE_VERSION.split(".")[0]);
-let ShellVersion = parseInt(Config.PACKAGE_VERSION.split(".")[1]);
+class EspressoWidget extends Adw.PreferencesGroup {
+    static {
+        GObject.registerClass(this);
+    }
 
-class EspressoWidget {
-    constructor(params) {
-        if (params === undefined) {
-            params={};
-        }
+    constructor(settings) {
+        super();
+        let params={};
+
         params.margin_top=10;
         params.margin_start=10;
         params.margin_end=10;
@@ -56,7 +54,7 @@ class EspressoWidget {
         this.w = new Gtk.Grid(params);
         this.w.set_orientation(Gtk.Orientation.VERTICAL);
 
-        this._settings = ExtensionUtils.getSettings();
+        this._settings = settings;
         this._settings.connect('changed', this._refresh.bind(this));
         this._changedPermitted = false;
 
@@ -68,9 +66,9 @@ class EspressoWidget {
                                                hexpand: true,
                                                xalign: 0});
 
-        let showEspressoSwitch = new Gtk.Switch({active: this._settings.get_boolean(SHOW_INDICATOR_KEY)});
+        let showEspressoSwitch = new Gtk.Switch({active: this._settings.get_boolean(Consts.SHOW_INDICATOR_KEY)});
         showEspressoSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(SHOW_INDICATOR_KEY, button.active);
+            this._settings.set_boolean(Consts.SHOW_INDICATOR_KEY, button.active);
         });
 
         showEspressoBox.prepend(showEspressoLabel);
@@ -85,15 +83,15 @@ class EspressoWidget {
                                             hexpand: true,
                                             xalign: 0});
 
-        const enableFullscreenSwitch = new Gtk.Switch({active: this._settings.get_boolean(FULLSCREEN_KEY)});
+        const enableFullscreenSwitch = new Gtk.Switch({active: this._settings.get_boolean(Consts.FULLSCREEN_KEY)});
         enableFullscreenSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(FULLSCREEN_KEY, button.active);
+            this._settings.set_boolean(Consts.FULLSCREEN_KEY, button.active);
         });
 
         // update visually in this prefs widget when modified elsewhere:
-        if (REACTIVE_SETTINGS) this._settings.connect(`changed::${FULLSCREEN_KEY}`, () => {
+        if (REACTIVE_SETTINGS) this._settings.connect(`changed::${Consts.FULLSCREEN_KEY}`, () => {
             Mainloop.timeout_add_seconds(1, () => {
-                enableFullscreenSwitch.set_active(this._settings.get_boolean(FULLSCREEN_KEY));
+                enableFullscreenSwitch.set_active(this._settings.get_boolean(Consts.FULLSCREEN_KEY));
             });
         });
 
@@ -109,9 +107,9 @@ class EspressoWidget {
                                 hexpand: true,
                                 xalign: 0});
 
-        const stateSwitch = new Gtk.Switch({active: this._settings.get_boolean(RESTORE_KEY)});
+        const stateSwitch = new Gtk.Switch({active: this._settings.get_boolean(Consts.RESTORE_KEY)});
         stateSwitch.connect('notify::active', button => {
-        this._settings.set_boolean(RESTORE_KEY, button.active);
+        this._settings.set_boolean(Consts.RESTORE_KEY, button.active);
         });
 
         stateBox.prepend(stateLabel);
@@ -126,9 +124,9 @@ class EspressoWidget {
                                         hexpand: true,
                                         xalign: 0});
 
-        const notificationsSwitch = new Gtk.Switch({active: this._settings.get_boolean(SHOW_NOTIFICATIONS_KEY)});
+        const notificationsSwitch = new Gtk.Switch({active: this._settings.get_boolean(Consts.SHOW_NOTIFICATIONS_KEY)});
         notificationsSwitch.connect('notify::active', button => {
-        this._settings.set_boolean(SHOW_NOTIFICATIONS_KEY, button.active);
+        this._settings.set_boolean(Consts.SHOW_NOTIFICATIONS_KEY, button.active);
         });
 
         notificationsBox.prepend(notificationsLabel);
@@ -144,9 +142,9 @@ class EspressoWidget {
                                                 max_width_chars: 25});
 
 
-        const nightlightSwitch = new Gtk.Switch({active: this._settings.get_boolean(NIGHT_LIGHT_KEY)});
+        const nightlightSwitch = new Gtk.Switch({active: this._settings.get_boolean(Consts.NIGHT_LIGHT_KEY)});
         nightlightSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(NIGHT_LIGHT_KEY, button.active);
+            this._settings.set_boolean(Consts.NIGHT_LIGHT_KEY, button.active);
         });
 
         nightlightBox.prepend(nightlightLabel);
@@ -161,9 +159,9 @@ class EspressoWidget {
                                                     hexpand: true,
                                                     xalign: 0});
 
-        const nightlightAppSwitch = new Gtk.Switch({active: this._settings.get_boolean(NIGHT_LIGHT_APP_ONLY_KEY)});
+        const nightlightAppSwitch = new Gtk.Switch({active: this._settings.get_boolean(Consts.NIGHT_LIGHT_APP_ONLY_KEY)});
         nightlightAppSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(NIGHT_LIGHT_APP_ONLY_KEY, button.active);
+            this._settings.set_boolean(Consts.NIGHT_LIGHT_APP_ONLY_KEY, button.active);
         });
         nightlightSwitch.connect('notify::active', button => {
             if (button.active) {
@@ -185,20 +183,20 @@ class EspressoWidget {
         const enableDockedLabel = new Gtk.Label({label: _("Enable when charging and docked to external monitors"),
                                                 hexpand: true,
                                                 xalign: 0,
-                                                sensitive: this._settings.get_boolean(HAS_BATTERY_KEY)});
+                                                sensitive: this._settings.get_boolean(Consts.HAS_BATTERY_KEY)});
 
         const enableDockedSwitch = new Gtk.Switch({
-            active: this._settings.get_boolean(DOCKED_KEY),
-            sensitive: this._settings.get_boolean(HAS_BATTERY_KEY),
+            active: this._settings.get_boolean(Consts.DOCKED_KEY),
+            sensitive: this._settings.get_boolean(Consts.HAS_BATTERY_KEY),
         });
         enableDockedSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(DOCKED_KEY, button.active);
+            this._settings.set_boolean(Consts.DOCKED_KEY, button.active);
         });
 
         // update visually in this prefs widget when modified elsewhere:
-        if (REACTIVE_SETTINGS) this._settings.connect(`changed::${DOCKED_KEY}`, () => {
+        if (REACTIVE_SETTINGS) this._settings.connect(`changed::${Consts.DOCKED_KEY}`, () => {
             Mainloop.timeout_add_seconds(1, () => {
-                enableDockedSwitch.set_active(this._settings.get_boolean(DOCKED_KEY));
+                enableDockedSwitch.set_active(this._settings.get_boolean(Consts.DOCKED_KEY));
             });
         });
 
@@ -213,20 +211,20 @@ class EspressoWidget {
         const enableChargingLabel = new Gtk.Label({label: _("Enable when this device is charging"),
                                                  hexpand: true,
                                                  xalign: 0,
-                                                 sensitive: this._settings.get_boolean(HAS_BATTERY_KEY)});
+                                                 sensitive: this._settings.get_boolean(Consts.HAS_BATTERY_KEY)});
 
         const enableChargingSwitch = new Gtk.Switch({
-            active: this._settings.get_boolean(CHARGING_KEY),
-            sensitive: this._settings.get_boolean(HAS_BATTERY_KEY),
+            active: this._settings.get_boolean(Consts.CHARGING_KEY),
+            sensitive: this._settings.get_boolean(Consts.HAS_BATTERY_KEY),
         });
         enableChargingSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(CHARGING_KEY, button.active);
+            this._settings.set_boolean(Consts.CHARGING_KEY, button.active);
         });
 
         // update visually in this prefs widget when modified elsewhere:
-        if (REACTIVE_SETTINGS) this._settings.connect(`changed::${CHARGING_KEY}`, () => {
+        if (REACTIVE_SETTINGS) this._settings.connect(`changed::${Consts.CHARGING_KEY}`, () => {
             Mainloop.timeout_add_seconds(1, () => {
-                enableChargingSwitch.set_active(this._settings.get_boolean(CHARGING_KEY));
+                enableChargingSwitch.set_active(this._settings.get_boolean(Consts.CHARGING_KEY));
             });
         });
 
@@ -242,9 +240,9 @@ class EspressoWidget {
                                                  hexpand: true,
                                                  xalign: 0});
 
-        const enableOverrideSwitch = new Gtk.Switch({active: this._settings.get_boolean(OVERRIDE_KEY)});
+        const enableOverrideSwitch = new Gtk.Switch({active: this._settings.get_boolean(Consts.OVERRIDE_KEY)});
         enableOverrideSwitch.connect('notify::active', button => {
-            this._settings.set_boolean(OVERRIDE_KEY, button.active);
+            this._settings.set_boolean(Consts.OVERRIDE_KEY, button.active);
         });
 
         overridebox.prepend(enableOverrideLabel);
@@ -286,10 +284,12 @@ class EspressoWidget {
 
         this._changedPermitted = true;
         this._refresh();
+
+        this.add(this.w);
     }
 
     _createNew() {
-        const dialog = new NewInhibitDialog(this.w.get_root());
+        const dialog = new NewInhibitDialog(this.w.get_root(), this._settings);
         dialog.connect('response', (dlg, id) => {
             const appInfo = id === Gtk.ResponseType.OK
                 ? dialog.get_widget().get_app_info() : null;
@@ -331,7 +331,7 @@ class EspressoWidget {
 
         this._store.clear();
 
-        const currentItems = this._settings.get_strv(INHIBIT_APPS_KEY);
+        const currentItems = this._settings.get_strv(Consts.INHIBIT_APPS_KEY);
         const validItems = [ ];
         for (let i = 0; i < currentItems.length; i++) {
             const id = currentItems[i];
@@ -347,11 +347,11 @@ class EspressoWidget {
         }
 
         if (validItems.length != currentItems.length) // some items were filtered out
-            this._settings.set_strv(INHIBIT_APPS_KEY, validItems);
+            this._settings.set_strv(Consts.INHIBIT_APPS_KEY, validItems);
     }
 
     _appendItem(id) {
-        const currentItems = this._settings.get_strv(INHIBIT_APPS_KEY);
+        const currentItems = this._settings.get_strv(Consts.INHIBIT_APPS_KEY);
 
         if (currentItems.includes(id)) {
             printerr("Already have an item for this id");
@@ -359,31 +359,31 @@ class EspressoWidget {
         }
 
         currentItems.push(id);
-        this._settings.set_strv(INHIBIT_APPS_KEY, currentItems);
+        this._settings.set_strv(Consts.INHIBIT_APPS_KEY, currentItems);
         return true;
     }
 
     _removeItem(id) {
-        const currentItems = this._settings.get_strv(INHIBIT_APPS_KEY);
+        const currentItems = this._settings.get_strv(Consts.INHIBIT_APPS_KEY);
         const index = currentItems.indexOf(id);
 
         if (index < 0)
             return;
 
         currentItems.splice(index, 1);
-        this._settings.set_strv(INHIBIT_APPS_KEY, currentItems);
+        this._settings.set_strv(Consts.INHIBIT_APPS_KEY, currentItems);
     }
 }
 
 const NewInhibitDialog = GObject.registerClass(
     class NewInhibitDialog extends Gtk.AppChooserDialog {
-        _init(parent) {
+        _init(parent, settings) {
             super._init({
                 transient_for: parent,
                 modal: true
             });
 
-            this._settings = ExtensionUtils.getSettings();
+            this._settings = settings;
 
             this.get_widget().set({
                 show_all: true,
@@ -396,18 +396,15 @@ const NewInhibitDialog = GObject.registerClass(
         }
 
         _updateSensitivity() {
-            const rules = this._settings.get_strv(INHIBIT_APPS_KEY);
+            const rules = this._settings.get_strv(Consts.INHIBIT_APPS_KEY);
             const appInfo = this.get_widget().get_app_info();
             this.set_response_sensitive(Gtk.ResponseType.OK,
                 appInfo && !rules.some(i => i.startsWith(appInfo.get_id())));
         }
     });
 
-function init() {
-    ExtensionUtils.initTranslations();
-}
-
-function buildPrefsWidget() {
-    const widget = new EspressoWidget();
-    return widget.w;
+export default class EspressoPreferences extends ExtensionPreferences {
+    getPreferencesWidget() {
+        return new EspressoWidget(this.getSettings());
+    }
 }
