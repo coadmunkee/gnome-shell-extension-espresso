@@ -3,34 +3,34 @@
 // NOTE: only `var` is exported, so use `let` or `const` for private members
 
 // setting keys:
-var INHIBIT_APPS_KEY = 'inhibit-apps';
-var SHOW_INDICATOR_KEY = 'show-indicator';
-var SHOW_NOTIFICATIONS_KEY = 'show-notifications';
-var USER_ENABLED_KEY = 'user-enabled';
-var FULLSCREEN_KEY = 'enable-fullscreen';
-var DOCKED_KEY = 'enable-docked';
-var CHARGING_KEY = 'enable-charging';
-var OVERRIDE_KEY = 'allow-override';
-var RESTORE_KEY = 'restore-state';
-var NIGHT_LIGHT_KEY = 'control-nightlight';
-var NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';
-var HAS_BATTERY_KEY = 'has-battery';
+export const INHIBIT_APPS_KEY = 'inhibit-apps';
+export const SHOW_INDICATOR_KEY = 'show-indicator';
+export const SHOW_NOTIFICATIONS_KEY = 'show-notifications';
+export const USER_ENABLED_KEY = 'user-enabled';
+export const FULLSCREEN_KEY = 'enable-fullscreen';
+export const DOCKED_KEY = 'enable-docked';
+export const CHARGING_KEY = 'enable-charging';
+export const OVERRIDE_KEY = 'allow-override';
+export const RESTORE_KEY = 'restore-state';
+export const NIGHT_LIGHT_KEY = 'control-nightlight';
+export const NIGHT_LIGHT_APP_ONLY_KEY = 'control-nightlight-for-app';
+export const HAS_BATTERY_KEY = 'has-battery';
 
 // virtual apps:
-var FULLSCREEN_SYMBOL = Symbol('espresso/fullscreen').toString();
-var DOCKED_SYMBOL = Symbol('espresso/docked').toString();
-var CHARGING_SYMBOL = Symbol('espresso/charging').toString();
-var USER_SYMBOL = Symbol('espresso/user').toString();
+export const FULLSCREEN_SYMBOL = Symbol('espresso/fullscreen').toString();
+export const DOCKED_SYMBOL = Symbol('espresso/docked').toString();
+export const CHARGING_SYMBOL = Symbol('espresso/charging').toString();
+export const USER_SYMBOL = Symbol('espresso/user').toString();
 
 // logging debug and error message control:
-var ESPRESSO_DEBUG_MSG = "Debug";
-var ESPRESSO_ERROR_MSG = "Error";
+export const ESPRESSO_DEBUG_MSG = "Debug";
+export const ESPRESSO_ERROR_MSG = "Error";
 // set to true to enable logging debug messages to the journal 
 // - choose wisely as debug messages are quite verbose
-var ESPRESSO_ENABLE_DEBUG = false;
+export const ESPRESSO_ENABLE_DEBUG = false;
 
 // notification states:
-var NOTIFY = {
+export const NOTIFY = {
     ENABLED: Symbol("espresso/notifyState/enabled"),
     DISABLED: Symbol("espresso/notifyState/disabled"),
     DOCKED_OFF: Symbol("espresso/notifyState/dockedOff"),
