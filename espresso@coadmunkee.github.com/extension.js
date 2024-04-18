@@ -154,7 +154,7 @@ class Espresso extends PanelMenu.Button {
         this._cookies = [];
         this._objects = [];
 
-        this.add_actor(this._icon);
+        this.add_child(this._icon);
         this.add_style_class_name('panel-status-button');
         this._connect(this, 'button-press-event', this.toggleState.bind(this));
         this._connect(this, 'touch-event', this.toggleState.bind(this));
