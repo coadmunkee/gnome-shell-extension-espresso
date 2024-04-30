@@ -550,26 +550,26 @@ class Espresso extends PanelMenu.Button {
         switch (state) {
         case Consts.NOTIFY.ENABLED:
             if (this._settings.get_boolean(Consts.NIGHT_LIGHT_KEY) && this._night_light && this._proxy.DisabledUntilTomorrow) {
-                Main.notify(_('Auto suspend and screensaver disabled. Night Light paused.'));
+                Main.notify('Espresso','Auto suspend and screensaver disabled. Night Light paused.');
             } else {
-                Main.notify(_('Auto suspend and screensaver disabled'));
+                Main.notify('Espresso','Auto suspend and screensaver disabled');
             }
             break;
         case Consts.NOTIFY.DISABLED:
             if (this._settings.get_boolean(Consts.NIGHT_LIGHT_KEY) && this._night_light && !this._proxy.DisabledUntilTomorrow) {
-                Main.notify(_('Auto suspend and screensaver enabled. Night Light resumed.'));
+                Main.notify('Espresso','Auto suspend and screensaver enabled. Night Light resumed.');
             } else {
-                Main.notify(_('Auto suspend and screensaver enabled'));
+                Main.notify('Espresso','Auto suspend and screensaver enabled');
             }
             break;
         case Consts.NOTIFY.DOCKED_OFF:
-            Main.notify(_('Turning off "espresso enabled when docked"'));
+            Main.notify('Espresso','Turning off "espresso enabled when docked"');
             break;
         case Consts.NOTIFY.CHARGING_OFF:
-            Main.notify(_('Turning off "espresso enabled when charging"'));
+            Main.notify('Espresso','Turning off "espresso enabled when charging"');
             break;
         case Consts.NOTIFY.FULLSCREEN_OFF:
-            Main.notify(_('Turning off "espresso enabled when fullscreen"'));
+            Main.notify('Espresso','Turning off "espresso enabled when fullscreen"');
         }
     }
 

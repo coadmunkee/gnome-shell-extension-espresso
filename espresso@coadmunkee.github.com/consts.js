@@ -31,9 +31,9 @@ export const ESPRESSO_ENABLE_DEBUG = false;
 
 // notification states:
 export const NOTIFY = {
-    ENABLED: Symbol("espresso/notifyState/enabled"),
-    DISABLED: Symbol("espresso/notifyState/disabled"),
-    DOCKED_OFF: Symbol("espresso/notifyState/dockedOff"),
-    CHARGING_OFF: Symbol("espresso/notifyState/chargingOff"),
-    FULLSCREEN_OFF: Symbol("espresso/notifyState/fullscreenOff"),
+    ENABLED: Symbol("espresso/notifyState/enabled").toString(),
+    DISABLED: Symbol("espresso/notifyState/disabled").toString(),
+    DOCKED_OFF: Symbol("espresso/notifyState/dockedOff").toString(),
+    CHARGING_OFF: Symbol("espresso/notifyState/chargingOff").toString(),
+    FULLSCREEN_OFF: Symbol("espresso/notifyState/fullscreenOff").toString(),
 };
