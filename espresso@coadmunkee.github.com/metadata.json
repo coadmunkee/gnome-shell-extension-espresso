@@ -5,7 +5,7 @@
   "name": "Espresso",
   "settings-schema": "org.gnome.shell.extensions.espresso",
   "shell-version": [
-    "45"
+    "46"
   ],
   "url": "https://github.com/coadmunkee/gnome-shell-extension-espresso",
   "uuid": "espresso@coadmunkee.github.com",
